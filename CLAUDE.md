@@ -32,3 +32,55 @@
 - **Docker** + **Docker Compose** (плагин, команда `docker compose`)
 - IDE: **IntelliJ IDEA** / JetBrains (`.idea/` и `*.iml` в `.gitignore`)
 
+## Подключение к серверам по SSH
+
+Рабочая машина — Windows. SSH-клиент — **PuTTY / plink**.  
+Приватный ключ хранится локально: `Z:\MY\vk-amazon-2023-private.ppk`
+
+### Выполнение команд на удалённом хосте
+
+```powershell
+plink -load "имя-хоста" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "команда"
+```
+
+Пример — проверить запущенные контейнеры:
+
+```powershell
+plink -load "vkosarev.name" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "docker compose -f /root/vps/vkosarev.name/docker-compose.yml ps"
+```
+
+### Выполнение многострочного скрипта
+
+Для сложных команд — записать скрипт в файл и передать через `-m`:
+
+```powershell
+$key = 'Z:\MY\vk-amazon-2023-private.ppk'
+$tmp = Join-Path $env:TEMP 'remote-script.sh'
+@'
+set -e
+# команды здесь
+docker compose ps
+'@ | Set-Content -Path $tmp -Encoding ascii
+plink -load "vkosarev.name" -i $key -batch -m $tmp
+Remove-Item $tmp -Force
+```
+
+### PuTTY Session
+
+Настройки подключения хранятся в PuTTY Session с именем хоста (например, `vkosarev.name`).  
+Сессия содержит: hostname/IP, порт, пользователя (`root`).
+
+### Путь к репозиторию на сервере
+
+```
+/root/vps/
+```
+
+Деплой на сервере:
+
+```bash
+cd /root/vps/vkosarev.name
+docker compose pull && docker compose up -d
+```
+
+

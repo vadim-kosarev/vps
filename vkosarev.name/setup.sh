@@ -20,9 +20,9 @@ die()  { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 if docker compose version &>/dev/null; then
   warn "docker compose plugin уже установлен ($(docker compose version --short))"
 else
-  log "Устанавливаем docker-compose-plugin..."
+  log "Устанавливаем docker-compose-v2..."
   apt-get update -qq
-  apt-get install -y docker-compose-plugin
+  apt-get install -y docker-compose-v2
   log "docker compose plugin установлен ($(docker compose version --short))"
 fi
 
