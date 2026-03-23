@@ -1,5 +1,7 @@
-#name: vkosarev.name
+name: vkosarev.name
 
+# Запуск:     docker compose up -d
+# Обновление: docker compose pull && docker compose up -d
 # Сертификаты монтируются в каждый контейнер из папки, заданной переменной CERT_DIR.
 # Задать в .env (см. .env.example). По умолчанию: /root/cert
 #   Linux/VPS : CERT_DIR=/root/cert
@@ -138,7 +140,7 @@ services:
   # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
   # ---------------------------------------------------------------------------
   portainer:
-    image: portainer/portainer-ce:lts
+    image: portainer/portainer-ce:latest
     container_name: portainer
     restart: always
     ports:

@@ -14,7 +14,19 @@ die()  { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 [[ $EUID -ne 0 ]] && die "Запускать от root: sudo bash $0"
 
 # =============================================================================
-# node_exporter — экспортёр метрик хоста для Prometheus
+# Docker Compose plugin (v2)
+# Нужен чтобы работала команда: docker compose (без дефиса)
+# =============================================================================
+if docker compose version &>/dev/null; then
+  warn "docker compose plugin уже установлен ($(docker compose version --short))"
+else
+  log "Устанавливаем docker-compose-plugin..."
+  apt-get update -qq
+  apt-get install -y docker-compose-plugin
+  log "docker compose plugin установлен ($(docker compose version --short))"
+fi
+
+ — экспортёр метрик хоста для Prometheus
 # Снимает: CPU, RAM, диски, сеть (rx/tx байт, пакеты, ошибки)
 # Должен работать на хосте (не в Docker), чтобы видеть реальные интерфейсы
 # =============================================================================
