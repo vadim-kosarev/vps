@@ -22,6 +22,9 @@ release.properties
 *.log
 logs/
 
+# Временный файл для вывода команд (используется агентом)
+.tmp.log
+
 # OS
 .DS_Store
 Thumbs.db
