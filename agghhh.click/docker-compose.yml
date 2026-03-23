@@ -35,20 +35,23 @@ services:
 
   # ---------------------------------------------------------------------------
   # telemt — Telegram MTProto Proxy v3.3.28
-  # Бинарник берётся с хоста: /usr/local/bin/telemt (установлен через setup.sh)
+  # Собирается из Dockerfile (скачивает бинарь с github.com/telemt/telemt).
   # Клиенты подключаются на порт 8443.
   # Upstream: vkosarev.name:8443 (цепочка через основной сервер)
-  # Проект: https://github.com/nicepkg/telemt
+  # Проект: https://github.com/telemt/telemt
   # ---------------------------------------------------------------------------
   telemt:
-    image: debian:bookworm-slim
+    build:
+      context: ./telemt
+      args:
+        TELEMT_VERSION: "3.3.28"
+    image: telemt:3.3.28
     container_name: telemt
     restart: unless-stopped
     volumes:
-      - /usr/local/bin/telemt:/usr/local/bin/telemt:ro
       - ${TELEMT_DATA:-./telemt/data}:/etc/telemt
     working_dir: /etc/telemt
-    command: ["telemt", "/etc/telemt/config.toml"]
+    command: ["/etc/telemt/config.toml"]
     ports:
       - "8443:8443"
       - "9091:9091"
