@@ -9,6 +9,23 @@
 
 - **Не делать `git commit` и `git push` без явной команды пользователя.**
 
+## Git — просмотр изменений перед коммитом
+
+Всегда использовать эту команду перед коммитом (неинтерактивная, без pager):
+
+```powershell
+git --no-pager status && git --no-pager diff && git --no-pager diff --cached
+```
+
+- `diff` — unstaged изменения
+- `diff --cached` — staged (уже добавленные через `git add`)
+
+Коммит после просмотра:
+
+```powershell
+git add -A && git commit -m "сообщение"
+```
+
 ## Принципы работы
 
 ### Развёртывание
