@@ -15,13 +15,14 @@
 
 Подробная архитектура со всеми режимами работы: **[proxy-architecture.md](proxy-architecture.md)**
 
+### Telegram
+
 ```mermaid
 flowchart TD
     TG["📱 Telegram App"]
     VPN_MSK["💻 VPN Client\n(msk / natasha-17)"]
     VPN_VK["💻 VPN Client\n(VK)"]
     EU_CLIENT["💻 EU Client\n(direct VLESS)"]
-    YT_CLIENT["📺 YouTube / Browser\n(HTTP proxy client)"]
 
     subgraph agghhh ["agghhh.click — RU entry (Yandex Cloud)"]
         TELEMT["telemt:8443\nMTProto TLS\nmask: browser.yandex.ru"]
@@ -33,34 +34,58 @@ flowchart TD
         MIXED["3x-ui:8443\nmixed SOCKS5\n(MTProxy upstream)"]
         RU_PL["3x-ui:8080\nVLESS+Reality\nSNI: yahoo.com"]
         EU_AMAZON["3x-ui:34819\nVLESS+Reality\nSNI: apple.com"]
-        HTTP_PROXY["3x-ui:10126\nHTTP proxy\nauth: user1"]
         MTPROXY["mtproxy:2443\nTG MTProxy classic"]
     end
 
-    INTERNET(("🌐 Internet\n/ Telegram"))
-    YOUTUBE(("▶️ YouTube"))
+    TELEGRAM(("📨 Telegram"))
 
     TG -->|"MTProto TLS :8443"| TELEMT
     TG -->|"MTProto :2443"| MTPROXY
     VPN_MSK -->|"VLESS+Reality :443"| XUI_443
     VPN_VK -->|"VLESS+Reality :40404"| XUI_40404
     EU_CLIENT -->|"VLESS+Reality :34819"| EU_AMAZON
-    YT_CLIENT -->|"HTTP proxy :10126"| HTTP_PROXY
 
     TELEMT -->|"SOCKS5"| MIXED
     XUI_443 -->|"VLESS+Reality chain"| RU_PL
-    XUI_40404 -->|"direct"| INTERNET
+    XUI_40404 -->|"direct"| TELEGRAM
 
-    MIXED --> INTERNET
-    RU_PL --> INTERNET
+    MIXED --> TELEGRAM
+    RU_PL --> TELEGRAM
+    MTPROXY --> TELEGRAM
+    EU_AMAZON --> TELEGRAM
+```
+
+### YouTube
+
+```mermaid
+flowchart TD
+    VPN_MSK["💻 VPN Client\n(msk / natasha-17)"]
+    EU_CLIENT["💻 EU Client\n(direct VLESS)"]
+    YT_CLIENT["📺 YouTube / Browser\n(HTTP proxy client)"]
+
+    subgraph agghhh ["agghhh.click — RU entry (Yandex Cloud)"]
+        XUI_443["3x-ui:443\nVLESS+Reality\nSNI: browser.yandex.com"]
+    end
+
+    subgraph vkosarev ["vkosarev.name — EU exit (AWS Poland)"]
+        RU_PL["3x-ui:8080\nVLESS+Reality\nSNI: yahoo.com"]
+        EU_AMAZON["3x-ui:34819\nVLESS+Reality\nSNI: apple.com"]
+        HTTP_PROXY["3x-ui:10126\nHTTP proxy\nauth: user1"]
+    end
+
+    YOUTUBE(("▶️ YouTube"))
+
+    VPN_MSK -->|"VLESS+Reality :443"| XUI_443
+    EU_CLIENT -->|"VLESS+Reality :34819"| EU_AMAZON
+    YT_CLIENT -->|"HTTP proxy :10126"| HTTP_PROXY
+
+    XUI_443 -->|"VLESS+Reality chain"| RU_PL
+
     RU_PL --> YOUTUBE
-    MTPROXY --> INTERNET
-    EU_AMAZON --> INTERNET
     EU_AMAZON --> YOUTUBE
     HTTP_PROXY --> YOUTUBE
 ```
 
-**Смысл схемы:** `agghhh.click` — RU-фронт, принимает клиентов и скрывает EU-сервер за двумя слоями: VLESS-цепочкой и SOCKS5-тоннелем для Telegram. `vkosarev.name` — EU-выход в интернет.
 
 ---
 
