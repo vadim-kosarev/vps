@@ -1,4 +1,4 @@
-name: vkosarev.name
+#name: vkosarev.name
 
 # Сертификаты монтируются в каждый контейнер из папки, заданной переменной CERT_DIR.
 # Задать в .env (см. .env.example). По умолчанию: /root/cert
