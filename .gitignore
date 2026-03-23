@@ -36,3 +36,5 @@ secrets/
 # Docker override files
 docker-compose.override.yml
 
+**/grafana/data/**
+**/prometheus/data/**

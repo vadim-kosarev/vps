@@ -87,3 +87,41 @@ services:
     depends_on:
       - prometheus
 
+  # ---------------------------------------------------------------------------
+  # mtproxy — Telegram MTProto Proxy
+  # Порт: 2443 (снаружи) → 443 (внутри контейнера)
+  # Секрет и конфиг генерируются автоматически при первом старте и хранятся
+  # в named volume mtproxy-data (/data внутри контейнера).
+  # Ссылку для подключения смотреть в логах: docker compose logs mtproxy
+  # Актуальные образы: https://hub.docker.com/r/telegrammessenger/proxy/tags
+  # ---------------------------------------------------------------------------
+  mtproxy:
+    image: telegrammessenger/proxy:latest
+    container_name: mtproxy
+    restart: unless-stopped
+    ports:
+      - "2443:443"
+    volumes:
+      # Постоянное хранилище секрета и конфига прокси
+      - mtproxy-data:/data
+
+  # ---------------------------------------------------------------------------
+  # Portainer — веб-интерфейс управления Docker
+  # UI:  https://vkosarev.name:9443
+  # API: http://vkosarev.name:8000  (используется агентом Portainer)
+  # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
+  # ---------------------------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  mtproxy-data:
+  portainer_data:
