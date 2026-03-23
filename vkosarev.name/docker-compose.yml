@@ -1,7 +1,15 @@
 name: vkosarev.name
+
+# Сертификаты монтируются в каждый контейнер из папки, заданной переменной CERT_DIR.
+# Задать в .env (см. .env.example). По умолчанию: /root/cert
+#   Linux/VPS : CERT_DIR=/root/cert
+#   Windows   : CERT_DIR=Z:\MY\CheapSSL\vkosarev.name
+# Ожидаемые файлы:
+#   vkosarev.name_fullchain.crt
+#   vkosarev.name_privatekey.key
+
 services:
   3x-ui:
-
     # --------------------------------------------------------------------------------------------------------------------------------------
     # URL:   http://localhost:2055/vkosarev.name.eu/
     # To run httpS - update certificates
@@ -17,11 +25,8 @@ services:
     volumes:
       # SQLite-база данных панели, настройки и конфиги Xray (генерируются панелью)
       - ./3x-ui/db:/etc/x-ui
-      # TLS-сертификаты (путь указывается в настройках панели)
-      # Положить файлы в ./3x-ui/cert/:
-      #   vkosarev.name_fullchain.crt  — полная цепочка сертификата
-      #   vkosarev.name.key            — приватный ключ
-      - ./3x-ui/cert:/root/cert
+      # TLS-сертификаты — общая папка с хоста
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
     ports:
       # Веб-панель управления (порт можно сменить в настройках панели)
@@ -31,9 +36,6 @@ services:
       - "8080:8080"
       - "8443:8443"
       - "34819:34819"
-      # Порты для inbound-подключений клиентов — добавить по мере настройки в панели
-      # - "443:443"
-      # - "80:80"
 
     environment:
       # Отключает принудительное использование AEAD для старых клиентов VMess
@@ -44,27 +46,24 @@ services:
 
   # ---------------------------------------------------------------------------
   # Prometheus — сбор метрик
-  # Скрейпит node_exporter на хосте (CPU, RAM, сеть rx/tx, диски)
   # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
   prometheus:
     image: prom/prometheus:v3.2.1
     container_name: prometheus
     restart: unless-stopped
-    # host-gateway позволяет обращаться к хосту по имени host.docker.internal
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus/data:/prometheus
+      - ${PROMETHEUS_DATA:-./prometheus/data}:/prometheus
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
       - "--storage.tsdb.retention.time=90d"
-      # Разрешаем перезагрузку конфига без рестарта: POST /-/reload
       - "--web.enable-lifecycle"
     ports:
-      # Закрыть извне, оставить только для Grafana
       - "127.0.0.1:9090:9090"
 
   # ---------------------------------------------------------------------------
@@ -77,11 +76,11 @@ services:
     container_name: grafana
     restart: unless-stopped
     volumes:
-      - ./grafana/data:/var/lib/grafana
+      - ${GRAFANA_DATA:-./grafana/data}:/var/lib/grafana
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
     ports:
       - "3000:3000"
     environment:
-      # Пароль администратора — задать в .env файле на сервере
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme}
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
@@ -90,8 +89,7 @@ services:
   # ---------------------------------------------------------------------------
   # mtproxy — Telegram MTProto Proxy
   # Порт: 2443 (снаружи) → 443 (внутри контейнера)
-  # Секрет и конфиг генерируются автоматически при первом старте и хранятся
-  # в named volume mtproxy-data (/data внутри контейнера).
+  # Секрет хранится в named volume mtproxy-data (/data).
   # Ссылку для подключения смотреть в логах: docker compose logs mtproxy
   # Актуальные образы: https://hub.docker.com/r/telegrammessenger/proxy/tags
   # ---------------------------------------------------------------------------
@@ -102,8 +100,36 @@ services:
     ports:
       - "2443:443"
     volumes:
-      # Постоянное хранилище секрета и конфига прокси
       - mtproxy-data:/data
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+
+  # ---------------------------------------------------------------------------
+  # iperf3 — сервер для замера пропускной способности сети
+  # Использование: iperf3 -c vkosarev.name -p 5201
+  # ---------------------------------------------------------------------------
+  iperf3:
+    image: networkstatic/iperf3:latest
+    container_name: iperf3
+    restart: unless-stopped
+    command: ["-s"]
+    ports:
+      - "5201:5201"
+    volumes:
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+
+  # ---------------------------------------------------------------------------
+  # mermaid — локальный редактор диаграмм (без отправки данных наружу)
+  # UI: http://vkosarev.name:3200
+  # Актуальные теги: https://hub.docker.com/r/johnsinclair73/mermaid-live-editor/tags
+  # ---------------------------------------------------------------------------
+  mermaid:
+    image: johnsinclair73/mermaid-live-editor:9.1.7
+    container_name: mermaid
+    restart: unless-stopped
+    ports:
+      - "3200:80"
+    volumes:
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
   # ---------------------------------------------------------------------------
   # Portainer — веб-интерфейс управления Docker
@@ -120,8 +146,8 @@ services:
       - "9443:9443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+      - ${PORTAINER_DATA:-./portainer/data}:/data
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
 volumes:
   mtproxy-data:
-  portainer_data:
