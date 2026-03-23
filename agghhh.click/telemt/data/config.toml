@@ -1,0 +1,75 @@
+# Telemt MTProxy — auto-generated config
+# Re-run `telemt --init` to regenerate
+
+show_link = ["user"]
+
+[general]
+# prefer_ipv6 is deprecated; use [network].prefer
+prefer_ipv6 = false
+fast_mode = true
+use_middle_proxy = false
+log_level = "normal"
+desync_all_full = false
+update_every = 43200
+hardswap = false
+me_pool_drain_ttl_secs = 90
+me_instadrain = false
+me_pool_drain_threshold = 32
+me_pool_drain_soft_evict_grace_secs = 10
+me_pool_drain_soft_evict_per_writer = 2
+me_pool_drain_soft_evict_budget_per_core = 16
+me_pool_drain_soft_evict_cooldown_ms = 1000
+me_bind_stale_mode = "never"
+me_pool_min_fresh_ratio = 0.8
+me_reinit_drain_timeout_secs = 90
+
+[network]
+ipv4 = true
+ipv6 = true
+prefer = 4
+multipath = false
+
+[general.modes]
+classic = false
+secure = false
+tls = true
+
+[server]
+port = 8443
+listen_addr_ipv4 = "0.0.0.0"
+listen_addr_ipv6 = "::"
+
+[[server.listeners]]
+ip = "0.0.0.0"
+# reuse_allow = false # Set true only when intentionally running multiple telemt instances on same port
+
+[[server.listeners]]
+ip = "::"
+
+[timeouts]
+client_handshake = 15
+tg_connect = 10
+client_keepalive = 60
+client_ack = 300
+
+[censorship]
+tls_domain = "browser.yandex.ru"
+mask = true
+mask_port = 443
+fake_cert_len = 2048
+tls_full_cert_ttl_secs = 90
+
+[access]
+replay_check_len = 65536
+replay_window_secs = 1800
+ignore_time_skew = false
+
+[access.users]
+user = "0a9575dbddd96549971e23f597083667"
+
+[[upstreams]]
+type = "socks5"
+enabled = true
+weight = 1
+address = "vkosarev.name:8443"
+
