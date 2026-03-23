@@ -1,0 +1,617 @@
+
+============================================================
+HOST: vkosarev.name
+============================================================
+
+[INBOUNDS]
+
+  id=1 remark=http-proxy-10126 protocol=http port=10126 enable=1
+  settings:
+    {
+      "accounts": [
+        {
+          "user": "user1",
+          "pass": "Password123!!"
+        }
+      ],
+      "allowTransparent": false
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+  id=3 remark=EU.443 protocol=vless port=443 enable=0
+  settings:
+    {
+      "clients": [
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "69omuqh3",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "de9b4176-8d21-45cc-aaf0-a11a2f62fb38",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "hr3omolkj8znhc7j",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "eu.vk.8888",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "d48c0137-b958-4f53-99d6-7afe8113d331",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "bvya1yek2pco9059",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "EU.DEXP.Баня",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "3f915b2f-1df4-4a89-b395-dee27bc41950",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "xvsh7h8msy62vuuw",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "projector",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "bb0a7349-eea7-4f7c-b6ea-740ee45070a9",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "5guef4wfyw5xmfew",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "yandex",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "1093367f-ab5e-48c1-a055-6dac74966950",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "2zjnt7vuwis1roto",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "ya-pl",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "fb4c0028-2786-4b61-a286-dea14a508bd0",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "8x2idc2f5rbp4ubk",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774121543000
+        },
+        {
+          "comment": "",
+          "created_at": 1774170351000,
+          "email": "ma",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "5f535342-01bf-4b8d-8bcd-294ac4c2855f",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "ibv5fr7f4gh0xqz8",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774170351000
+        }
+      ],
+      "decryption": "none",
+      "encryption": "none"
+    }
+  stream_settings:
+    {
+      "network": "tcp",
+      "security": "reality",
+      "externalProxy": [],
+      "realitySettings": {
+        "show": false,
+        "xver": 0,
+        "target": "www.icloud.com:443",
+        "serverNames": [
+          "www.icloud.com"
+        ],
+        "privateKey": "qDYNvyeiP7cONBlrgU7HHZByBL0rDukecuOObXIbd2Q",
+        "minClientVer": "",
+        "maxClientVer": "",
+        "maxTimediff": 0,
+        "shortIds": [
+          "54",
+          "2e8380",
+          "bcc96f1460ea",
+          "fe0a02e42a",
+          "923489b2b29b563c",
+          "68e080e9",
+          "98c3",
+          "f111271c9f5bf1"
+        ],
+        "mldsa65Seed": "",
+        "settings": {
+          "publicKey": "jibezTkhLx6eOL92sOf6mHwvNT4PDw38Ky9jiToalyc",
+          "fingerprint": "chrome",
+          "serverName": "",
+          "spiderX": "/",
+          "mldsa65Verify": ""
+        }
+      },
+      "tcpSettings": {
+        "acceptProxyProtocol": false,
+        "header": {
+          "type": "none"
+        }
+      }
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+  id=8 remark=RU-PL protocol=vless port=8080 enable=1
+  settings:
+    {
+      "clients": [
+        {
+          "comment": "",
+          "created_at": 1774121543000,
+          "email": "msk",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "xtls-rprx-vision",
+          "id": "58318fd0-e8b9-40dd-a2d4-3292a0b5dc5d",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "bw4viex1mw2g4rp8",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774129105000
+        }
+      ],
+      "decryption": "none",
+      "encryption": "none",
+      "testseed": [
+        900,
+        500,
+        900,
+        256
+      ]
+    }
+  stream_settings:
+    {
+      "network": "tcp",
+      "security": "reality",
+      "externalProxy": [],
+      "realitySettings": {
+        "show": false,
+        "xver": 0,
+        "target": "yahoo.com:443",
+        "serverNames": [
+          "yahoo.com",
+          "www.yahoo.com"
+        ],
+        "privateKey": "EIrBH0NRtdXLKvf7BIAy_oETYxjEDsq8XIu6K_fyx1k",
+        "minClientVer": "",
+        "maxClientVer": "",
+        "maxTimediff": 0,
+        "shortIds": [
+          "d6a74304"
+        ],
+        "mldsa65Seed": "",
+        "settings": {
+          "publicKey": "lgVZnLaN6lpmQhyvwjbGJ5s0yrOoaQba_5pr43SglUU",
+          "fingerprint": "chrome",
+          "serverName": "",
+          "spiderX": "/",
+          "mldsa65Verify": ""
+        }
+      },
+      "tcpSettings": {
+        "acceptProxyProtocol": false,
+        "header": {
+          "type": "none"
+        }
+      }
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+  id=10 remark=mixed -msk MTProxy protocol=mixed port=8443 enable=1
+  settings:
+    {
+      "auth": "noauth",
+      "udp": true,
+      "ip": "127.0.0.1"
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+  id=11 remark=EU.AMAZON protocol=vless port=34819 enable=1
+  settings:
+    {
+      "clients": [
+        {
+          "comment": "",
+          "created_at": 1774182325000,
+          "email": "vk-EU.amazon",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "0e4b9998-bc09-4733-afc3-4215a3672670",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "9wjsc9ozdbue19ql",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774182325000
+        },
+        {
+          "comment": "",
+          "created_at": 1774183927000,
+          "email": "natasha.eu",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "320ac9e5-367d-43b6-a914-01c9edd452ba",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "ihjj7kk2uzag956j",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774183927000
+        },
+        {
+          "comment": "",
+          "created_at": 1774184042000,
+          "email": "TV-SAMSUNG.EU",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "f241f2d0-130b-4d4e-bd65-b0acdfb15cce",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "h873k6hptyxds39g",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774184042000
+        },
+        {
+          "comment": "",
+          "created_at": 1774189161000,
+          "email": "vlad",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "071febef-952e-4420-a35f-a46729c76b90",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "i3h21dkzlruwl01q",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774189161000
+        },
+        {
+          "comment": "",
+          "created_at": 1774204786000,
+          "email": "seva",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "285b9ecc-ecd2-4930-ba3c-76b654becba8",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "2wpeqcq6uthar2mu",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774204786000
+        }
+      ],
+      "decryption": "none",
+      "encryption": "none"
+    }
+  stream_settings:
+    {
+      "network": "tcp",
+      "security": "reality",
+      "externalProxy": [],
+      "realitySettings": {
+        "show": false,
+        "xver": 0,
+        "target": "www.apple.com:443",
+        "serverNames": [
+          "www.apple.com"
+        ],
+        "privateKey": "ULvxjIj7JBtx_3hcf_nMoVu-LV5S_3RpIf7o5VSkGWE",
+        "minClientVer": "",
+        "maxClientVer": "",
+        "maxTimediff": 0,
+        "shortIds": [
+          "d9457c8239",
+          "55ea",
+          "35a599",
+          "1a5af2f1",
+          "4bb694bb67da",
+          "c0",
+          "6b6bfd003fe8c5",
+          "08c421d157ae82c5"
+        ],
+        "mldsa65Seed": "",
+        "settings": {
+          "publicKey": "wG2jcSZD66WyFZjuq6Ks2UpnTycnRErSkRHrFRrEhWo",
+          "fingerprint": "chrome",
+          "serverName": "",
+          "spiderX": "/",
+          "mldsa65Verify": ""
+        }
+      },
+      "tcpSettings": {
+        "acceptProxyProtocol": false,
+        "header": {
+          "type": "none"
+        }
+      }
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+============================================================
+HOST: agghhh.click
+============================================================
+
+[INBOUNDS]
+
+  id=4 remark=MSK-PL:443 protocol=vless port=443 enable=1
+  settings:
+    {
+      "clients": [
+        {
+          "comment": "",
+          "created_at": 1774123301000,
+          "email": "msk",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "xtls-rprx-vision",
+          "id": "938a3d20-b0c6-4f75-9130-0c69f12c6ef8",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "ti172882ze4oyyu9",
+          "tgId": 0,
+          "totalGB": 0,
+          "updated_at": 1774123695000
+        },
+        {
+          "comment": "",
+          "created_at": 1774124257000,
+          "email": "natasha-17",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "780f1bb2-92db-4aeb-9f4a-2b327168e9af",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "dy0qo8yknmwgbnyr",
+          "tgId": "",
+          "totalGB": 0,
+          "updated_at": 1774124257000
+        }
+      ],
+      "decryption": "none",
+      "encryption": "none",
+      "testseed": [
+        900,
+        500,
+        900,
+        256
+      ]
+    }
+  stream_settings:
+    {
+      "network": "tcp",
+      "security": "reality",
+      "externalProxy": [],
+      "realitySettings": {
+        "show": false,
+        "xver": 0,
+        "target": "browser.yandex.com:443",
+        "serverNames": [
+          "browser.yandex.com"
+        ],
+        "privateKey": "YIS4BDgASQpPCm6sdpaB0U_st7XxnCWTa-AfNQHDUFE",
+        "minClientVer": "",
+        "maxClientVer": "",
+        "maxTimediff": 0,
+        "shortIds": [
+          "42",
+          "79b9",
+          "50fdb2bff81c5131",
+          "b715c8e55150",
+          "f2d36e4641f6c8",
+          "943b3f5f",
+          "511526",
+          "2b85e81275"
+        ],
+        "mldsa65Seed": "",
+        "settings": {
+          "publicKey": "w_lZLD_5jblq7eGWgEJLwbxHzGburuCnRo1JPRMytAI",
+          "fingerprint": "chrome",
+          "serverName": "",
+          "spiderX": "/",
+          "mldsa65Verify": ""
+        }
+      },
+      "tcpSettings": {
+        "acceptProxyProtocol": false,
+        "header": {
+          "type": "none"
+        }
+      }
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }
+
+  id=5 remark=RU-RU:40404 protocol=vless port=40404 enable=1
+  settings:
+    {
+      "clients": [
+        {
+          "comment": "",
+          "created_at": 1774161624000,
+          "email": "VK",
+          "enable": true,
+          "expiryTime": 0,
+          "flow": "",
+          "id": "f455b3c2-d38e-4c7c-96a4-69cf64c82cba",
+          "limitIp": 0,
+          "reset": 0,
+          "subId": "irzde849ytlovl6q",
+          "tgId": 0,
+          "totalGB": 0,
+          "updated_at": 1774162193000
+        }
+      ],
+      "decryption": "none",
+      "encryption": "none"
+    }
+  stream_settings:
+    {
+      "network": "tcp",
+      "security": "reality",
+      "externalProxy": [],
+      "realitySettings": {
+        "show": false,
+        "xver": 0,
+        "target": "browser.yandex.ru:443",
+        "serverNames": [
+          "browser.yandex.ru"
+        ],
+        "privateKey": "QJHU8wjEOhC-b5gWsrzABTYAcS-sMObhdiU9cqAJU0U",
+        "minClientVer": "",
+        "maxClientVer": "",
+        "maxTimediff": 0,
+        "shortIds": [
+          "37",
+          "d0b94da7",
+          "a713",
+          "8911e8",
+          "edbb07fffa",
+          "61546168b8e7ac",
+          "f6369b29fc882088",
+          "a7f1b324fbdd"
+        ],
+        "mldsa65Seed": "",
+        "settings": {
+          "publicKey": "HZzor8wBP4D4LhZyA-WvWL1s3ONG5R4YfEMHrHWpsEA",
+          "fingerprint": "chrome",
+          "serverName": "",
+          "spiderX": "/",
+          "mldsa65Verify": ""
+        }
+      },
+      "tcpSettings": {
+        "acceptProxyProtocol": false,
+        "header": {
+          "type": "none"
+        }
+      }
+    }
+  sniffing:
+    {
+      "enabled": false,
+      "destOverride": [
+        "http",
+        "tls",
+        "quic",
+        "fakedns"
+      ],
+      "metadataOnly": false,
+      "routeOnly": false
+    }

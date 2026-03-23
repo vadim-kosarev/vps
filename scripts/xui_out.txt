@@ -1,0 +1,704 @@
+
+============================================================
+HOST: vkosarev.name
+============================================================
+
+[INBOUNDS]
+columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+
+  id=None remark=None protocol=None port=None enable=None
+
+  id=None remark=None protocol=None port=None enable=None
+
+  id=None remark=None protocol=None port=None enable=None
+
+  id=None remark=None protocol=None port=None enable=None
+
+  id=None remark=None protocol=None port=None enable=None
+
+[SETTINGS (xray config)]
+  0: 1
+  1: webPort
+  2: 2055
+  0: 2
+  1: webBasePath
+  2: /vkosarev.name.eu/
+  0: 3
+  1: secret
+  2: aW3VkK018hMpIN5ARwj9MED9YW1cYEFm
+  0: 4
+  1: webListen
+  2: 
+  0: 5
+  1: webDomain
+  2: 
+  0: 6
+  1: webCertFile
+  2: /root/cert/vkosarev.name_fullchain.crt
+  0: 7
+  1: webKeyFile
+  2: /root/cert/vkosarev.name_privatekey.key
+  0: 8
+  1: sessionMaxAge
+  2: 60
+  0: 9
+  1: pageSize
+  2: 50
+  0: 10
+  1: expireDiff
+  2: 0
+  0: 11
+  1: trafficDiff
+  2: 0
+  0: 12
+  1: remarkModel
+  2: -ieo
+  0: 13
+  1: tgBotEnable
+  2: false
+  0: 14
+  1: tgBotToken
+  2: 
+  0: 15
+  1: tgBotProxy
+  2: 
+  0: 16
+  1: tgBotAPIServer
+  2: 
+  0: 17
+  1: tgBotChatId
+  2: 
+  0: 18
+  1: tgRunTime
+  2: @daily
+  0: 19
+  1: tgBotBackup
+  2: false
+  0: 20
+  1: tgBotLoginNotify
+  2: true
+  0: 21
+  1: tgCpu
+  2: 80
+  0: 22
+  1: tgLang
+  2: en-US
+  0: 23
+  1: timeLocation
+  2: Local
+  0: 24
+  1: twoFactorEnable
+  2: false
+  0: 25
+  1: twoFactorToken
+  2: 
+  0: 26
+  1: subEnable
+  2: false
+  0: 27
+  1: subTitle
+  2: 
+  0: 28
+  1: subListen
+  2: 
+  0: 29
+  1: subPort
+  2: 2096
+  0: 30
+  1: subPath
+  2: /sub/
+  0: 31
+  1: subDomain
+  2: 
+  0: 32
+  1: subCertFile
+  2: 
+  0: 33
+  1: subKeyFile
+  2: 
+  0: 34
+  1: subUpdates
+  2: 12
+  0: 35
+  1: externalTrafficInformEnable
+  2: false
+  0: 36
+  1: externalTrafficInformURI
+  2: 
+  0: 37
+  1: subEncrypt
+  2: true
+  0: 38
+  1: subShowInfo
+  2: true
+  0: 39
+  1: subURI
+  2: 
+  0: 40
+  1: subJsonPath
+  2: /json/
+  0: 41
+  1: subJsonURI
+  2: 
+  0: 42
+  1: subJsonFragment
+  2: 
+  0: 43
+  1: subJsonNoises
+  2: 
+  0: 44
+  1: subJsonMux
+  2: 
+  0: 45
+  1: subJsonRules
+  2: 
+  0: 46
+  1: datepicker
+  2: gregorian
+  0: 47
+  1: xrayTemplateConfig
+  2:
+    {
+      "log": {
+        "access": "./access.log",
+        "dnsLog": false,
+        "error": "./error.log",
+        "loglevel": "warning",
+        "maskAddress": ""
+      },
+      "api": {
+        "tag": "api",
+        "services": [
+          "HandlerService",
+          "LoggerService",
+          "StatsService"
+        ]
+      },
+      "inbounds": [
+        {
+          "tag": "api",
+          "listen": "127.0.0.1",
+          "port": 62789,
+          "protocol": "dokodemo-door",
+          "settings": {
+            "address": "127.0.0.1"
+          }
+        }
+      ],
+      "outbounds": [
+        {
+          "tag": "direct",
+          "protocol": "freedom",
+          "settings": {
+            "domainStrategy": "AsIs",
+            "redirect": "",
+            "noises": []
+          }
+        },
+        {
+          "tag": "blocked",
+          "protocol": "blackhole",
+          "settings": {}
+        }
+      ],
+      "policy": {
+        "levels": {
+          "0": {
+            "statsUserDownlink": true,
+            "statsUserUplink": true
+          }
+        },
+        "system": {
+          "statsInboundDownlink": true,
+          "statsInboundUplink": true,
+          "statsOutboundDownlink": false,
+          "statsOutboundUplink": false
+        }
+      },
+      "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+          {
+            "type": "field",
+            "inboundTag": [
+              "api"
+            ],
+            "outboundTag": "api"
+          },
+          {
+            "type": "field",
+            "outboundTag": "blocked",
+            "ip": [
+              "geoip:private"
+            ]
+          },
+          {
+            "type": "field",
+            "outboundTag": "blocked",
+            "protocol": [
+              "bittorrent"
+            ]
+          }
+        ]
+      },
+      "stats": {},
+      "metrics": {
+        "tag": "metrics_out",
+        "listen": "127.0.0.1:11111"
+      }
+    }
+  0: 48
+  1: xrayOutboundTestUrl
+  2: https://www.google.com/generate_204
+  0: 49
+  1: subJsonEnable
+  2: false
+  0: 50
+  1: subSupportUrl
+  2: 
+  0: 51
+  1: subProfileUrl
+  2: 
+  0: 52
+  1: subAnnounce
+  2: 
+  0: 53
+  1: subEnableRouting
+  2: true
+  0: 54
+  1: subRoutingRules
+  2: 
+  0: 55
+  1: ldapEnable
+  2: false
+  0: 56
+  1: ldapHost
+  2: 
+  0: 57
+  1: ldapPort
+  2: 389
+  0: 58
+  1: ldapUseTLS
+  2: false
+  0: 59
+  1: ldapBindDN
+  2: 
+  0: 60
+  1: ldapPassword
+  2: 
+  0: 61
+  1: ldapBaseDN
+  2: 
+  0: 62
+  1: ldapUserFilter
+  2: (objectClass=person)
+  0: 63
+  1: ldapUserAttr
+  2: mail
+  0: 64
+  1: ldapVlessField
+  2: vless_enabled
+  0: 65
+  1: ldapSyncCron
+  2: @every 1m
+  0: 66
+  1: ldapFlagField
+  2: 
+  0: 67
+  1: ldapTruthyValues
+  2: true,1,yes,on
+  0: 68
+  1: ldapInvertFlag
+  2: false
+  0: 69
+  1: ldapInboundTags
+  2: 
+  0: 70
+  1: ldapAutoCreate
+  2: false
+  0: 71
+  1: ldapAutoDelete
+  2: false
+  0: 72
+  1: ldapDefaultTotalGB
+  2: 0
+  0: 73
+  1: ldapDefaultExpiryDays
+  2: 0
+  0: 74
+  1: ldapDefaultLimitIP
+  2: 0
+
+============================================================
+HOST: agghhh.click
+============================================================
+
+[INBOUNDS]
+columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+
+  id=None remark=None protocol=None port=None enable=None
+
+  id=None remark=None protocol=None port=None enable=None
+
+[SETTINGS (xray config)]
+  0: 1
+  1: webPort
+  2: 2077
+  0: 2
+  1: webBasePath
+  2: /vaduha.name777/
+  0: 3
+  1: secret
+  2: FWg50wGn4hOkwTjSIZpsQPAXM6gmOGsc
+  0: 4
+  1: webListen
+  2: 
+  0: 5
+  1: webDomain
+  2: 
+  0: 6
+  1: webCertFile
+  2: 
+  0: 7
+  1: webKeyFile
+  2: 
+  0: 8
+  1: sessionMaxAge
+  2: 360
+  0: 9
+  1: pageSize
+  2: 25
+  0: 10
+  1: expireDiff
+  2: 0
+  0: 11
+  1: trafficDiff
+  2: 0
+  0: 12
+  1: remarkModel
+  2: -ieo
+  0: 13
+  1: datepicker
+  2: gregorian
+  0: 14
+  1: tgBotEnable
+  2: false
+  0: 15
+  1: tgBotToken
+  2: 
+  0: 16
+  1: tgBotProxy
+  2: 
+  0: 17
+  1: tgBotAPIServer
+  2: 
+  0: 18
+  1: tgBotChatId
+  2: 
+  0: 19
+  1: tgRunTime
+  2: @daily
+  0: 20
+  1: tgBotBackup
+  2: false
+  0: 21
+  1: tgBotLoginNotify
+  2: true
+  0: 22
+  1: tgCpu
+  2: 80
+  0: 23
+  1: tgLang
+  2: en-US
+  0: 24
+  1: timeLocation
+  2: Local
+  0: 25
+  1: twoFactorEnable
+  2: false
+  0: 26
+  1: twoFactorToken
+  2: 
+  0: 27
+  1: subEnable
+  2: true
+  0: 28
+  1: subJsonEnable
+  2: false
+  0: 29
+  1: subTitle
+  2: 
+  0: 30
+  1: subSupportUrl
+  2: 
+  0: 31
+  1: subProfileUrl
+  2: 
+  0: 32
+  1: subAnnounce
+  2: 
+  0: 33
+  1: subEnableRouting
+  2: true
+  0: 34
+  1: subRoutingRules
+  2: 
+  0: 35
+  1: subListen
+  2: 
+  0: 36
+  1: subPort
+  2: 2096
+  0: 37
+  1: subPath
+  2: /sub/
+  0: 38
+  1: subDomain
+  2: 
+  0: 39
+  1: subCertFile
+  2: 
+  0: 40
+  1: subKeyFile
+  2: 
+  0: 41
+  1: subUpdates
+  2: 12
+  0: 42
+  1: externalTrafficInformEnable
+  2: false
+  0: 43
+  1: externalTrafficInformURI
+  2: 
+  0: 44
+  1: subEncrypt
+  2: true
+  0: 45
+  1: subShowInfo
+  2: true
+  0: 46
+  1: subURI
+  2: 
+  0: 47
+  1: subJsonPath
+  2: /json/
+  0: 48
+  1: subJsonURI
+  2: 
+  0: 49
+  1: subJsonFragment
+  2: 
+  0: 50
+  1: subJsonNoises
+  2: 
+  0: 51
+  1: subJsonMux
+  2: 
+  0: 52
+  1: subJsonRules
+  2: 
+  0: 53
+  1: ldapEnable
+  2: false
+  0: 54
+  1: ldapHost
+  2: 
+  0: 55
+  1: ldapPort
+  2: 389
+  0: 56
+  1: ldapUseTLS
+  2: false
+  0: 57
+  1: ldapBindDN
+  2: 
+  0: 58
+  1: ldapPassword
+  2: 
+  0: 59
+  1: ldapBaseDN
+  2: 
+  0: 60
+  1: ldapUserFilter
+  2: (objectClass=person)
+  0: 61
+  1: ldapUserAttr
+  2: mail
+  0: 62
+  1: ldapVlessField
+  2: vless_enabled
+  0: 63
+  1: ldapSyncCron
+  2: @every 1m
+  0: 64
+  1: ldapFlagField
+  2: 
+  0: 65
+  1: ldapTruthyValues
+  2: true,1,yes,on
+  0: 66
+  1: ldapInvertFlag
+  2: false
+  0: 67
+  1: ldapInboundTags
+  2: 
+  0: 68
+  1: ldapAutoCreate
+  2: false
+  0: 69
+  1: ldapAutoDelete
+  2: false
+  0: 70
+  1: ldapDefaultTotalGB
+  2: 0
+  0: 71
+  1: ldapDefaultExpiryDays
+  2: 0
+  0: 72
+  1: ldapDefaultLimitIP
+  2: 0
+  0: 73
+  1: xrayTemplateConfig
+  2:
+    {
+      "log": {
+        "access": "none",
+        "dnsLog": false,
+        "error": "",
+        "loglevel": "warning",
+        "maskAddress": ""
+      },
+      "api": {
+        "tag": "api",
+        "services": [
+          "HandlerService",
+          "LoggerService",
+          "StatsService"
+        ]
+      },
+      "inbounds": [
+        {
+          "tag": "api",
+          "listen": "127.0.0.1",
+          "port": 62789,
+          "protocol": "tunnel",
+          "settings": {
+            "address": "127.0.0.1"
+          }
+        }
+      ],
+      "outbounds": [
+        {
+          "protocol": "vless",
+          "settings": {
+            "address": "vkosarev.name",
+            "port": 8080,
+            "id": "58318fd0-e8b9-40dd-a2d4-3292a0b5dc5d",
+            "flow": "xtls-rprx-vision",
+            "encryption": "none",
+            "testseed": [
+              900,
+              500,
+              900,
+              256
+            ]
+          },
+          "tag": "to-poland-reality",
+          "streamSettings": {
+            "network": "tcp",
+            "security": "reality",
+            "realitySettings": {
+              "publicKey": "lgVZnLaN6lpmQhyvwjbGJ5s0yrOoaQba_5pr43SglUU",
+              "fingerprint": "chrome",
+              "serverName": "yahoo.com",
+              "shortId": "d6a74304",
+              "spiderX": "",
+              "mldsa65Verify": ""
+            },
+            "tcpSettings": {
+              "header": {
+                "type": "none"
+              }
+            }
+          }
+        },
+        {
+          "tag": "direct",
+          "protocol": "freedom",
+          "settings": {
+            "domainStrategy": "AsIs",
+            "redirect": "",
+            "noises": []
+          }
+        },
+        {
+          "tag": "blocked",
+          "protocol": "blackhole",
+          "settings": {}
+        }
+      ],
+      "policy": {
+        "levels": {
+          "0": {
+            "statsUserDownlink": true,
+            "statsUserUplink": true
+          }
+        },
+        "system": {
+          "statsInboundDownlink": true,
+          "statsInboundUplink": true,
+          "statsOutboundDownlink": false,
+          "statsOutboundUplink": false
+        }
+      },
+      "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+          {
+            "type": "field",
+            "network": "TCP,UDP",
+            "user": [
+              "VK"
+            ],
+            "inboundTag": [
+              "inbound-40404"
+            ],
+            "outboundTag": "direct"
+          },
+          {
+            "type": "field",
+            "network": "TCP,UDP",
+            "user": [
+              "msk",
+              "natasha-17"
+            ],
+            "inboundTag": [
+              "inbound-443"
+            ],
+            "outboundTag": "to-poland-reality"
+          },
+          {
+            "type": "field",
+            "outboundTag": "blocked",
+            "ip": [
+              "geoip:private"
+            ]
+          },
+          {
+            "type": "field",
+            "outboundTag": "blocked",
+            "protocol": [
+              "bittorrent"
+            ]
+          }
+        ]
+      },
+      "stats": {},
+      "metrics": {
+        "tag": "metrics_out",
+        "listen": "127.0.0.1:11111"
+      }
+    }
+  0: 74
+  1: xrayOutboundTestUrl
+  2: https://www.google.com/generate_204

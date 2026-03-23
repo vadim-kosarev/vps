@@ -1,0 +1,1556 @@
+
+========== vkosarev.name ==========
+tables: ['users', 'sqlite_sequence', 'inbounds', 'outbound_traffics', 'settings', 'inbound_client_ips', 'client_traffics', 'history_of_seeders']
+
+--- users (1 rows) ---
+  0: 1
+  1: vkosarev
+  2: $2a$10$9zHf7d/8cGfivesrunkvW.ULMaMFMoEZ5LHC7eE032wnmp1F.lSn6
+
+--- sqlite_sequence (5 rows) ---
+  0: users
+  1: 1
+  0: history_of_seeders
+  1: 1
+  0: settings
+  1: 74
+  0: inbounds
+  1: 11
+  0: client_traffics
+  1: 30
+
+--- inbounds (5 rows) ---
+  0: 1
+  1: 1
+  2: 30858191816
+  3: 100985549963
+  4: 0
+  5: http-proxy-10126
+  6: 1
+  7: 0
+  8: 
+  9: 10126
+  10: http
+  11: {
+  "accounts": [
+    {
+      "user": "user1",
+      "pass": "Password123!!"
+    }
+  ],
+  "allowTransparent": false
+}
+  12: 
+  13: inbound-10126
+  14: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  15: {
+  "strategy": "always",
+  "refresh": 5,
+  "concurrency": 3
+}
+  16: 131843741779
+  17: never
+  18: 0
+  0: 3
+  1: 1
+  2: 6211656383
+  3: 200495728392
+  4: 0
+  5: EU.443
+  6: 0
+  7: 0
+  8: 
+  9: 443
+  10: vless
+  11: [JSON 2557 chars]
+{
+  "clients": [
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "69omuqh3",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "de9b4176-8d21-45cc-aaf0-a11a2f62fb38",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "hr3omolkj8znhc7j",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774121543000
+    },
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "eu.vk.8888",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "d48c0137-b958-4f53-99d6-7afe8113d331",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "bvya1yek2pco9059",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774121543000
+    },
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "EU.DEXP.╨С╨░╨╜╤П",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "3f915b2f-1df4-4a89-b395-dee27bc41950",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "xvsh7h8msy62vuuw",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774121543000
+    },
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "projector",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "bb0a7349-eea7-4f7c-b6ea-740ee45070a9",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "5guef4wfyw5xmfew",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774121543000
+    },
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "yandex",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "1093367f-ab5e-48c1-a055-6dac74966950",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "2zjnt7vuwis1roto",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774121543000
+    },
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "ya-pl",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "fb4c0028-2786-4b61-a286-dea14a508bd0
+  12: [JSON 847 chars]
+{
+  "network": "tcp",
+  "security": "reality",
+  "externalProxy": [],
+  "realitySettings": {
+    "show": false,
+    "xver": 0,
+    "target": "www.icloud.com:443",
+    "serverNames": [
+      "www.icloud.com"
+    ],
+    "privateKey": "qDYNvyeiP7cONBlrgU7HHZByBL0rDukecuOObXIbd2Q",
+    "minClientVer": "",
+    "maxClientVer": "",
+    "maxTimediff": 0,
+    "shortIds": [
+      "54",
+      "2e8380",
+      "bcc96f1460ea",
+      "fe0a02e42a",
+      "923489b2b29b563c",
+      "68e080e9",
+      "98c3",
+      "f111271c9f5bf1"
+    ],
+    "mldsa65Seed": "",
+    "settings": {
+      "publicKey": "jibezTkhLx6eOL92sOf6mHwvNT4PDw38Ky9jiToalyc",
+      "fingerprint": "chrome",
+      "serverName": "",
+      "spiderX": "/",
+      "mldsa65Verify": ""
+    }
+  },
+  "tcpSettings": {
+    "acceptProxyProtocol": false,
+    "header": {
+      "type": "none"
+    }
+  }
+}
+  13: inbound-443
+  14: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  15: {
+  "strategy": "always",
+  "refresh": 5,
+  "concurrency": 3
+}
+  16: 206707384775
+  17: never
+  18: 1774185106000
+  0: 8
+  1: 1
+  2: 76353797
+  3: 2799266200
+  4: 0
+  5: RU-PL
+  6: 1
+  7: 0
+  8: 
+  9: 8080
+  10: vless
+  11: [JSON 492 chars]
+{
+  "clients": [
+    {
+      "comment": "",
+      "created_at": 1774121543000,
+      "email": "msk",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "xtls-rprx-vision",
+      "id": "58318fd0-e8b9-40dd-a2d4-3292a0b5dc5d",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "bw4viex1mw2g4rp8",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774129105000
+    }
+  ],
+  "decryption": "none",
+  "encryption": "none",
+  "testseed": [
+    900,
+    500,
+    900,
+    256
+  ]
+}
+  12: [JSON 726 chars]
+{
+  "network": "tcp",
+  "security": "reality",
+  "externalProxy": [],
+  "realitySettings": {
+    "show": false,
+    "xver": 0,
+    "target": "yahoo.com:443",
+    "serverNames": [
+      "yahoo.com",
+      "www.yahoo.com"
+    ],
+    "privateKey": "EIrBH0NRtdXLKvf7BIAy_oETYxjEDsq8XIu6K_fyx1k",
+    "minClientVer": "",
+    "maxClientVer": "",
+    "maxTimediff": 0,
+    "shortIds": [
+      "d6a74304"
+    ],
+    "mldsa65Seed": "",
+    "settings": {
+      "publicKey": "lgVZnLaN6lpmQhyvwjbGJ5s0yrOoaQba_5pr43SglUU",
+      "fingerprint": "chrome",
+      "serverName": "",
+      "spiderX": "/",
+      "mldsa65Verify": ""
+    }
+  },
+  "tcpSettings": {
+    "acceptProxyProtocol": false,
+    "header": {
+      "type": "none"
+    }
+  }
+}
+  13: inbound-8080
+  14: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  15: {
+  "strategy": "always",
+  "refresh": 5,
+  "concurrency": 3
+}
+  16: 2875641629
+  17: never
+  18: 0
+  0: 10
+  1: 1
+  2: 81125973770
+  3: 113932333788
+  4: 0
+  5: mixed -msk MTProxy
+  6: 1
+  7: 0
+  8: 
+  9: 8443
+  10: mixed
+  11: {
+  "auth": "noauth",
+  "udp": true,
+  "ip": "127.0.0.1"
+}
+  12: 
+  13: inbound-8443
+  14: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  15: None
+  16: 195106909077
+  17: never
+  18: 0
+  0: 11
+  1: 1
+  2: 276445431
+  3: 11637266912
+  4: 0
+  5: EU.AMAZON
+  6: 1
+  7: 0
+  8: 
+  9: 34819
+  10: vless
+  11: [JSON 1852 chars]
+{
+  "clients": [
+    {
+      "comment": "",
+      "created_at": 1774182325000,
+      "email": "vk-EU.amazon",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "0e4b9998-bc09-4733-afc3-4215a3672670",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "9wjsc9ozdbue19ql",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774182325000
+    },
+    {
+      "comment": "",
+      "created_at": 1774183927000,
+      "email": "natasha.eu",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "320ac9e5-367d-43b6-a914-01c9edd452ba",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "ihjj7kk2uzag956j",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774183927000
+    },
+    {
+      "comment": "",
+      "created_at": 1774184042000,
+      "email": "TV-SAMSUNG.EU",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "f241f2d0-130b-4d4e-bd65-b0acdfb15cce",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "h873k6hptyxds39g",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774184042000
+    },
+    {
+      "comment": "",
+      "created_at": 1774189161000,
+      "email": "vlad",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "071febef-952e-4420-a35f-a46729c76b90",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "i3h21dkzlruwl01q",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774189161000
+    },
+    {
+      "comment": "",
+      "created_at": 1774204786000,
+      "email": "seva",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "285b9ecc-ecd2-4930-ba3c-76b654becba8",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "2wpeqcq6uthar2mu",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774204786000
+    }
+  ],
+  "decryption": "none",
+  "encryption": "none"
+}
+  12: [JSON 845 chars]
+{
+  "network": "tcp",
+  "security": "reality",
+  "externalProxy": [],
+  "realitySettings": {
+    "show": false,
+    "xver": 0,
+    "target": "www.apple.com:443",
+    "serverNames": [
+      "www.apple.com"
+    ],
+    "privateKey": "ULvxjIj7JBtx_3hcf_nMoVu-LV5S_3RpIf7o5VSkGWE",
+    "minClientVer": "",
+    "maxClientVer": "",
+    "maxTimediff": 0,
+    "shortIds": [
+      "d9457c8239",
+      "55ea",
+      "35a599",
+      "1a5af2f1",
+      "4bb694bb67da",
+      "c0",
+      "6b6bfd003fe8c5",
+      "08c421d157ae82c5"
+    ],
+    "mldsa65Seed": "",
+    "settings": {
+      "publicKey": "wG2jcSZD66WyFZjuq6Ks2UpnTycnRErSkRHrFRrEhWo",
+      "fingerprint": "chrome",
+      "serverName": "",
+      "spiderX": "/",
+      "mldsa65Verify": ""
+    }
+  },
+  "tcpSettings": {
+    "acceptProxyProtocol": false,
+    "header": {
+      "type": "none"
+    }
+  }
+}
+  13: inbound-34819
+  14: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  15: None
+  16: 11916819215
+  17: never
+  18: 0
+
+--- outbound_traffics (0 rows) ---
+
+--- settings (74 rows) ---
+  0: 1
+  1: webPort
+  2: 2055
+  0: 2
+  1: webBasePath
+  2: /vkosarev.name.eu/
+  0: 3
+  1: secret
+  2: aW3VkK018hMpIN5ARwj9MED9YW1cYEFm
+  0: 4
+  1: webListen
+  2: 
+  0: 5
+  1: webDomain
+  2: 
+  0: 6
+  1: webCertFile
+  2: /root/cert/vkosarev.name_fullchain.crt
+  0: 7
+  1: webKeyFile
+  2: /root/cert/vkosarev.name_privatekey.key
+  0: 8
+  1: sessionMaxAge
+  2: 60
+  0: 9
+  1: pageSize
+  2: 50
+  0: 10
+  1: expireDiff
+  2: 0
+  0: 11
+  1: trafficDiff
+  2: 0
+  0: 12
+  1: remarkModel
+  2: -ieo
+  0: 13
+  1: tgBotEnable
+  2: false
+  0: 14
+  1: tgBotToken
+  2: 
+  0: 15
+  1: tgBotProxy
+  2: 
+  0: 16
+  1: tgBotAPIServer
+  2: 
+  0: 17
+  1: tgBotChatId
+  2: 
+  0: 18
+  1: tgRunTime
+  2: @daily
+  0: 19
+  1: tgBotBackup
+  2: false
+  0: 20
+  1: tgBotLoginNotify
+  2: true
+  0: 21
+  1: tgCpu
+  2: 80
+  0: 22
+  1: tgLang
+  2: en-US
+  0: 23
+  1: timeLocation
+  2: Local
+  0: 24
+  1: twoFactorEnable
+  2: false
+  0: 25
+  1: twoFactorToken
+  2: 
+  0: 26
+  1: subEnable
+  2: false
+  0: 27
+  1: subTitle
+  2: 
+  0: 28
+  1: subListen
+  2: 
+  0: 29
+  1: subPort
+  2: 2096
+  0: 30
+  1: subPath
+  2: /sub/
+  0: 31
+  1: subDomain
+  2: 
+  0: 32
+  1: subCertFile
+  2: 
+  0: 33
+  1: subKeyFile
+  2: 
+  0: 34
+  1: subUpdates
+  2: 12
+  0: 35
+  1: externalTrafficInformEnable
+  2: false
+  0: 36
+  1: externalTrafficInformURI
+  2: 
+  0: 37
+  1: subEncrypt
+  2: true
+  0: 38
+  1: subShowInfo
+  2: true
+  0: 39
+  1: subURI
+  2: 
+  0: 40
+  1: subJsonPath
+  2: /json/
+  0: 41
+  1: subJsonURI
+  2: 
+  0: 42
+  1: subJsonFragment
+  2: 
+  0: 43
+  1: subJsonNoises
+  2: 
+  0: 44
+  1: subJsonMux
+  2: 
+  0: 45
+  1: subJsonRules
+  2: 
+  0: 46
+  1: datepicker
+  2: gregorian
+  0: 47
+  1: xrayTemplateConfig
+  2: [JSON 1590 chars]
+{
+  "log": {
+    "access": "./access.log",
+    "dnsLog": false,
+    "error": "./error.log",
+    "loglevel": "warning",
+    "maskAddress": ""
+  },
+  "api": {
+    "tag": "api",
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "api",
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "AsIs",
+        "redirect": "",
+        "noises": []
+      }
+    },
+    {
+      "tag": "blocked",
+      "protocol": "blackhole",
+      "settings": {}
+    }
+  ],
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserDownlink": true,
+        "statsUserUplink": true
+      }
+    },
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true,
+      "statsOutboundDownlink": false,
+      "statsOutboundUplink": false
+    }
+  },
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api"
+      },
+      {
+        "type": "field",
+        "outboundTag": "blocked",
+        "ip": [
+          "geoip:private"
+        ]
+      },
+      {
+        "type": "field",
+        "outboundTag": "blocked",
+        "protocol": [
+          "bittorrent"
+        ]
+      }
+    ]
+  },
+  "stats": {},
+  "metrics": {
+    "tag": "metrics_out",
+    "listen": "127.0.0.1:11111"
+  }
+}
+  0: 48
+  1: xrayOutboundTestUrl
+  2: https://www.google.com/generate_204
+  0: 49
+  1: subJsonEnable
+  2: false
+  0: 50
+  1: subSupportUrl
+  2: 
+  0: 51
+  1: subProfileUrl
+  2: 
+  0: 52
+  1: subAnnounce
+  2: 
+  0: 53
+  1: subEnableRouting
+  2: true
+  0: 54
+  1: subRoutingRules
+  2: 
+  0: 55
+  1: ldapEnable
+  2: false
+  0: 56
+  1: ldapHost
+  2: 
+  0: 57
+  1: ldapPort
+  2: 389
+  0: 58
+  1: ldapUseTLS
+  2: false
+  0: 59
+  1: ldapBindDN
+  2: 
+  0: 60
+  1: ldapPassword
+  2: 
+  0: 61
+  1: ldapBaseDN
+  2: 
+  0: 62
+  1: ldapUserFilter
+  2: (objectClass=person)
+  0: 63
+  1: ldapUserAttr
+  2: mail
+  0: 64
+  1: ldapVlessField
+  2: vless_enabled
+  0: 65
+  1: ldapSyncCron
+  2: @every 1m
+  0: 66
+  1: ldapFlagField
+  2: 
+  0: 67
+  1: ldapTruthyValues
+  2: true,1,yes,on
+  0: 68
+  1: ldapInvertFlag
+  2: false
+  0: 69
+  1: ldapInboundTags
+  2: 
+  0: 70
+  1: ldapAutoCreate
+  2: false
+  0: 71
+  1: ldapAutoDelete
+  2: false
+  0: 72
+  1: ldapDefaultTotalGB
+  2: 0
+  0: 73
+  1: ldapDefaultExpiryDays
+  2: 0
+  0: 74
+  1: ldapDefaultLimitIP
+  2: 0
+
+--- inbound_client_ips (0 rows) ---
+
+--- client_traffics (13 rows) ---
+  0: 11
+  1: 3
+  2: 1
+  3: 69omuqh3
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: None
+  10: 0
+  0: 12
+  1: 3
+  2: 1
+  3: eu.vk.8888
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 157816959603
+  10: 1774237444004
+  0: 13
+  1: 3
+  2: 1
+  3: EU.DEXP.╨С╨░╨╜╤П
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 48783474940
+  10: 0
+  0: 14
+  1: 3
+  2: 1
+  3: projector
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 2058115
+  10: 0
+  0: 15
+  1: 3
+  2: 1
+  3: yandex
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: None
+  10: 0
+  0: 17
+  1: 3
+  2: 1
+  3: ya-pl
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: None
+  10: 0
+  0: 20
+  1: 8
+  2: 1
+  3: msk
+  4: 70286505
+  5: 2796317949
+  6: 0
+  7: 0
+  8: 0
+  9: 2866604454
+  10: 1774282838009
+  0: 22
+  1: 3
+  2: 1
+  3: ma
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 0
+  10: 0
+  0: 25
+  1: 11
+  2: 1
+  3: vk-EU.amazon
+  4: 85559543
+  5: 232600041
+  6: 0
+  7: 0
+  8: 0
+  9: 335293604
+  10: 1774290810011
+  0: 27
+  1: 11
+  2: 1
+  3: natasha.eu
+  4: 21681096
+  5: 1178271852
+  6: 0
+  7: 0
+  8: 0
+  9: 1199952948
+  10: 1774290800011
+  0: 28
+  1: 11
+  2: 1
+  3: TV-SAMSUNG.EU
+  4: 52391778
+  5: 7196393780
+  6: 0
+  7: 0
+  8: 0
+  9: 7248785558
+  10: 1774290810011
+  0: 29
+  1: 11
+  2: 1
+  3: vlad
+  4: 62184784
+  5: 1101357877
+  6: 0
+  7: 0
+  8: 0
+  9: 1163542661
+  10: 1774290810011
+  0: 30
+  1: 11
+  2: 1
+  3: seva
+  4: 50260674
+  5: 1898500920
+  6: 0
+  7: 0
+  8: 0
+  9: 1948761594
+  10: 1774290780031
+
+--- history_of_seeders (1 rows) ---
+  0: 1
+  1: UserPasswordHash
+
+========== agghhh.click ==========
+tables: ['users', 'sqlite_sequence', 'inbounds', 'outbound_traffics', 'settings', 'inbound_client_ips', 'client_traffics', 'history_of_seeders']
+
+--- users (1 rows) ---
+  0: 1
+  1: vkosarev
+  2: $2a$10$uRAccHsX/k0b1zu/x3dIQes..L.cLRh74xKoDgez5F6FptZnyJ2BC
+
+--- sqlite_sequence (5 rows) ---
+  0: users
+  1: 1
+  0: history_of_seeders
+  1: 1
+  0: settings
+  1: 74
+  0: inbounds
+  1: 5
+  0: client_traffics
+  1: 6
+
+--- inbounds (2 rows) ---
+  0: 4
+  1: 1
+  2: 59286752
+  3: 1836624972
+  4: 0
+  5: 1897931497
+  6: MSK-PL:443
+  7: 1
+  8: 0
+  9: never
+  10: 0
+  11: 
+  12: 443
+  13: vless
+  14: [JSON 849 chars]
+{
+  "clients": [
+    {
+      "comment": "",
+      "created_at": 1774123301000,
+      "email": "msk",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "xtls-rprx-vision",
+      "id": "938a3d20-b0c6-4f75-9130-0c69f12c6ef8",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "ti172882ze4oyyu9",
+      "tgId": 0,
+      "totalGB": 0,
+      "updated_at": 1774123695000
+    },
+    {
+      "comment": "",
+      "created_at": 1774124257000,
+      "email": "natasha-17",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "780f1bb2-92db-4aeb-9f4a-2b327168e9af",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "dy0qo8yknmwgbnyr",
+      "tgId": "",
+      "totalGB": 0,
+      "updated_at": 1774124257000
+    }
+  ],
+  "decryption": "none",
+  "encryption": "none",
+  "testseed": [
+    900,
+    500,
+    900,
+    256
+  ]
+}
+  15: [JSON 855 chars]
+{
+  "network": "tcp",
+  "security": "reality",
+  "externalProxy": [],
+  "realitySettings": {
+    "show": false,
+    "xver": 0,
+    "target": "browser.yandex.com:443",
+    "serverNames": [
+      "browser.yandex.com"
+    ],
+    "privateKey": "YIS4BDgASQpPCm6sdpaB0U_st7XxnCWTa-AfNQHDUFE",
+    "minClientVer": "",
+    "maxClientVer": "",
+    "maxTimediff": 0,
+    "shortIds": [
+      "42",
+      "79b9",
+      "50fdb2bff81c5131",
+      "b715c8e55150",
+      "f2d36e4641f6c8",
+      "943b3f5f",
+      "511526",
+      "2b85e81275"
+    ],
+    "mldsa65Seed": "",
+    "settings": {
+      "publicKey": "w_lZLD_5jblq7eGWgEJLwbxHzGburuCnRo1JPRMytAI",
+      "fingerprint": "chrome",
+      "serverName": "",
+      "spiderX": "/",
+      "mldsa65Verify": ""
+    }
+  },
+  "tcpSettings": {
+    "acceptProxyProtocol": false,
+    "header": {
+      "type": "none"
+    }
+  }
+}
+  16: inbound-443
+  17: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+  0: 5
+  1: 1
+  2: 530445
+  3: 1555391
+  4: 0
+  5: 2087836
+  6: RU-RU:40404
+  7: 1
+  8: 0
+  9: monthly
+  10: 0
+  11: 
+  12: 40404
+  13: vless
+  14: [JSON 418 chars]
+{
+  "clients": [
+    {
+      "comment": "",
+      "created_at": 1774161624000,
+      "email": "VK",
+      "enable": true,
+      "expiryTime": 0,
+      "flow": "",
+      "id": "f455b3c2-d38e-4c7c-96a4-69cf64c82cba",
+      "limitIp": 0,
+      "reset": 0,
+      "subId": "irzde849ytlovl6q",
+      "tgId": 0,
+      "totalGB": 0,
+      "updated_at": 1774162193000
+    }
+  ],
+  "decryption": "none",
+  "encryption": "none"
+}
+  15: [JSON 853 chars]
+{
+  "network": "tcp",
+  "security": "reality",
+  "externalProxy": [],
+  "realitySettings": {
+    "show": false,
+    "xver": 0,
+    "target": "browser.yandex.ru:443",
+    "serverNames": [
+      "browser.yandex.ru"
+    ],
+    "privateKey": "QJHU8wjEOhC-b5gWsrzABTYAcS-sMObhdiU9cqAJU0U",
+    "minClientVer": "",
+    "maxClientVer": "",
+    "maxTimediff": 0,
+    "shortIds": [
+      "37",
+      "d0b94da7",
+      "a713",
+      "8911e8",
+      "edbb07fffa",
+      "61546168b8e7ac",
+      "f6369b29fc882088",
+      "a7f1b324fbdd"
+    ],
+    "mldsa65Seed": "",
+    "settings": {
+      "publicKey": "HZzor8wBP4D4LhZyA-WvWL1s3ONG5R4YfEMHrHWpsEA",
+      "fingerprint": "chrome",
+      "serverName": "",
+      "spiderX": "/",
+      "mldsa65Verify": ""
+    }
+  },
+  "tcpSettings": {
+    "acceptProxyProtocol": false,
+    "header": {
+      "type": "none"
+    }
+  }
+}
+  16: inbound-40404
+  17: {
+  "enabled": false,
+  "destOverride": [
+    "http",
+    "tls",
+    "quic",
+    "fakedns"
+  ],
+  "metadataOnly": false,
+  "routeOnly": false
+}
+
+--- outbound_traffics (0 rows) ---
+
+--- settings (74 rows) ---
+  0: 1
+  1: webPort
+  2: 2077
+  0: 2
+  1: webBasePath
+  2: /vaduha.name777/
+  0: 3
+  1: secret
+  2: FWg50wGn4hOkwTjSIZpsQPAXM6gmOGsc
+  0: 4
+  1: webListen
+  2: 
+  0: 5
+  1: webDomain
+  2: 
+  0: 6
+  1: webCertFile
+  2: 
+  0: 7
+  1: webKeyFile
+  2: 
+  0: 8
+  1: sessionMaxAge
+  2: 360
+  0: 9
+  1: pageSize
+  2: 25
+  0: 10
+  1: expireDiff
+  2: 0
+  0: 11
+  1: trafficDiff
+  2: 0
+  0: 12
+  1: remarkModel
+  2: -ieo
+  0: 13
+  1: datepicker
+  2: gregorian
+  0: 14
+  1: tgBotEnable
+  2: false
+  0: 15
+  1: tgBotToken
+  2: 
+  0: 16
+  1: tgBotProxy
+  2: 
+  0: 17
+  1: tgBotAPIServer
+  2: 
+  0: 18
+  1: tgBotChatId
+  2: 
+  0: 19
+  1: tgRunTime
+  2: @daily
+  0: 20
+  1: tgBotBackup
+  2: false
+  0: 21
+  1: tgBotLoginNotify
+  2: true
+  0: 22
+  1: tgCpu
+  2: 80
+  0: 23
+  1: tgLang
+  2: en-US
+  0: 24
+  1: timeLocation
+  2: Local
+  0: 25
+  1: twoFactorEnable
+  2: false
+  0: 26
+  1: twoFactorToken
+  2: 
+  0: 27
+  1: subEnable
+  2: true
+  0: 28
+  1: subJsonEnable
+  2: false
+  0: 29
+  1: subTitle
+  2: 
+  0: 30
+  1: subSupportUrl
+  2: 
+  0: 31
+  1: subProfileUrl
+  2: 
+  0: 32
+  1: subAnnounce
+  2: 
+  0: 33
+  1: subEnableRouting
+  2: true
+  0: 34
+  1: subRoutingRules
+  2: 
+  0: 35
+  1: subListen
+  2: 
+  0: 36
+  1: subPort
+  2: 2096
+  0: 37
+  1: subPath
+  2: /sub/
+  0: 38
+  1: subDomain
+  2: 
+  0: 39
+  1: subCertFile
+  2: 
+  0: 40
+  1: subKeyFile
+  2: 
+  0: 41
+  1: subUpdates
+  2: 12
+  0: 42
+  1: externalTrafficInformEnable
+  2: false
+  0: 43
+  1: externalTrafficInformURI
+  2: 
+  0: 44
+  1: subEncrypt
+  2: true
+  0: 45
+  1: subShowInfo
+  2: true
+  0: 46
+  1: subURI
+  2: 
+  0: 47
+  1: subJsonPath
+  2: /json/
+  0: 48
+  1: subJsonURI
+  2: 
+  0: 49
+  1: subJsonFragment
+  2: 
+  0: 50
+  1: subJsonNoises
+  2: 
+  0: 51
+  1: subJsonMux
+  2: 
+  0: 52
+  1: subJsonRules
+  2: 
+  0: 53
+  1: ldapEnable
+  2: false
+  0: 54
+  1: ldapHost
+  2: 
+  0: 55
+  1: ldapPort
+  2: 389
+  0: 56
+  1: ldapUseTLS
+  2: false
+  0: 57
+  1: ldapBindDN
+  2: 
+  0: 58
+  1: ldapPassword
+  2: 
+  0: 59
+  1: ldapBaseDN
+  2: 
+  0: 60
+  1: ldapUserFilter
+  2: (objectClass=person)
+  0: 61
+  1: ldapUserAttr
+  2: mail
+  0: 62
+  1: ldapVlessField
+  2: vless_enabled
+  0: 63
+  1: ldapSyncCron
+  2: @every 1m
+  0: 64
+  1: ldapFlagField
+  2: 
+  0: 65
+  1: ldapTruthyValues
+  2: true,1,yes,on
+  0: 66
+  1: ldapInvertFlag
+  2: false
+  0: 67
+  1: ldapInboundTags
+  2: 
+  0: 68
+  1: ldapAutoCreate
+  2: false
+  0: 69
+  1: ldapAutoDelete
+  2: false
+  0: 70
+  1: ldapDefaultTotalGB
+  2: 0
+  0: 71
+  1: ldapDefaultExpiryDays
+  2: 0
+  0: 72
+  1: ldapDefaultLimitIP
+  2: 0
+  0: 73
+  1: xrayTemplateConfig
+  2: [JSON 2723 chars]
+{
+  "log": {
+    "access": "none",
+    "dnsLog": false,
+    "error": "",
+    "loglevel": "warning",
+    "maskAddress": ""
+  },
+  "api": {
+    "tag": "api",
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "api",
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "tunnel",
+      "settings": {
+        "address": "127.0.0.1"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "address": "vkosarev.name",
+        "port": 8080,
+        "id": "58318fd0-e8b9-40dd-a2d4-3292a0b5dc5d",
+        "flow": "xtls-rprx-vision",
+        "encryption": "none",
+        "testseed": [
+          900,
+          500,
+          900,
+          256
+        ]
+      },
+      "tag": "to-poland-reality",
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "publicKey": "lgVZnLaN6lpmQhyvwjbGJ5s0yrOoaQba_5pr43SglUU",
+          "fingerprint": "chrome",
+          "serverName": "yahoo.com",
+          "shortId": "d6a74304",
+          "spiderX": "",
+          "mldsa65Verify": ""
+        },
+        "tcpSettings": {
+          "header": {
+            "type": "none"
+          }
+        }
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "AsIs",
+        "redirect": "",
+        "noises": []
+      }
+    },
+    {
+      "tag": "blocked",
+      "protocol": "blackhole",
+      "settings": {}
+    }
+  ],
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserDownlink": true,
+        "statsUserUplink": true
+      }
+    },
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true,
+      "statsOutboundDownlink": false,
+      "statsOutboundUplink": false
+    }
+  },
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "network": "TCP,UDP",
+        "user": [
+          
+  0: 74
+  1: xrayOutboundTestUrl
+  2: https://www.google.com/generate_204
+
+--- inbound_client_ips (0 rows) ---
+
+--- client_traffics (3 rows) ---
+  0: 4
+  1: 4
+  2: 1
+  3: msk
+  4: 45653875
+  5: 1248099913
+  6: 1293753788
+  7: 0
+  8: 0
+  9: 0
+  10: 1774162345003
+  0: 5
+  1: 4
+  2: 1
+  3: natasha-17
+  4: 8958305
+  5: 587993207
+  6: 596951512
+  7: 0
+  8: 0
+  9: 0
+  10: 1774129665003
+  0: 6
+  1: 5
+  2: 1
+  3: VK
+  4: 524205
+  5: 1559162
+  6: 2083367
+  7: 0
+  8: 0
+  9: 0
+  10: 1774162385002
+
+--- history_of_seeders (1 rows) ---
+  0: 1
+  1: UserPasswordHash
