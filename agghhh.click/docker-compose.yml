@@ -52,3 +52,19 @@ services:
     ports:
       - "${TELEMT_PORT:-8443}:8443"
       - "${TELEMT_STATS_PORT:-9091}:9091"
+
+  # ---------------------------------------------------------------------------
+  # Portainer — веб-интерфейс управления Docker
+  # UI:  https://agghhh.click:9443
+  # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
+  # ---------------------------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ce:2.27.9
+    restart: always
+    ports:
+      - "${PORTAINER_PORT:-9443}:9443"
+      - "${PORTAINER_AGENT_PORT:-8000}:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PORTAINER_DATA:-./portainer/data}:/data
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
