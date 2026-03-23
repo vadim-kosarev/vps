@@ -14,7 +14,7 @@ services:
 
   # ---------------------------------------------------------------------------
   # 3x-ui — панель управления Xray
-  # Панель:  https://agghhh.click:2055
+  # Панель:  http://agghhh.click:2077/vaduha.name777/panel/settings
   # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
   # ---------------------------------------------------------------------------
   3x-ui:
@@ -27,6 +27,7 @@ services:
     ports:
       - "${X_UI_PORT_443:-443}:443"
       - "${X_UI_PORT_40404:-40404}:40404"
+      - "2077:2077"
     environment:
       - XRAY_VMESS_AEAD_FORCED=false
 
