@@ -5,6 +5,10 @@
 Этот репозиторий предназначен для управления конфигурациями VPS хостингов.  
 Каждая директория верхнего уровня соответствует отдельному серверу или домену.
 
+## Правила работы агента
+
+- **Не делать `git commit` и `git push` без явной команды пользователя.**
+
 ## Принципы работы
 
 ### Развёртывание
@@ -39,30 +43,29 @@
 
 ### Выполнение команд на удалённом хосте
 
+Всегда использовать **inline-команду** (без временных файлов):
+
 ```powershell
-plink -load "имя-хоста" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "команда"
+plink -load "vkosarev.name" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "команда"
 ```
 
-Пример — проверить запущенные контейнеры:
+Пример:
 
 ```powershell
 plink -load "vkosarev.name" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "docker compose -f /root/vps/vkosarev.name/docker-compose.yml ps"
 ```
 
-### Выполнение многострочного скрипта
+### Экранирование `$` в PowerShell
 
-Для сложных команд — записать скрипт в файл и передать через `-m`:
+PowerShell раскрывает `$()` и `$var` внутри двойных кавычек локально.  
+Чтобы передать `$` в bash на сервере — экранировать через backtick `` ` ``:
 
 ```powershell
-$key = 'Z:\MY\vk-amazon-2023-private.ppk'
-$tmp = Join-Path $env:TEMP 'remote-script.sh'
-@'
-set -e
-# команды здесь
-docker compose ps
-'@ | Set-Content -Path $tmp -Encoding ascii
-plink -load "vkosarev.name" -i $key -batch -m $tmp
-Remove-Item $tmp -Force
+# Неправильно — PowerShell выполнит $(cat ...) локально:
+plink ... -batch "TOKEN=$(cat ~/.github.token) && git push"
+
+# Правильно — `$ экранирует знак доллара, bash получит $(...) как есть:
+plink ... -batch "TOKEN=`$(cat ~/.github.token) && git push"
 ```
 
 ### PuTTY Session

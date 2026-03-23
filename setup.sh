@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # setup.sh — минимальная настройка хоста VPS
-# Запускать: sudo bash setup.sh
+# Запускать: sudo bash setup.sh  (из директории репозитория)
 # Всё остальное разворачивается через docker compose.
 # =============================================================================
 set -euo pipefail
@@ -13,9 +13,10 @@ die()  { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 [[ $EUID -ne 0 ]] && die "Запускать от root: sudo bash $0"
 
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # =============================================================================
 # Docker Compose plugin (v2)
-# Нужен чтобы работала команда: docker compose (без дефиса)
 # =============================================================================
 if docker compose version &>/dev/null; then
   warn "docker compose plugin уже установлен ($(docker compose version --short))"
@@ -26,31 +27,27 @@ else
   log "docker compose plugin установлен ($(docker compose version --short))"
 fi
 
- — экспортёр метрик хоста для Prometheus
-# Снимает: CPU, RAM, диски, сеть (rx/tx байт, пакеты, ошибки)
-# Должен работать на хосте (не в Docker), чтобы видеть реальные интерфейсы
-# =============================================================================
-
 # =============================================================================
 # Git — настройка remote с GitHub token
 # Токен хранится в ~/.github.token (не коммитить!)
 # =============================================================================
 if [[ -f ~/.github.token ]]; then
   TOKEN=$(cat ~/.github.token)
-  REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
   git -C "$REPO_DIR" remote set-url origin "https://${TOKEN}@github.com/vadim-kosarev/vps.git"
-  git -C "$REPO_DIR" config --global user.email "root@vkosarev.name"
-  git -C "$REPO_DIR" config --global user.name "vkosarev"
+  git -C "$REPO_DIR" config --global user.email "root@$(hostname)"
+  git -C "$REPO_DIR" config --global user.name "$(hostname)"
   log "git remote настроен с токеном из ~/.github.token"
 else
   warn "~/.github.token не найден — git push работать не будет. Создайте файл с GitHub PAT."
 fi
 
 # =============================================================================
-# node_exporter
+# node_exporter — экспортёр метрик хоста для Prometheus
+# Снимает: CPU, RAM, диски, сеть (rx/tx байт, пакеты, ошибки)
+# Должен работать на хосте (не в Docker), чтобы видеть реальные интерфейсы
+# =============================================================================
 NODE_EXPORTER_VERSION="1.8.2"
 
-# Определяем архитектуру
 case "$(uname -m)" in
   x86_64)  ARCH="amd64" ;;
   aarch64) ARCH="arm64" ;;
@@ -58,10 +55,15 @@ case "$(uname -m)" in
   *)       die "Неизвестная архитектура: $(uname -m)" ;;
 esac
 
-if systemctl is-active --quiet node_exporter 2>/dev/null; then
-  warn "node_exporter уже запущен, пропускаем установку"
+if [[ -x /usr/local/bin/node_exporter ]]; then
+  warn "node_exporter уже установлен, пропускаем установку"
+  # Убедиться что сервис включён и запущен
+  systemctl enable node_exporter &>/dev/null
+  systemctl is-active --quiet node_exporter || systemctl start node_exporter
 else
   log "Устанавливаем node_exporter v${NODE_EXPORTER_VERSION} (${ARCH})..."
+
+  apt-get install -y wget ca-certificates
 
   TARBALL="node_exporter-${NODE_EXPORTER_VERSION}.linux-${ARCH}.tar.gz"
   URL="https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/${TARBALL}"
@@ -73,10 +75,8 @@ else
   chmod +x /usr/local/bin/node_exporter
   rm -rf "node_exporter-${NODE_EXPORTER_VERSION}.linux-${ARCH}" "${TARBALL}"
 
-  # Отдельный непривилегированный пользователь для сервиса
   id node_exporter &>/dev/null || useradd --no-create-home --shell /bin/false node_exporter
 
-  # Systemd unit
   cat > /etc/systemd/system/node_exporter.service <<'EOF'
 [Unit]
 Description=Prometheus Node Exporter
@@ -119,7 +119,7 @@ fi
 # =============================================================================
 echo ""
 log "Готово! Следующий шаг:"
-echo "  cd \$(dirname \$0)"
+echo "  cd $REPO_DIR/<хостинг>"
 echo "  docker compose up -d"
 echo ""
 warn "Порт 9100 (node_exporter) должен быть закрыт для внешнего мира — Prometheus обращается к нему внутри хоста."
