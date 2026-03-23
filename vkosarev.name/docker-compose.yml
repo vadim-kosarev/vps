@@ -31,3 +31,48 @@ services:
     # Альтернатива явным портам — host-сеть (проще при множестве inbound):
     # network_mode: host
 
+  # ---------------------------------------------------------------------------
+  # Prometheus — сбор метрик
+  # Скрейпит node_exporter на хосте (CPU, RAM, сеть rx/tx, диски)
+  # Актуальные теги: https://github.com/prometheus/prometheus/releases
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    restart: unless-stopped
+    # host-gateway позволяет обращаться к хосту по имени host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=90d"
+      # Разрешаем перезагрузку конфига без рестарта: POST /-/reload
+      - "--web.enable-lifecycle"
+    ports:
+      # Закрыть извне, оставить только для Grafana
+      - "127.0.0.1:9090:9090"
+
+  # ---------------------------------------------------------------------------
+  # Grafana — дашборды и визуализация
+  # Готовый дашборд для node_exporter: https://grafana.com/dashboards/1860
+  # Актуальные теги: https://github.com/grafana/grafana/releases
+  # ---------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:11.5.2
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      # Пароль администратора — задать в .env файле на сервере
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+
