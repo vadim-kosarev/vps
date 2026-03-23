@@ -100,7 +100,7 @@ services:
     ports:
       - "2443:443"
     volumes:
-      - mtproxy-data:/data
+      - ${MTPROXY_DATA:-./mtproxy/data}:/data
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
   # ---------------------------------------------------------------------------
@@ -149,5 +149,4 @@ services:
       - ${PORTAINER_DATA:-./portainer/data}:/data
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
-volumes:
-  mtproxy-data:
+volumes: {}
