@@ -25,8 +25,6 @@ services:
       - ${X_UI_DATA:-./3x-ui/db}:/etc/x-ui
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
     ports:
-      - "2055:2055"   # веб-панель
-      - "2096:2096"   # подписка
       - "443:443"     # xray inbound
       - "40404:40404" # xray inbound
     environment:
