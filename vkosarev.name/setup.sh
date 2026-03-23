@@ -30,6 +30,24 @@ fi
 # Снимает: CPU, RAM, диски, сеть (rx/tx байт, пакеты, ошибки)
 # Должен работать на хосте (не в Docker), чтобы видеть реальные интерфейсы
 # =============================================================================
+
+# =============================================================================
+# Git — настройка remote с GitHub token
+# Токен хранится в ~/.github.token (не коммитить!)
+# =============================================================================
+if [[ -f ~/.github.token ]]; then
+  TOKEN=$(cat ~/.github.token)
+  REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+  git -C "$REPO_DIR" remote set-url origin "https://${TOKEN}@github.com/vadim-kosarev/vps.git"
+  git -C "$REPO_DIR" config --global user.email "root@vkosarev.name"
+  git -C "$REPO_DIR" config --global user.name "vkosarev"
+  log "git remote настроен с токеном из ~/.github.token"
+else
+  warn "~/.github.token не найден — git push работать не будет. Создайте файл с GitHub PAT."
+fi
+
+# =============================================================================
+# node_exporter
 NODE_EXPORTER_VERSION="1.8.2"
 
 # Определяем архитектуру
