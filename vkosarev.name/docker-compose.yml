@@ -56,13 +56,12 @@ services:
     container_name: xui-exporter
     restart: unless-stopped
     environment:
-      # Адрес панели 3x-ui внутри Docker-сети (по container_name)
-      XUI_HOST:      ${XUI_EXPORTER_HOST:-http://3x-ui:2055}
-      # Базовый путь панели (задан в настройках 3x-ui)
-      XUI_BASE_PATH: ${XUI_EXPORTER_BASE_PATH:-/vkosarev.name.eu/}
-      # Учётные данные панели
-      XUI_USERNAME:  ${XUI_EXPORTER_USERNAME:-vkosarev}
-      XUI_PASSWORD:  ${XUI_EXPORTER_PASSWORD:-changeme}
+      # Панель работает по HTTPS; base path включён прямо в URL
+      XUI_HOST:     "${XUI_EXPORTER_HOST:-https://3x-ui:2055/vkosarev.name.eu/}"
+      XUI_USERNAME: "${XUI_EXPORTER_USERNAME:-vkosarev}"
+      XUI_PASSWORD: "${XUI_EXPORTER_PASSWORD:-changeme}"
+      # Сертификат выдан на vkosarev.name, не на 3x-ui → отключаем проверку
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
     ports:
       - "${XUI_EXPORTER_PORT:-2112}:2112"
 
