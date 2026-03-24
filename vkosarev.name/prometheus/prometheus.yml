@@ -13,3 +13,11 @@ scrape_configs:
       - targets: ["agghhh.click:9100"]
         labels:
           host: "agghhh.click"
+
+  # 3x-ui метрики — экспортёр в той же Docker-сети
+  - job_name: "xui"
+    static_configs:
+      - targets: ["xui-exporter:2112"]
+        labels:
+          host: "vkosarev.name"
+

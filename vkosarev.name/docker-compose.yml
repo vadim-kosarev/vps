@@ -47,6 +47,26 @@ services:
     # network_mode: host
 
   # ---------------------------------------------------------------------------
+  # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
+  # Метрики: http://vkosarev.name:2112/metrics
+  # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
+  # ---------------------------------------------------------------------------
+  3x-ui-exporter:
+    image: ghcr.io/m4l3vich/3x-ui-prometheus-exporter:latest
+    container_name: xui-exporter
+    restart: unless-stopped
+    environment:
+      # Адрес панели 3x-ui внутри Docker-сети (по container_name)
+      XUI_HOST:      ${XUI_EXPORTER_HOST:-http://3x-ui:2055}
+      # Базовый путь панели (задан в настройках 3x-ui)
+      XUI_BASE_PATH: ${XUI_EXPORTER_BASE_PATH:-/vkosarev.name.eu/}
+      # Учётные данные панели
+      XUI_USERNAME:  ${XUI_EXPORTER_USERNAME:-vkosarev}
+      XUI_PASSWORD:  ${XUI_EXPORTER_PASSWORD:-changeme}
+    ports:
+      - "${XUI_EXPORTER_PORT:-2112}:2112"
+
+  # ---------------------------------------------------------------------------
   # frps — Fast Reverse Proxy server v0.63.0
   # Dashboard: http://vkosarev.name:7599
   # Клиенты подключаются на порт 7401 (TCP + KCP/UDP)
