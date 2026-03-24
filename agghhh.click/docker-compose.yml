@@ -54,6 +54,28 @@ services:
       - "${TELEMT_STATS_PORT:-9091}:9091"
 
   # ---------------------------------------------------------------------------
+  # Prometheus — сбор метрик
+  # UI: http://agghhh.click:9090
+  # Актуальные теги: https://github.com/prometheus/prometheus/releases
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${PROMETHEUS_DATA:-./prometheus/data}:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=90d"
+      - "--web.enable-lifecycle"
+    ports:
+      - "9090:9090"
+
+  # ---------------------------------------------------------------------------
   # Portainer — веб-интерфейс управления Docker
   # UI:  https://agghhh.click:9443
   # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
