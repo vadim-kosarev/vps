@@ -4,10 +4,12 @@ global:
 
 scrape_configs:
 
-  # node_exporter работает на хосте, не в Docker
-  # host.docker.internal резолвится в IP хоста благодаря extra_hosts в compose
+  # node_exporter на обоих хостах — порт 9100 открыт публично
   - job_name: "node"
     static_configs:
       - targets: ["host.docker.internal:9100"]
         labels:
           host: "vkosarev.name"
+      - targets: ["agghhh.click:9100"]
+        labels:
+          host: "agghhh.click"

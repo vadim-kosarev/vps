@@ -11,4 +11,6 @@ scrape_configs:
       - targets: ["host.docker.internal:9100"]
         labels:
           host: "agghhh.click"
-
+      - targets: ["vkosarev.name:9100"]
+        labels:
+          host: "vkosarev.name"
