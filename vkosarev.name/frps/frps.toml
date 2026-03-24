@@ -1,0 +1,29 @@
+# frps — конфиг сервера FRP (Fast Reverse Proxy)
+# Документация: https://github.com/fatedier/frp
+#
+# ВАЖНО: auth.token — секрет, совпадает с frpc на клиентах.
+# Лучше вынести в .env и подставлять, но frps не поддерживает env-переменные в toml нативно.
+# Текущее решение: конфиг хранится здесь, не коммитить в публичный репо.
+
+bindAddr = "::"
+bindPort = 7401
+
+# KCP (UDP) — тот же порт что и TCP
+kcpBindPort = 7401
+
+# Прокси слушают только на localhost хоста (т.к. network_mode: host)
+proxyBindAddr = "127.0.0.1"
+
+transport.tls.force = false
+transport.maxPoolCount = 5
+
+# Dashboard (веб-интерфейс frps)
+# http://vkosarev.name:7599
+webServer.addr = "0.0.0.0"
+webServer.port = 7599
+webServer.user = "admin"
+webServer.password = "noname564"
+
+# Токен аутентификации для frpc-клиентов
+auth.token = "470720451211462921230901855180"
+

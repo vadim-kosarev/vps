@@ -47,6 +47,22 @@ services:
     # network_mode: host
 
   # ---------------------------------------------------------------------------
+  # frps — Fast Reverse Proxy server v0.63.0
+  # Dashboard: http://vkosarev.name:7599
+  # Клиенты подключаются на порт 7401 (TCP + KCP/UDP)
+  # network_mode: host — frps слушает напрямую на интерфейсах хоста
+  # Актуальные теги: https://github.com/fatedier/frp/releases
+  # ---------------------------------------------------------------------------
+  frps:
+    image: snowdreamtech/frps:0.63.0
+    container_name: frps
+    restart: always
+    network_mode: host
+    volumes:
+      - ${FRPS_CONFIG:-./frps/frps.toml}:/etc/frp/frps.toml:ro
+    command: ["-c", "/etc/frp/frps.toml"]
+
+  # ---------------------------------------------------------------------------
   # Prometheus — сбор метрик
   # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
