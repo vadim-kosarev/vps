@@ -43,4 +43,5 @@ secrets/
 docker-compose.override.yml
 
 **/grafana/data/**
+!**/grafana/data/grafana.db
 **/prometheus/data/**
