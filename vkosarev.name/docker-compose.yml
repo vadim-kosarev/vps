@@ -52,7 +52,7 @@ services:
   # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
   # ---------------------------------------------------------------------------
   3x-ui-exporter:
-    image: ghcr.io/m4l3vich/3x-ui-prometheus-exporter:latest
+    image: m4l3vich/3x-ui-prometheus-exporter:latest
     container_name: xui-exporter
     restart: unless-stopped
     environment:
