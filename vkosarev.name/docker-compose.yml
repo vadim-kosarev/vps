@@ -48,13 +48,13 @@ services:
 
   # ---------------------------------------------------------------------------
   # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
-  # Метрики: http://vkosarev.name:2112/metrics
+  # Метрики: http://vkosarev.name:3001/metrics
   # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
   # ---------------------------------------------------------------------------
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
     container_name: xui-exporter
-    restart: no
+    restart: unless-stopped
     environment:
       # Адрес панели 3x-ui внутри Docker-сети — экспортёр читает XUI_ORIGIN (не XUI_HOST!)
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://3x-ui:2055/vkosarev.name.eu/}"
@@ -63,7 +63,7 @@ services:
       # Сертификат выдан на vkosarev.name, не на 3x-ui → отключаем проверку
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     ports:
-      - "${XUI_EXPORTER_PORT:-2112}:2112"
+      - "${XUI_EXPORTER_PORT:-3001}:3000"
 
   # ---------------------------------------------------------------------------
   # frps — Fast Reverse Proxy server v0.63.0
