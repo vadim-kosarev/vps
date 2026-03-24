@@ -19,7 +19,7 @@ scrape_configs:
   # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
     static_configs:
-      - targets: ["xui-exporter:3000"]
+      - targets: ["vkosarev.name:3001"]
         labels:
           host: "vkosarev.name"
 
