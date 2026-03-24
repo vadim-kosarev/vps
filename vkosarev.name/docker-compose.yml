@@ -54,10 +54,10 @@ services:
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
     container_name: xui-exporter
-    restart: unless-stopped
+    restart: no
     environment:
       # Панель работает по HTTPS; base path включён прямо в URL
-      XUI_HOST:     "${XUI_EXPORTER_HOST:-https://3x-ui:2055/vkosarev.name.eu/}"
+      XUI_HOST:     "${XUI_EXPORTER_HOST:-https://vkosarev.name:2055/vkosarev.name.eu/}"
       XUI_USERNAME: "${XUI_EXPORTER_USERNAME:-vkosarev}"
       XUI_PASSWORD: "${XUI_EXPORTER_PASSWORD:-changeme}"
       # Сертификат выдан на vkosarev.name, не на 3x-ui → отключаем проверку
