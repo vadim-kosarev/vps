@@ -54,7 +54,7 @@ services:
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
     container_name: xui-exporter
-    restart: unless-stopped
+    restart: no
     environment:
       # Адрес панели 3x-ui внутри Docker-сети — экспортёр читает XUI_ORIGIN (не XUI_HOST!)
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://3x-ui:2055/vkosarev.name.eu/}"
