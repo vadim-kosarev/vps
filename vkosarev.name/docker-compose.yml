@@ -182,17 +182,9 @@ services:
     image: nginx:1.27-alpine
     container_name: nginx
     restart: unless-stopped
-    extra_hosts:
-      # Даёт доступ к портам хоста (frps-тунели: 2283, 3180, 5000, 980, 4040)
-      - "host.docker.internal:host-gateway"
-    ports:
-      - "80:80"       # HTTP → HTTPS редирект на 1443
-      - "1443:1443"   # HTTPS статический сайт
-      - "7601:7601"   # IMMICH (frps → host:2283)
-      - "3181:3181"   # прокси (frps → host:3180)
-      - "5001:5001"   # Frigate + basic auth (frps → host:5000)
-      - "981:981"     # HIKCAM + basic auth  (frps → host:980)
-      - "4041:4041"   # Subsonic             (frps → host:4040)
+    # host-сеть: nginx видит localhost хоста напрямую →
+    # frps-тунели (proxyBindAddr=127.0.0.1) доступны как localhost:XXXX
+    network_mode: host
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/www:/etc/nginx/www:ro
