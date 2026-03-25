@@ -20,20 +20,20 @@
 ```mermaid
 flowchart TD
     TG["📱 Telegram App"]
-    VPN_MSK["💻 VPN Client\n(msk / natasha-17)"]
     VPN_VK["💻 VPN Client\n(VK)"]
+    VPN_MSK["💻 VPN Client\n(msk / natasha-17)"]
     EU_CLIENT["💻 EU Client\n(direct VLESS)"]
 
     subgraph agghhh ["agghhh.click — RU entry (Yandex Cloud)"]
         TELEMT["telemt:8443\nMTProto TLS\nmask: browser.yandex.ru"]
-        XUI_443["3x-ui:443\nVLESS+Reality\nSNI: browser.yandex.com"]
         XUI_40404["3x-ui:40404\nVLESS+Reality\nSNI: browser.yandex.ru"]
+        XUI_443["3x-ui:443\nVLESS+Reality\nSNI: browser.yandex.com"]
     end
 
     subgraph vkosarev ["vkosarev.name — EU exit (AWS Poland)"]
-        MIXED["3x-ui:8443\nmixed SOCKS5\n(MTProxy upstream)"]
         RU_PL["3x-ui:8080\nVLESS+Reality\nSNI: yahoo.com"]
         EU_AMAZON["3x-ui:34819\nVLESS+Reality\nSNI: apple.com"]
+        MIXED["3x-ui:8443\nmixed SOCKS5\n(MTProxy upstream)"]
         MTPROXY["mtproxy:2443\nTG MTProxy classic"]
     end
 
