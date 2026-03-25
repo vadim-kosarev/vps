@@ -40,8 +40,8 @@ flowchart TD
     TELEGRAM(("📨 Telegram"))
 
     TG -->|"MTProto TLS :8443"| TELEMT
-    TG -->|"MTProto :2443"| MTPROXY
     VPN_MSK -->|"VLESS+Reality :443"| XUI_443
+    TG -->|"MTProto :2443"| MTPROXY
     VPN_VK -->|"VLESS+Reality :40404"| XUI_40404
     EU_CLIENT -->|"VLESS+Reality :34819"| EU_AMAZON
 
