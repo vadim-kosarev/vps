@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vkosarev.link — сервисы</title>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --bg2:       #1a1d27;
+      --bg3:       #22263a;
+      --border:    #2e3250;
+      --accent:    #5b7cfa;
+      --accent2:   #7c5bfa;
+      --green:     #3ecf8e;
+      --yellow:    #f5c542;
+      --red:       #ff6b6b;
+      --muted:     #6b7280;
+      --text:      #e4e6f0;
+      --text2:     #9ca3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px 24px 80px;
+    }
+    header {
+      max-width: 1100px;
+      margin: 0 auto 48px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    header h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -.5px; }
+    header p  { color: var(--text2); font-size: .95rem; margin-top: 2px; }
+    .section {
+      max-width: 1100px;
+      margin: 0 auto 40px;
+    }
+    .section-title {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+      padding-left: 2px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .18s, transform .18s, box-shadow .18s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--card-color, var(--accent)) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .18s;
+      border-radius: inherit;
+    }
+    .card:hover { border-color: var(--card-color, var(--accent)); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+    .card:hover::before { opacity: .06; }
+    .card-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--bg3);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 1px solid var(--border);
+    }
+    .card-body { flex: 1; min-width: 0; }
+    .card-name {
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-desc {
+      color: var(--text2);
+      font-size: .84rem;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: .72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-weight: 500;
+    }
+    .tag.auth  { border-color: #f5c54255; color: var(--yellow); background: #f5c54211; }
+    .tag.https { border-color: #3ecf8e55; color: var(--green);  background: #3ecf8e11; }
+    .tag.port  { border-color: #5b7cfa55; color: var(--accent); background: #5b7cfa11; }
+    .tag.ext   { border-color: #ff6b6b55; color: var(--red);    background: #ff6b6b11; }
+    .card-arrow {
+      font-size: 16px;
+      color: var(--muted);
+      align-self: center;
+      flex-shrink: 0;
+      transition: color .18s, transform .18s;
+    }
+    .card:hover .card-arrow { color: var(--card-color, var(--accent)); transform: translateX(3px); }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer span { opacity: .6; }
+    @media (max-width: 600px) {
+      body { padding: 24px 16px 60px; }
+      header h1 { font-size: 1.4rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔗</div>
+  <div>
+    <h1>vkosarev.link</h1>
+    <p>Инфраструктура · все сервисы в одном месте</p>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">🔒 VPN / Прокси</div>
+  <div class="grid">
+
+    <a class="card" href="https://vkosarev.link:33562/" target="_blank" style="--card-color:#f43f5e">
+      <div class="card-icon">🔒</div>
+      <div class="card-body">
+        <div class="card-name">3x-ui</div>
+        <div class="card-desc">Панель управления VLESS / Xray прокси</div>
+        <div class="card-meta">
+          <span class="tag https">HTTPS</span>
+          <span class="tag port">:33562</span>
+          <span class="tag auth">🔐 auth</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <div class="card" style="--card-color:#0ea5e9; cursor: default;">
+      <div class="card-icon">🛡️</div>
+      <div class="card-body">
+        <div class="card-name">OpenVPN</div>
+        <div class="card-desc">VPN-сервер OpenVPN<br><code style="font-size:.8rem;color:var(--text2)">openvpn --config agghhh-user1.ovpn</code></div>
+        <div class="card-meta">
+          <span class="tag port">:29817</span>
+          <span class="tag ext">TCP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="--card-color:#64748b; cursor: default;">
+      <div class="card-icon">🌐</div>
+      <div class="card-body">
+        <div class="card-name">HTTP Proxy</div>
+        <div class="card-desc">Xray HTTP-прокси (user1)<br><code style="font-size:.8rem;color:var(--text2)">http://vkosarev.link:22000</code></div>
+        <div class="card-meta">
+          <span class="tag port">:22000</span>
+          <span class="tag auth">🔐 auth</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">📸 Медиа</div>
+  <div class="grid">
+
+    <a class="card" href="https://vkosarev.link:7601/" target="_blank" style="--card-color:#f59e42">
+      <div class="card-icon">🖼️</div>
+      <div class="card-body">
+        <div class="card-name">Immich</div>
+        <div class="card-desc">Фото и видео — переадресация на vkosarev.name</div>
+        <div class="card-meta">
+          <span class="tag https">HTTPS</span>
+          <span class="tag port">:7601</span>
+          <span class="tag ext">→ vkosarev.name</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">🛠️ Инфраструктура</div>
+  <div class="grid">
+
+    <a class="card" href="https://vkosarev.link:9443/" target="_blank" style="--card-color:#5b7cfa">
+      <div class="card-icon">🐳</div>
+      <div class="card-body">
+        <div class="card-name">Portainer</div>
+        <div class="card-desc">Веб-интерфейс управления Docker</div>
+        <div class="card-meta">
+          <span class="tag https">HTTPS</span>
+          <span class="tag port">:9443</span>
+          <span class="tag auth">🔐 auth</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="http://vkosarev.link:7599/" target="_blank" style="--card-color:#10b981">
+      <div class="card-icon">🔀</div>
+      <div class="card-body">
+        <div class="card-name">frps Dashboard</div>
+        <div class="card-desc">Статус FRP-тунелей — подключённые клиенты</div>
+        <div class="card-meta">
+          <span class="tag port">:7599</span>
+          <span class="tag auth">🔐 auth</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <span>vkosarev.link</span>
+  <span>nginx · Docker · Linux</span>
+</footer>
+
+</body>
+</html>
+

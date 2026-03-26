@@ -1,0 +1,9 @@
+# Папка для базы данных 3x-ui (x-ui.db)
+# ВАЖНО: перед первым запуском Docker скопировать существующую БД:
+#
+#   sudo cp /etc/x-ui/x-ui.db /root/vps/vkosarev.link/3x-ui/db/
+#
+# После этого можно остановить systemd-сервис и запустить Docker:
+#   sudo systemctl stop x-ui && sudo systemctl disable x-ui
+#   docker compose up -d 3x-ui
+

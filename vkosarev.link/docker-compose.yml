@@ -1,0 +1,109 @@
+name: vkosarev.link
+
+# Запуск:     docker compose up -d
+# Обновление: docker compose pull && docker compose up -d
+#
+# Переменные — в файле .env (скопировать из .env.example).
+# Сертификаты: CERT_DIR=/tools/nginx/cert (по умолчанию)
+#   Ожидаемые файлы в CERT_DIR:
+#     fullchain.pem
+#     vkosarev.link_privatekey.key
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # 3x-ui — панель управления Xray (VLESS/Reality/HTTP-proxy)
+  # Panel:    https://vkosarev.link:33562/
+  # Inbounds: 443  (VLESS TCP)
+  #           8888 (VLESS+Reality, SNI: yahoo.com)
+  #           22000 (HTTP proxy, user1/Password123!!)
+  # network_mode: host — Xray слушает напрямую на интерфейсах хоста.
+  # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
+  # ---------------------------------------------------------------------------
+  3x-ui:
+    image: ghcr.io/mhsanaei/3x-ui:v2.8.11
+    container_name: 3x-ui
+    restart: unless-stopped
+    tty: true
+    network_mode: host
+    volumes:
+      # SQLite-база данных панели (настройки, пользователи, inbounds)
+      # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
+      - ./3x-ui/db:/etc/x-ui
+      # TLS-сертификаты
+      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+    environment:
+      - XRAY_VMESS_AEAD_FORCED=false
+
+  # ---------------------------------------------------------------------------
+  # frps — Fast Reverse Proxy server
+  # Dashboard: http://vkosarev.link:7599
+  # Клиенты подключаются на порт 7401 (TCP + KCP/UDP)
+  # network_mode: host — frps слушает напрямую на интерфейсах хоста
+  # Актуальные теги: https://github.com/fatedier/frp/releases
+  # ---------------------------------------------------------------------------
+  frps:
+    image: snowdreamtech/frps:0.63.0
+    container_name: frps
+    restart: always
+    network_mode: host
+    volumes:
+      - ./frps/frps1.toml:/etc/frp/frps1.toml:ro
+    command: ["-c", "/etc/frp/frps1.toml"]
+
+  # ---------------------------------------------------------------------------
+  # openvpn — сервер OpenVPN
+  # Порт: 29817 (снаружи) → 1194/tcp (внутри контейнера)
+  # Данные: ./openvpn/data (конфиги, сертификаты, профили клиентов)
+  # Текущее расположение данных на сервере: /root/ovpn/openvpn-data
+  #   Перед первым запуском: OPENVPN_DATA=/root/ovpn/openvpn-data
+  # Актуальные теги: https://hub.docker.com/r/kylemanna/openvpn/tags
+  # ---------------------------------------------------------------------------
+  openvpn:
+    image: kylemanna/openvpn:2.4
+    container_name: openvpn
+    restart: always
+    ports:
+      - "29817:1194/tcp"
+    volumes:
+      - ${OPENVPN_DATA:-./openvpn/data}:/etc/openvpn
+    cap_add:
+      - NET_ADMIN
+
+  # ---------------------------------------------------------------------------
+  # nginx — обратный прокси и статический сайт
+  # Заменяет системный nginx: порты 80, 1443, 7601
+  # Конфиг:  ./nginx/conf.d/vkosarev.link.conf
+  # Статика: ./nginx/www/vkosarev.link/
+  # network_mode: host — nginx видит localhost хоста (frps-тунели)
+  # Актуальные теги: https://hub.docker.com/_/nginx/tags
+  # ---------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/www:/etc/nginx/www:ro
+      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+
+  # ---------------------------------------------------------------------------
+  # Portainer — веб-интерфейс управления Docker
+  # UI:  https://vkosarev.link:9443
+  # API: http://vkosarev.link:8000  (для Portainer Edge Agent)
+  # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
+  # ---------------------------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PORTAINER_DATA:-./portainer/data}:/data
+
+volumes: {}
+
