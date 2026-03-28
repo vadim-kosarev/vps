@@ -227,6 +227,5 @@ services:
       # - "11966:11966"  # backend (если потребуется снаружи)
     environment:
       - ALLOW_ORIGIN=*
-      - ALLOW_IPS=0.0.0.0/0
 
 volumes: {}
