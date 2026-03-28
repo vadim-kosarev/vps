@@ -1,0 +1,20 @@
+# Конфигурация для windows_exporter
+# Документация: https://github.com/prometheus-community/windows_exporter
+
+# Пример минимальной конфигурации
+collectors:
+  enabled:
+    - cpu
+    - memory
+    - logical_disk
+    - net
+    - os
+    - system
+    - service
+    - process
+    - tcp
+    - textfile
+
+# Путь к дополнительным метрикам (если нужно)
+# textfile.directory: C:\monitoring
+
