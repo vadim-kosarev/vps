@@ -101,19 +101,18 @@ services:
     container_name: roundcube
     restart: unless-stopped
     ports:
-      - "3210:80"          # измени на 80, если хочешь напрямую
+      - "3210:80"
     environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.ec-leasing.ru   # твой IMAP-сервер
+      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.ec-leasing.ru
       - ROUNDCUBEMAIL_DEFAULT_PORT=993
-      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://mail.ec-leasing.ru    # твой SMTP
+      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://mail.ec-leasing.ru
       - ROUNDCUBEMAIL_SMTP_PORT=465
       - ROUNDCUBEMAIL_SMTP_USER=vkosarev
       - ROUNDCUBEMAIL_SMTP_PASS=${ROUNDCUBEMAIL_SMTP_PASS}
-      - ROUNDCUBEMAIL_USERNAME_DOMAIN=ec-leasing.ru           # автодобавление домена при логине (опционально)
+      - ROUNDCUBEMAIL_USERNAME_DOMAIN=ec-leasing.ru
       - ROUNDCUBEMAIL_SKIN=elastic
       - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload
-      # - ROUNDCUBEMAIL_DB_TYPE=sqlite                      # по умолчанию sqlite
     volumes:
-      - ./roundcube-db:/var/roundcube/db          # для SQLite
-      - ./roundcube-config:/var/roundcube/config  # дополнительные конфиги
-      - ./roundcube-temp:/tmp/roundcube-temp      # временные файлы
+      - ./roundcube-db:/var/roundcube/db
+      - ./roundcube-config:/var/roundcube/config
+      - ./roundcube-temp:/tmp/roundcube-temp

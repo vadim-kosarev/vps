@@ -69,6 +69,17 @@ powershell -ExecutionPolicy Bypass -File .\internet-access.ps1
 powershell -ExecutionPolicy Bypass -File .\internet-access-runner.ps1
 ```
 
+## Автоматический запуск мониторинга
+
+- Для запуска/обновления сервисов используйте скрипт:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup_luigi.ps1
+```
+
+- Отчёт о запуске будет сохранён в .tmp/luigi_setup_report.log
+- Скрипт автоматически запустит циклические раннеры для iperf_exporter и internet-access, а также проверит появление метрик.
+
 ---
 - Все метрики пишутся в C:\monitoring\ и подхватываются Prometheus (см. основной README).
 - Для speedtest требуется iperf3.exe (поместить рядом с iperf_exporter.ps1).

@@ -41,6 +41,7 @@ if [[ -n "$1" && -f "$1" ]]; then
     log INFO "Директории из файла: ${BACKUP_DIRS[*]}"
 fi
 
+
 # Куда складывать архивы
 TARGET_DIR="/backup"
 
@@ -48,8 +49,10 @@ TARGET_DIR="/backup"
 KEEP_DAYS=30
 # ===============================================
 
+# Имя хоста для имени файла
+HOSTNAME=$(hostname)
 DATE=$(date +%Y-%m-%d)
-BACKUP_FILE="${TARGET_DIR}/backup-${DATE}.tar.gz"
+BACKUP_FILE="${TARGET_DIR}/backup-${HOSTNAME}-${DATE}.tar.gz"
 
 # Создаём целевую папку
 mkdir -p "$TARGET_DIR"
