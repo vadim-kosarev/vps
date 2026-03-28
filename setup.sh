@@ -115,6 +115,17 @@ else
 fi
 
 # =============================================================================
+# Cron: ежедневный бэкап /root/vps/backup.sh по ночам МСК через systemd-cat (для journalctl)
+# =============================================================================
+CRON_LINE="0 3 * * * /usr/bin/systemd-cat -t backup /root/vps/backup.sh /root/vps/$(hostname)/backup.list"
+if ! crontab -l 2>/dev/null | grep -Fq "/root/vps/backup.sh"; then
+  (crontab -l 2>/dev/null; echo "$CRON_LINE") | crontab -
+  log "Добавлен ежедневный бэкап в cron через systemd-cat: $CRON_LINE (03:00 МСК, journalctl -t backup)"
+else
+  warn "Бэкап уже есть в cron, пропускаем добавление."
+fi
+
+# =============================================================================
 # Итог
 # =============================================================================
 echo ""
@@ -123,4 +134,3 @@ echo "  cd $REPO_DIR/<хостинг>"
 echo "  docker compose up -d"
 echo ""
 warn "Порт 9100 (node_exporter) должен быть закрыт для внешнего мира — Prometheus обращается к нему внутри хоста."
-
