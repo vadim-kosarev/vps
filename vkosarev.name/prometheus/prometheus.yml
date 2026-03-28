@@ -4,22 +4,17 @@ global:
 
 scrape_configs:
 
-  # node_exporter на обоих хостах — порт 9100 открыт публично
   - job_name: "node"
     static_configs:
 
-      - targets: ["vkosarev.name:9100"]
+      - targets: ["host.docker.internal:9100"]
         labels:
-          host: "vkosarev.name"
-
-      - targets: ["agghhh.click:9100"]
-        labels:
-          host: "agghhh.click"
+          host: "lithuania-xxx"
 
   # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
     static_configs:
-      - targets: ["vkosarev.name:3001"]
+      - targets: ["host.docker.internal:3001"]
         labels:
-          host: "vkosarev.name"
+          host: "lithuania-xxx"
 

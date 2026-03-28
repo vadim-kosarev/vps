@@ -1,0 +1,1 @@
+vless://9d03dec2-4dab-4eb9-b723-cf7c5ec0c37e@vkosarev.name:34819?type=tcp&encryption=none&security=reality&pbk=wG2jcSZD66WyFZjuq6Ks2UpnTycnRErSkRHrFRrEhWo&fp=chrome&sni=www.apple.com&sid=d9457c8239&spx=%2F#xxx-M
