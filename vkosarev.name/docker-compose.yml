@@ -219,10 +219,11 @@ services:
   # Документация: https://hub.docker.com/r/jason5ng32/myip
   # ---------------------------------------------------------------------------
   myip:
-    image: jason5ng32/myip:1.0.6
+    image: jason5ng32/myip:latest
     container_name: myip
     restart: unless-stopped
     ports:
-      - "88:80"
+      - "88:18966"  # frontend (основной UI)
+      # - "11966:11966"  # backend (если потребуется снаружи)
 
 volumes: {}
