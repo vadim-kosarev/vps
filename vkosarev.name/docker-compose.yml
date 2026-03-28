@@ -213,4 +213,16 @@ services:
       - ${PORTAINER_DATA:-./portainer/data}:/data
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
+  # ---------------------------------------------------------------------------
+  # myip — сервис для отображения публичного IP-адреса
+  # UI: http://vkosarev.name:88
+  # Документация: https://hub.docker.com/r/jason5ng32/myip
+  # ---------------------------------------------------------------------------
+  myip:
+    image: jason5ng32/myip:1.0.6
+    container_name: myip
+    restart: unless-stopped
+    ports:
+      - "88:80"
+
 volumes: {}
