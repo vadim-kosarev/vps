@@ -1,0 +1,6 @@
+# Папка для миграции Grafana в Docker. Сюда копируются:
+# - data/grafana.db
+# - conf/
+# - data/plugins/
+# Все пути будут проброшены в контейнер через volume.
+

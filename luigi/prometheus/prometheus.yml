@@ -1,0 +1,33 @@
+# my global config
+# (скопировано с luigi, см. отчёт)
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - "luigi:9090"
+          - "luigi:9182"
+          - "brightsky:9182"
+          - "starlight:9182"
+          - "roobin:9182"
+  - job_name: "nvidia_gpu"
+    static_configs:
+      - targets:
+          - "starlight:9835"
+          - "brightsky:9835"
+  - job_name: "frigate"
+    metrics_path: /api/metrics
+    static_configs:
+      - targets:
+          - "starlight:5000"
+          - "brightsky:5000"
