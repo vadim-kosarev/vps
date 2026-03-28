@@ -6,6 +6,27 @@
 set -o errexit          # выход при любой ошибке
 set -o pipefail         # ловим ошибки в пайпах
 
+# Красивая функция логирования (цвета только в терминале)
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local ts=$(date '+%Y-%m-%d %H:%M:%S')
+
+    local color="" reset="\033[0m"
+    if [ -t 1 ]; then  # только если запущено в терминале
+        case "$level" in
+            INFO)  color="\033[0;32m" ;;   # зелёный
+            WARN)  color="\033[0;33m" ;;   # жёлтый
+            ERROR) color="\033[0;31m" ;;   # красный
+            SUCCESS) color="\033[0;32m" ;;
+            *)     color="" ;;
+        esac
+    fi
+
+    echo -e "${color}[${ts}] [${level}] ${message}${reset}"
+}
+
 # ================== НАСТРОЙКИ ==================
 # Список директорий, которые нужно бэкапить
 BACKUP_DIRS=(
@@ -29,27 +50,6 @@ KEEP_DAYS=30
 
 DATE=$(date +%Y-%m-%d)
 BACKUP_FILE="${TARGET_DIR}/backup-${DATE}.tar.gz"
-
-# Красивая функция логирования (цвета только в терминале)
-log() {
-    local level="$1"
-    shift
-    local message="$*"
-    local ts=$(date '+%Y-%m-%d %H:%M:%S')
-
-    local color="" reset="\033[0m"
-    if [ -t 1 ]; then  # только если запущено в терминале
-        case "$level" in
-            INFO)  color="\033[0;32m" ;;   # зелёный
-            WARN)  color="\033[0;33m" ;;   # жёлтый
-            ERROR) color="\033[0;31m" ;;   # красный
-            SUCCESS) color="\033[0;32m" ;;
-            *)     color="" ;;
-        esac
-    fi
-
-    echo -e "${color}[${ts}] [${level}] ${message}${reset}"
-}
 
 # Создаём целевую папку
 mkdir -p "$TARGET_DIR"
