@@ -99,9 +99,9 @@ if (Test-Path $exporterExe) {
     $report += " - Установка windows_exporter : windows_exporter.exe не найден в $binDir. Скопируйте бинарник и конфиг вручную и повторите установку."
 }
 
-# === Установка nvidia_gpu_exporter как Windows-сервиса (только если есть NVIDIA) через NSSM ===
+
+# === Установка nvidia_gpu_exporter как Windows-сервиса (только если есть NVIDIA) через NSSM (winget) ===
 $hasNvidia = Get-CimInstance Win32_VideoController | Where-Object { $_.Name -like "*NVIDIA*" }
-$nssmExe = Join-Path $binDir 'nssm.exe'
 if ($hasNvidia) {
     $report += " - Проверка NVIDIA : Обнаружена видеокарта NVIDIA ($($hasNvidia.Name))"
     $nvidiaZipUrl = 'https://github.com/utkuozdemir/nvidia_gpu_exporter/releases/download/v1.4.1/nvidia_gpu_exporter_1.4.1_windows_x86_64.zip'
@@ -122,23 +122,30 @@ if ($hasNvidia) {
         $report += " - Скачивание nvidia_gpu_exporter : nvidia_gpu_exporter.exe уже есть в $binDir."
     }
     if (Test-Path $nvidiaExe) {
-        if (-not (Test-Path $nssmExe)) {
-            $report += " - NSSM : nssm.exe не найден в $binDir. Скачайте https://nssm.cc/release/nssm-2.24.zip, распакуйте nssm.exe в bin и повторите установку."
-        } else {
-            $nssmExeFull = [System.IO.Path]::GetFullPath($nssmExe)
+        # Проверяем наличие NSSM через winget
+        $nssmInstalled = winget list --id NSSM.NSSM | Select-String NSSM
+        if (-not $nssmInstalled) {
             try {
-                # Остановить и удалить старый сервис, если есть
-                & $nssmExeFull stop $nvidiaServiceName | Out-Null
-                & $nssmExeFull remove $nvidiaServiceName confirm | Out-Null
-            } catch {}
-            try {
-                & $nssmExeFull install $nvidiaServiceName $nvidiaExe
-                & $nssmExeFull set $nvidiaServiceName Start SERVICE_AUTO_START
-                & $nssmExeFull start $nvidiaServiceName
-                $report += " - Установка nvidia_gpu_exporter : Сервис установлен через NSSM и запущен. Метрики: http://localhost:9835/metrics"
+                winget install -e --id NSSM.NSSM --accept-source-agreements --accept-package-agreements
+                $report += " - NSSM : NSSM установлен через winget."
             } catch {
-                $report += " - Установка nvidia_gpu_exporter : Ошибка NSSM — $_"
+                $report += " - NSSM : Ошибка установки NSSM через winget — $_"
             }
+        } else {
+            $report += " - NSSM : NSSM уже установлен (winget)."
+        }
+        try {
+            # NSSM должен быть в PATH после установки через winget
+            nssm stop $nvidiaServiceName | Out-Null
+            nssm remove $nvidiaServiceName confirm | Out-Null
+        } catch {}
+        try {
+            nssm install $nvidiaServiceName $nvidiaExe
+            nssm set $nvidiaServiceName Start SERVICE_AUTO_START
+            nssm start $nvidiaServiceName
+            $report += " - Установка nvidia_gpu_exporter : Сервис установлен через NSSM (winget) и запущен. Метрики: http://localhost:9835/metrics"
+        } catch {
+            $report += " - Установка nvidia_gpu_exporter : Ошибка NSSM — $_"
         }
     } else {
         $report += " - Установка nvidia_gpu_exporter : nvidia_gpu_exporter.exe не найден в $binDir. Скопируйте бинарник вручную и повторите установку."
