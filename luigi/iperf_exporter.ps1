@@ -1,4 +1,4 @@
-# Экспортер скорости через iperf3 для Prometheus
+﻿# Экспортер скорости через iperf3 для Prometheus
 # Оригинал: local/tools/prometheus/exporters/iperf_exporter/iperf_exporter.ps1
 
 function Is-Numeric {

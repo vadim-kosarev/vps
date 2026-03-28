@@ -1,4 +1,4 @@
-# Циклический запуск проверки доступности интернета
+﻿# Циклический запуск проверки доступности интернета
 # Оригинал: local/tools/prometheus/exporters/internet-access-runner.ps1
 
 while ($true) {

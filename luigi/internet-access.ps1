@@ -1,4 +1,4 @@
-# Проверка доступности интернета для Prometheus
+﻿# Проверка доступности интернета для Prometheus
 # Оригинал: local/tools/prometheus/exporters/internet-access.ps1
 
 $TestHost = "8.8.8.8"  # Google DNS
