@@ -1,0 +1,3 @@
+[submodule "local/tools"]
+	path = local/tools
+	url = https://github.com/vadim-kosarev/tools.git

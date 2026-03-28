@@ -31,6 +31,11 @@ git --no-pager status && git --no-pager diff && git --no-pager diff --cached
 git add -A && git commit -m "сообщение"
 ```
 
+
+## Правила для папки .ai
+
+- Все файлы в папке .ai должны иметь префикс даты в формате yyyy.mm.dd_ (например, 2026.03.27_ports_map.md).
+
 ## Принципы работы
 
 ### Развёртывание
