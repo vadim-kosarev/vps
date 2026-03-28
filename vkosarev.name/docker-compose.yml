@@ -224,8 +224,9 @@ services:
     restart: unless-stopped
     ports:
       - "88:18966"  # frontend (основной UI)
-      # - "11966:11966"  # backend (если потребуется снаружи)
+      - "11966:11966"  # backend (если потребуется снаружи)
     environment:
       - ALLOW_ORIGIN=*
+      - ALLOWED_DOMAINS=vkosarev.name
 
 volumes: {}
