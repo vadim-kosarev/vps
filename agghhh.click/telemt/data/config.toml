@@ -72,4 +72,5 @@ type = "socks5"
 enabled = true
 weight = 1
 address = "vkosarev.name:8443"
-
+username = "msk.mtproxy"
+password = "mTtCfG8XmWjDEUEfzkQU"
