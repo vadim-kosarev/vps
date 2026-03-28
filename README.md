@@ -117,24 +117,51 @@ flowchart TD
 
 ## Структура репозитория
 
+- Новый хостинг — новая директория в корне репозитория (название = домен или псевдоним сервера).
+- Внутри директории хостинга хранятся только файлы конфигурации (compose, nginx-конфиги, скрипты).
+- Папка `local/` — вспомогательные утилиты, скрипты, инструменты для локального использования (не деплоятся на серверы).
+- Папка `scripts/` — отдельные скрипты для анализа, дампов, вспомогательных задач.
+- Папка `.ai/` — заметки, отчёты и логи AI-агента (каждый файл с датой в названии).
+- Папка `vkosarev.link/` — дополнительный хостинг/домен (структура аналогична другим хостингам).
+
 ```
 .
 ├── setup.sh                   # Общий скрипт начальной настройки хоста
-│                              # (docker-compose-v2, node_exporter, git remote)
-├── vkosarev.name/
+├── backup.sh                  # Скрипт резервного копирования
+├── CLAUDE.md                  # Инструкции для AI-агента
+├── proxy-architecture.md      # Документация по архитектуре прокси
+├── README.md                  # Основная документация
+├── vps.iml                    # Файл проекта для JetBrains
+├── .ai/                       # Заметки и отчёты AI (формат: yyyy.mm.dd_*)
+├── local/                     # Локальные утилиты и инструменты
+│   └── tools/                 # Примеры: bReader/, download-premier-one/, ...
+├── scripts/                   # Вспомогательные скрипты (read_xui.py и др.)
+├── agghhh.click/              # Конфигурация хостинга agghhh.click
 │   ├── docker-compose.yml
-│   ├── 3x-ui/db/              # БД панели Xray (x-ui.db)
-│   ├── mtproxy/data/          # Данные MTProxy (секрет)
-│   ├── portainer/data/        # Данные Portainer
-│   ├── prometheus/            # Конфиг и данные Prometheus
-│   └── grafana/data/          # Данные Grafana
-└── agghhh.click/
-    ├── docker-compose.yml
-    ├── 3x-ui/db/              # БД панели Xray (x-ui.db)
-    ├── telemt/
-    │   ├── Dockerfile         # Собирает telemt из GitHub releases
-    │   └── data/              # Конфиг и секрет telemt
-    └── portainer/data/        # Данные Portainer
+│   ├── 3x-ui/
+│   ├── cert/
+│   ├── portainer/
+│   ├── prometheus/
+│   ├── telemt/
+│   └── ...
+├── vkosarev.name/             # Конфигурация хостинга vkosarev.name
+│   ├── docker-compose.yml
+│   ├── 3x-ui/
+│   ├── frps/
+│   ├── grafana/
+│   ├── mtproxy/
+│   ├── nginx/
+│   ├── portainer/
+│   ├── prometheus/
+│   └── ...
+├── vkosarev.link/             # Конфигурация хостинга vkosarev.link
+│   ├── docker-compose.yml
+│   ├── 3x-ui/
+│   ├── frps/
+│   ├── nginx/
+│   ├── portainer/
+│   └── ...
+└── ...                        # Прочие файлы и директории по мере необходимости
 ```
 
 ---
@@ -156,6 +183,29 @@ sudo bash setup.sh
 cd /root/vps/vkosarev.name   # или agghhh.click
 cp .env.example .env          # заполнить переменные
 docker compose up -d
+```
+
+**PuTTY Session:**
+Настройки подключения хранятся в PuTTY Session с именем хоста (например, `vkosarev.name`).
+Сессия содержит: hostname/IP, порт, пользователя (`root`).
+
+---
+
+## Путь к репозиторию на сервере
+
+Рекомендуемый путь для клонирования репозитория на сервере:
+
+```
+/root/vps/
+```
+
+Деплой на сервере:
+
+```bash
+cd /root/vps/vkosarev.name
+# или cd /root/vps/agghhh.click
+
+docker compose pull && docker compose up -d
 ```
 
 ---
