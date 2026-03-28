@@ -1,20 +1,24 @@
 # Конфигурация для windows_exporter
 # Документация: https://github.com/prometheus-community/windows_exporter
 
-# Пример минимальной конфигурации
 collectors:
-  enabled:
-    - cpu
-    - memory
-    - logical_disk
-    - net
-    - os
-    - system
-    - service
-    - process
-    - tcp
-    - textfile
+  # Список коллекторов через запятую (ОБЯЗАТЕЛЬНО одной строкой!)
+  enabled: cpu,memory,logical_disk,net,os,system,service,process,tcp,textfile
 
-# Путь к дополнительным метрикам (если нужно)
-# textfile.directory: C:\monitoring
+# Дополнительные настройки коллекторов (примеры)
+# collector:
+#   service:
+#     services-where: "Name='windows_exporter' OR Name='wuauserv'"
 
+# Путь к textfile коллектору (если используешь кастомные метрики)
+# textfile:
+#   directory: "C:\\monitoring"
+
+# Логирование (по желанию)
+log:
+  level: info
+
+# Веб-интерфейс (можно поменять порт, если 9182 занят)
+web:
+  listen-address: ":9182"
+ 
