@@ -15,7 +15,8 @@ scrape_configs:
       - targets:
           - "host.docker.internal:3001"
         labels:
-          instance: "vkosarev.name:3001"
+          instance: "vkosarev.name:9100"
+          xui_instance: "vkosarev.name:3001"
 
   - job_name: 'federate-vkosarev.name'
     scrape_interval: 30s
