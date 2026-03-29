@@ -6,12 +6,11 @@ scrape_configs:
 
   - job_name: "node"
     static_configs:
-
       - targets:
         - "host.docker.internal:9100"
         - "vkosarev.name:9100"
         - "agghhh.click:9100"
-        - "vkosarev.link:9100"
+        # - "vkosarev.link:9100"  # теперь через federation
 
   # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
@@ -20,4 +19,17 @@ scrape_configs:
         - "host.docker.internal:3001"
         - "vkosarev.name:3001"
         - "agghhh.click:3001"
-        - "vkosarev.link:3001"
+        # - "vkosarev.link:3001"  # теперь через federation
+
+  # Federation: собираем метрики с vkosarev.link через его Prometheus
+  - job_name: 'federate-vkosarev-link'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+        - 'vkosarev.link:9090'

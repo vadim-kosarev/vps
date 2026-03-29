@@ -19,7 +19,7 @@
 Всегда использовать эту команду перед коммитом (неинтерактивная, без pager):
 
 ```powershell
-git --no-pager status && git --no-pager diff && git --no-pager diff --cached
+git add -A && git --no-pager status && git --no-pager diff && git --no-pager diff --cached
 ```
 
 - `diff` — unstaged изменения

@@ -15,3 +15,19 @@
 
 _Задача по подготовке docker-compose.yml и унификации конфигов для vkosarev.link выполнена._
 
+
+## 2026-03-29: Prometheus для vkosarev.link — запуск и HTTPS через nginx
+
+**Выполнено:**
+- Prometheus добавлен в docker-compose.yml для vkosarev.link по аналогии с vkosarev.name.
+- Подготовлен prometheus.yml для сбора локальных метрик (node_exporter, xui).
+- Создана директория для данных Prometheus, переменная PROMETHEUS_DATA вынесена в .env.
+- Выставлены права на каталог /data/prometheus для корректной работы контейнера.
+- Prometheus успешно запущен в Docker, порт 9090 проброшен, статус Up.
+- Подготовлена инструкция для организации HTTPS-доступа к Prometheus через nginx-прокси с использованием сертификатов.
+
+**Рекомендации:**
+- Для доступа к Prometheus по HTTPS использовать обратный прокси nginx с SSL (пример server-конфига приведён выше).
+- При необходимости ограничить доступ к /prometheus/ через basic auth или по IP.
+
+_Задача по развертыванию и запуску Prometheus для vkosarev.link завершена._
