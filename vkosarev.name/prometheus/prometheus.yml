@@ -12,8 +12,8 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__address__]
         regex: .*
-        # Имя текущего нода берётся из переменной окружения NODE_NAME (пример: vkosarev.name, vkosarev.link, agghhh.click)
-        replacement: "$NODE_NAME:9100"
+        # Имя текущего нода теперь берётся через шаблон Prometheus: {{ env "NODE_NAME" }}
+        replacement: "{{ env \"NODE_NAME\" }}:9100"
         target_label: instance
 
   # federation: собираем агрегированные метрики с prometheus на всех трёх нодах
