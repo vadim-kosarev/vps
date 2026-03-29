@@ -42,7 +42,7 @@ services:
   # ---------------------------------------------------------------------------
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
-    container_name: xui-exporter
+    container_name: 3x-ui-exporter
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
