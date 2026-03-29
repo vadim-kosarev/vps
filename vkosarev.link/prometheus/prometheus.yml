@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s      # как часто снимать метрики
+  evaluation_interval: 15s  # как часто вычислять alert-правила
+
+scrape_configs:
+
+  - job_name: "node"
+    static_configs:
+      - targets:
+        - "host.docker.internal:9100"
+        - "vkosarev.link:9100"
+
+  # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
+  - job_name: "xui"
+    static_configs:
+      - targets:
+        - "host.docker.internal:3001"
+        - "vkosarev.link:3001"
+

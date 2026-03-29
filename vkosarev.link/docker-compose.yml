@@ -105,5 +105,29 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PORTAINER_DATA:-./portainer/data}:/data
 
-volumes: {}
+  # ---------------------------------------------------------------------------
+  # prometheus — система мониторинга и оповещения
+  # UI: http://vkosarev.link:9090
+  # Конфиг: ./prometheus/prometheus.yml
+  # Данные: ${PROMETHEUS_DATA:-./prometheus/data}
+  # Актуальные теги: https://hub.docker.com/r/prom/prometheus/tags
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${PROMETHEUS_DATA:-./prometheus/data}:/prometheus
+      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=90d"
+      - "--web.enable-lifecycle"
+    ports:
+      - "9090:9090"
 
+volumes: {}
