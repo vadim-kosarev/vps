@@ -37,6 +37,7 @@ scrape_configs:
     params:
       'match[]':
         - '{job="node"}'
+        - '{job="node_self"}'
         - '{job="xui"}'
     static_configs:
       - targets:
@@ -49,6 +50,7 @@ scrape_configs:
     params:
       'match[]':
         - '{job="node"}'
+        - '{job="node_self"}'
         - '{job="xui"}'
     static_configs:
       - targets:
