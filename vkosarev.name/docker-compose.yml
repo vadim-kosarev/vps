@@ -28,7 +28,8 @@ services:
       # SQLite-база данных панели, настройки и конфиги Xray (генерируются панелью)
       - ./3x-ui/db:/etc/x-ui
       # TLS-сертификаты — общая папка с хоста
-      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+      #- ${CERT_DIR:-/root/cert}:/root/cert:ro
+      - /src/cert:/root/cert:ro
 
     ports:
       # Веб-панель управления (порт можно сменить в настройках панели)
