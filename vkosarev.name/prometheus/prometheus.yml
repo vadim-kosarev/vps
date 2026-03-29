@@ -7,14 +7,17 @@ scrape_configs:
   - job_name: "node"
     static_configs:
 
-      - targets: ["host.docker.internal:9100"]
-        labels:
-          host: "lithuania-xxx"
+      - targets:
+        - "host.docker.internal:9100"
+        - "vkosarev.name:9100"
+        - "agghhh.click:9100"
+        - "vkosarev.link:9100"
 
   # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
     static_configs:
-      - targets: ["host.docker.internal:3001"]
-        labels:
-          host: "lithuania-xxx"
-
+      - targets:
+        - "host.docker.internal:3001"
+        - "vkosarev.name:3001"
+        - "agghhh.click:3001"
+        - "vkosarev.link:3001"
