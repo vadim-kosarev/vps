@@ -20,20 +20,20 @@ services:
   # network_mode: host — Xray слушает напрямую на интерфейсах хоста.
   # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
   # ---------------------------------------------------------------------------
-  3x-ui:
-    image: ghcr.io/mhsanaei/3x-ui:v2.8.11
-    container_name: 3x-ui
-    restart: unless-stopped
-    tty: true
-    network_mode: host
-    volumes:
-      # SQLite-база данных панели (настройки, пользователи, inbounds)
-      # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
-      - ./3x-ui/db:/etc/x-ui
-      # TLS-сертификаты
-      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
-    environment:
-      - XRAY_VMESS_AEAD_FORCED=false
+#  3x-ui:
+#    image: ghcr.io/mhsanaei/3x-ui:v2.8.11
+#    container_name: 3x-ui
+#    restart: unless-stopped
+#    tty: true
+#    network_mode: host
+#    volumes:
+#      # SQLite-база данных панели (настройки, пользователи, inbounds)
+#      # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
+#      - ./3x-ui/db:/etc/x-ui
+#      # TLS-сертификаты
+#      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+#    environment:
+#      - XRAY_VMESS_AEAD_FORCED=false
 
   # ---------------------------------------------------------------------------
   # frps — Fast Reverse Proxy server
@@ -42,14 +42,14 @@ services:
   # network_mode: host — frps слушает напрямую на интерфейсах хоста
   # Актуальные теги: https://github.com/fatedier/frp/releases
   # ---------------------------------------------------------------------------
-  frps:
-    image: snowdreamtech/frps:0.63.0
-    container_name: frps
-    restart: always
-    network_mode: host
-    volumes:
-      - ./frps/frps1.toml:/etc/frp/frps1.toml:ro
-    command: ["-c", "/etc/frp/frps1.toml"]
+#  frps:
+#    image: snowdreamtech/frps:0.63.0
+#    container_name: frps
+#    restart: always
+#    network_mode: host
+#    volumes:
+#      - ./frps/frps1.toml:/etc/frp/frps1.toml:ro
+#    command: ["-c", "/etc/frp/frps1.toml"]
 
   # ---------------------------------------------------------------------------
   # openvpn — сервер OpenVPN
@@ -59,16 +59,16 @@ services:
   #   Перед первым запуском: OPENVPN_DATA=/root/ovpn/openvpn-data
   # Актуальные теги: https://hub.docker.com/r/kylemanna/openvpn/tags
   # ---------------------------------------------------------------------------
-  openvpn:
-    image: kylemanna/openvpn:2.4
-    container_name: openvpn
-    restart: always
-    ports:
-      - "29817:1194/tcp"
-    volumes:
-      - ${OPENVPN_DATA:-./openvpn/data}:/etc/openvpn
-    cap_add:
-      - NET_ADMIN
+#  openvpn:
+#    image: kylemanna/openvpn:2.4
+#    container_name: openvpn
+#    restart: always
+#    ports:
+#      - "29817:1194/tcp"
+#    volumes:
+#      - ${OPENVPN_DATA:-./openvpn/data}:/etc/openvpn
+#    cap_add:
+#      - NET_ADMIN
 
   # ---------------------------------------------------------------------------
   # nginx — обратный прокси и статический сайт
@@ -129,4 +129,3 @@ services:
     environment:
       - NODE_NAME=${NODE_NAME}
 
-volumes: {}
