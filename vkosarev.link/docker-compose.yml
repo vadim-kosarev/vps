@@ -20,20 +20,20 @@ services:
   # network_mode: host — Xray слушает напрямую на интерфейсах хоста.
   # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
   # ---------------------------------------------------------------------------
-#  3x-ui:
-#    image: ghcr.io/mhsanaei/3x-ui:v2.8.11
-#    container_name: 3x-ui
-#    restart: unless-stopped
-#    tty: true
-#    network_mode: host
-#    volumes:
-#      # SQLite-база данных панели (настройки, пользователи, inbounds)
-#      # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
-#      - ./3x-ui/db:/etc/x-ui
-#      # TLS-сертификаты
-#      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
-#    environment:
-#      - XRAY_VMESS_AEAD_FORCED=false
+  3x-ui:
+    image: ghcr.io/mhsanaei/3x-ui:v2.8.11
+    container_name: 3x-ui
+    restart: unless-stopped
+    tty: true
+    network_mode: host
+    volumes:
+      # SQLite-база данных панели (настройки, пользователи, inbounds)
+      # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
+      - ./3x-ui/db:/etc/x-ui
+      # TLS-сертификаты
+      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+    environment:
+      - XRAY_VMESS_AEAD_FORCED=false
 
   # ---------------------------------------------------------------------------
   # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
