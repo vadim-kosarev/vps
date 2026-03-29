@@ -4,7 +4,7 @@ name: vkosarev.link
 # Обновление: docker compose pull && docker compose up -d
 #
 # Переменные — в файле .env (скопировать из .env.example).
-# Сертификаты: CERT_DIR=/tools/nginx/cert (по умолчанию)
+# Сертификаты: CERT_DIR=/root/cert (по умолчанию)
 #   Ожидаемые файлы в CERT_DIR:
 #     fullchain.pem
 #     vkosarev.link_privatekey.key
@@ -13,7 +13,7 @@ services:
 
   # ---------------------------------------------------------------------------
   # 3x-ui — панель управления Xray (VLESS/Reality/HTTP-proxy)
-  # Panel:    https://vkosarev.link:33562/
+  # Panel:    https://vkosarev.link:33562/vkosarev.link.amazon/panel/settings
   # Inbounds: 443  (VLESS TCP)
   #           8888 (VLESS+Reality, SNI: yahoo.com)
   #           22000 (HTTP proxy, user1/Password123!!)
@@ -31,7 +31,7 @@ services:
       # Перед первым запуском скопировать: sudo cp /etc/x-ui/x-ui.db ./3x-ui/db/
       - ./3x-ui/db:/etc/x-ui
       # TLS-сертификаты
-      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
     environment:
       - XRAY_VMESS_AEAD_FORCED=false
 
@@ -103,11 +103,14 @@ services:
     image: nginx:1.27-alpine
     container_name: nginx
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "80:80"
+      - "1443:1443"
+      - "7601:7601"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/www:/etc/nginx/www:ro
-      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
 
   # ---------------------------------------------------------------------------
   # Portainer — веб-интерфейс управления Docker
@@ -139,7 +142,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ${PROMETHEUS_DATA:-./prometheus/data}:/prometheus
-      - ${CERT_DIR:-/tools/nginx/cert}:/root/cert:ro
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
