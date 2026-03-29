@@ -118,6 +118,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ${GRAFANA_DATA:-./grafana/data}:/var/lib/grafana
+      - ./grafana/conf/grafana.ini:/etc/grafana/grafana.ini:ro
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
     ports:
       - "3000:3000"
