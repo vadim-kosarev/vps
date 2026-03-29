@@ -90,7 +90,7 @@ services:
   # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v3.2.1
+    image: prom/prometheus:latest-distroless
     container_name: prometheus
     restart: unless-stopped
     extra_hosts:

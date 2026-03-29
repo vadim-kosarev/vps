@@ -13,7 +13,7 @@ scrape_configs:
       - source_labels: [__address__]
         regex: .*
         # Имя текущего нода теперь берётся через шаблон Prometheus: {{ env "NODE_NAME" }}
-        replacement: "{{ env \"NODE_NAME\" }}:9100"
+        replacement: "vkosarev.name:9100"
         target_label: instance
 
   # federation: собираем агрегированные метрики с prometheus на всех трёх нодах
@@ -24,6 +24,7 @@ scrape_configs:
     params:
       'match[]':
         - '{job="node"}'
+        - '{job="node_self"}'
         - '{job="xui"}'
     static_configs:
       - targets:
