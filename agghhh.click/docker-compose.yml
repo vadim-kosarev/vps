@@ -59,11 +59,10 @@ services:
 
   # ---------------------------------------------------------------------------
   # Prometheus — сбор метрик
-  # UI: http://agghhh.click:9090
   # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v3.2.1
+    image: prom/prometheus:latest-distroless
     container_name: prometheus
     restart: unless-stopped
     extra_hosts:
@@ -71,6 +70,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ${PROMETHEUS_DATA:-./prometheus/data}:/prometheus
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -78,6 +78,8 @@ services:
       - "--web.enable-lifecycle"
     ports:
       - "9090:9090"
+    environment:
+      - NODE_NAME=${NODE_NAME}
 
   # ---------------------------------------------------------------------------
   # Portainer — веб-интерфейс управления Docker

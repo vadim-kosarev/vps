@@ -4,21 +4,56 @@ global:
 
 scrape_configs:
 
-  - job_name: "node"
+  - job_name: "node-self"
     static_configs:
       - targets:
           - "host.docker.internal:9100"
-      # Для уникальности instance подменяем его на имя сервера
-    relabel_configs:
-      - source_labels: [__address__]
-        regex: .*
-        replacement: "vkosarev.link:9100"
-        target_label: instance
+        labels:
+          instance: "vkosarev.link:9100"
 
-  # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
     static_configs:
       - targets:
-        - "host.docker.internal:3001"
-        - "vkosarev.link:3001"
+          - "host.docker.internal:3001"
+        labels:
+          instance: "vkosarev.link:9100"
+          xui_instance: "vkosarev.link:3001"
 
+  - job_name: 'federate-vkosarev.name'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.name:9090'
+
+  - job_name: 'federate-vkosarev.link'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.link:9090'
+
+  - job_name: 'federate-agghhh.click'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'agghhh.click:9090'
