@@ -21,6 +21,7 @@ services:
     # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
     image: ghcr.io/mhsanaei/3x-ui:v2.8.11
     container_name: 3x-ui
+    hostname: 3x-ui
     restart: unless-stopped
     tty: true
 

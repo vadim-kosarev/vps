@@ -4,29 +4,20 @@ global:
 
 scrape_configs:
 
-  - job_name: "node"
+  # node_exporter на этом сервере (instance подменяется на имя текущего нода)
+  - job_name: "node-self"
     static_configs:
       - targets:
           - "host.docker.internal:9100"
-      # Для уникальности instance подменяем его на имя сервера
     relabel_configs:
       - source_labels: [__address__]
         regex: .*
-        replacement: "vkosarev.name:9100"
+        # Имя текущего нода берётся из переменной окружения NODE_NAME (пример: vkosarev.name, vkosarev.link, agghhh.click)
+        replacement: "$NODE_NAME:9100"
         target_label: instance
-      # Если нужно собирать с других серверов — добавить отдельные job с нужным replacement
 
-  # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
-  - job_name: "xui"
-    static_configs:
-      - targets:
-        - "host.docker.internal:3001"
-        - "vkosarev.name:3001"
-        - "agghhh.click:3001"
-        # - "vkosarev.link:3001"  # теперь через federation
-
-  # Federation: собираем метрики с vkosarev.link через его Prometheus
-  - job_name: 'federate-vkosarev-link'
+  # federation: собираем агрегированные метрики с prometheus на всех трёх нодах
+  - job_name: 'federate-vkosarev.name'
     scrape_interval: 30s
     metrics_path: '/federate'
     honor_labels: true
@@ -36,4 +27,28 @@ scrape_configs:
         - '{job="xui"}'
     static_configs:
       - targets:
-        - 'vkosarev.link:9090'
+          - 'vkosarev.name:9090'
+
+  - job_name: 'federate-vkosarev.link'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.link:9090'
+
+  - job_name: 'federate-agghhh.click'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'agghhh.click:9090'
