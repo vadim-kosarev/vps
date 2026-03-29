@@ -135,3 +135,24 @@ services:
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
     depends_on:
       - roundcube
+
+  # ---------------------------------------------------------------------------
+  # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
+  # Метрики: http://agghhh.click:3001/metrics
+  # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
+  # Проблема и патч: см. .ai/2026.03.29_3x-ui-exporter_patch.md
+  # После запуска применить патч к /app/build/xui.js (см. инструкцию в .ai)
+  # ---------------------------------------------------------------------------
+  3x-ui-exporter:
+    image: m4l3vich/3x-ui-prometheus-exporter:latest
+    container_name: 3x-ui-exporter
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2077/vaduha.name777/}"
+      XUI_USERNAME: "${XUI_EXPORTER_USERNAME:-vkosarev}"
+      XUI_PASSWORD: "${XUI_EXPORTER_PASSWORD:-changeme}"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    ports:
+      - "3001:3000"
