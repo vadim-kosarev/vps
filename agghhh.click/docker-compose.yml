@@ -20,6 +20,7 @@ services:
   # ---------------------------------------------------------------------------
   3x-ui:
     image: ghcr.io/mhsanaei/3x-ui:latest
+    container_name: 3x-ui
     restart: unless-stopped
     tty: true
     volumes:
@@ -49,6 +50,7 @@ services:
       args:
         TELEMT_VERSION: "3.3.28"
     image: telemt:3.3.28
+    container_name: telemt
     restart: unless-stopped
     volumes:
       - ${TELEMT_DATA:-./telemt/data}:/etc/telemt
@@ -89,6 +91,7 @@ services:
   # ---------------------------------------------------------------------------
   portainer:
     image: portainer/portainer-ce:2.27.9
+    container_name: portainer
     restart: always
     ports:
       - "${PORTAINER_PORT:-9443}:9443"
@@ -126,7 +129,7 @@ services:
   # ---------------------------------------------------------------------------
   nginx:
     image: nginx:1.27-alpine
-    container_name: nginx-roundcube
+    container_name: nginx
     restart: unless-stopped
     ports:
       - "3210:3210"
