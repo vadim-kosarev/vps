@@ -4,19 +4,19 @@ global:
 
 scrape_configs:
 
-  # node_exporter на этом сервере (instance подменяется на имя текущего нода)
   - job_name: "node-self"
     static_configs:
-      - targets:
-          - "host.docker.internal:9100"
-    relabel_configs:
-      - source_labels: [__address__]
-        regex: .*
-        # Имя текущего нода теперь берётся через шаблон Prometheus: {{ env "NODE_NAME" }}
-        replacement: "vkosarev.name:9100"
-        target_label: instance
+      - targets: [ "host.docker.internal:9100" ]
+        labels:
+          instance: "${NODE_NAME}:9100"
 
-  # federation: собираем агрегированные метрики с prometheus на всех трёх нодах
+  - job_name: "xui"
+    static_configs:
+      - targets:
+          - "host.docker.internal:3001"
+        labels:
+          instance: "${NODE_NAME}:9100"
+
   - job_name: 'federate-vkosarev.name'
     scrape_interval: 30s
     metrics_path: '/federate'
