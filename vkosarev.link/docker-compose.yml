@@ -106,14 +106,11 @@ services:
       - ${PORTAINER_DATA:-./portainer/data}:/data
 
   # ---------------------------------------------------------------------------
-  # prometheus — система мониторинга и оповещения
-  # UI: http://vkosarev.link:9090
-  # Конфиг: ./prometheus/prometheus.yml
-  # Данные: ${PROMETHEUS_DATA:-./prometheus/data}
-  # Актуальные теги: https://hub.docker.com/r/prom/prometheus/tags
+  # Prometheus — сбор метрик
+  # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v3.2.1
+    image: prom/prometheus:latest-distroless
     container_name: prometheus
     restart: unless-stopped
     extra_hosts:
@@ -129,5 +126,7 @@ services:
       - "--web.enable-lifecycle"
     ports:
       - "9090:9090"
+    environment:
+      - NODE_NAME=${NODE_NAME}
 
 volumes: {}

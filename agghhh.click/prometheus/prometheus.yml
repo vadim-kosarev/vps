@@ -4,13 +4,56 @@ global:
 
 scrape_configs:
 
-  # node_exporter работает на хосте, не в Docker
-  # host.docker.internal резолвится в IP хоста благодаря extra_hosts в compose
-  - job_name: "node"
+  - job_name: "node-self"
     static_configs:
-      - targets: ["host.docker.internal:9100"]
+      - targets:
+          - "host.docker.internal:9100"
         labels:
-          host: "agghhh.click"
-      - targets: ["vkosarev.name:9100"]
+          instance: "agghhh.click:9100"
+
+  - job_name: "xui"
+    static_configs:
+      - targets:
+          - "host.docker.internal:3001"
         labels:
-          host: "vkosarev.name"
+          instance: "agghhh.click:9100"
+          xui_instance: "agghhh.click:3001"
+
+  - job_name: 'federate-vkosarev.name'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.name:9090'
+
+  - job_name: 'federate-vkosarev.link'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.link:9090'
+
+  - job_name: 'federate-agghhh.click'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job="node"}'
+        - '{job="node_self"}'
+        - '{job="xui"}'
+    static_configs:
+      - targets:
+          - 'agghhh.click:9090'
