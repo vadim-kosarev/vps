@@ -46,15 +46,13 @@ scrape_configs:
       - targets:
           - 'vkosarev.link:9090'
 
-#  - job_name: 'federate-agghhh.click'
-#    scrape_interval: 30s
-#    metrics_path: '/federate'
-#    honor_labels: true
-#    params:
-#      'match[]':
-#        - '{job="node"}'
-#        - '{job="node-self"}'
-#        - '{job="xui"}'
-#    static_configs:
-#      - targets:
-#          - 'agghhh.click:9090'
+  - job_name: 'federate-agghhh.click'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job=~"node|node-self|xui"}'
+    static_configs:
+      - targets:
+          - 'agghhh.click:9090'
