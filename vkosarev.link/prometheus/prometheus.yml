@@ -1,6 +1,8 @@
 global:
   scrape_interval: 15s      # как часто снимать метрики
   evaluation_interval: 15s  # как часто вычислять alert-правила
+  external_labels:
+    prometheus: "vkosarev.link"
 
 scrape_configs:
 
@@ -19,41 +21,41 @@ scrape_configs:
           instance: "vkosarev.link:9100"
           xui_instance: "vkosarev.link:3001"
 
-  - job_name: 'federate-vkosarev.name'
-    scrape_interval: 30s
-    metrics_path: '/federate'
-    honor_labels: true
-    params:
-      'match[]':
-        - '{job="node"}'
-        - '{job="node_self"}'
-        - '{job="xui"}'
-    static_configs:
-      - targets:
-          - 'vkosarev.name:9090'
+#  - job_name: 'federate-vkosarev.name'
+#    scrape_interval: 30s
+#    metrics_path: '/federate'
+#    honor_labels: true
+#    params:
+#      'match[]':
+#        - '{job="node"}'
+#        - '{job="node_self"}'
+#        - '{job="xui"}'
+#    static_configs:
+#      - targets:
+#          - 'vkosarev.name:9090'
 
-  - job_name: 'federate-vkosarev.link'
-    scrape_interval: 30s
-    metrics_path: '/federate'
-    honor_labels: true
-    params:
-      'match[]':
-        - '{job="node"}'
-        - '{job="node_self"}'
-        - '{job="xui"}'
-    static_configs:
-      - targets:
-          - 'vkosarev.link:9090'
+#  - job_name: 'federate-vkosarev.link'
+#    scrape_interval: 30s
+#    metrics_path: '/federate'
+#    honor_labels: true
+#    params:
+#      'match[]':
+#        - '{job="node"}'
+#        - '{job="node_self"}'
+#        - '{job="xui"}'
+#    static_configs:
+#      - targets:
+#          - 'vkosarev.link:9090'
 
-  - job_name: 'federate-agghhh.click'
-    scrape_interval: 30s
-    metrics_path: '/federate'
-    honor_labels: true
-    params:
-      'match[]':
-        - '{job="node"}'
-        - '{job="node_self"}'
-        - '{job="xui"}'
-    static_configs:
-      - targets:
-          - 'agghhh.click:9090'
+#  - job_name: 'federate-agghhh.click'
+#    scrape_interval: 30s
+#    metrics_path: '/federate'
+#    honor_labels: true
+#    params:
+#      'match[]':
+#        - '{job="node"}'
+#        - '{job="node_self"}'
+#        - '{job="xui"}'
+#    static_configs:
+#      - targets:
+#          - 'agghhh.click:9090'
