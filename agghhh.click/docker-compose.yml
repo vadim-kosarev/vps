@@ -129,7 +129,7 @@ services:
     container_name: nginx-roundcube
     restart: unless-stopped
     ports:
-      - "443:443"
+      - "3210:3210"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
