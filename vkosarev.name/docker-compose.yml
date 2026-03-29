@@ -128,7 +128,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus
-    user: "472:472"
+    user: "0:0"
 
   # ---------------------------------------------------------------------------
   # mtproxy — Telegram MTProto Proxy
