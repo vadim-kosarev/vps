@@ -7,10 +7,14 @@ scrape_configs:
   - job_name: "node"
     static_configs:
       - targets:
-        - "host.docker.internal:9100"
-        - "vkosarev.name:9100"
-        - "agghhh.click:9100"
-        # - "vkosarev.link:9100"  # теперь через federation
+          - "host.docker.internal:9100"
+      # Для уникальности instance подменяем его на имя сервера
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: .*
+        replacement: "vkosarev.name:9100"
+        target_label: instance
+      # Если нужно собирать с других серверов — добавить отдельные job с нужным replacement
 
   # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
