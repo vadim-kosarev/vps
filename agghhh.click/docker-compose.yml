@@ -119,3 +119,19 @@ services:
       - ./roundcube-db:/var/roundcube/db
       - ./roundcube-config:/var/roundcube/config
       - ./roundcube-temp:/tmp/roundcube-temp
+
+  # ---------------------------------------------------------------------------
+  # nginx — HTTPS reverse proxy для roundcube
+  # Проксирует 443 → roundcube:80, сертификаты из ${CERT_DIR}
+  # ---------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx-roundcube
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+    depends_on:
+      - roundcube
