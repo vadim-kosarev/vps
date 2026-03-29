@@ -103,8 +103,8 @@ services:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
     restart: unless-stopped
-    ports:
-      - "3211:80"
+#    ports:
+#      - "3211:80"
     environment:
       - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.ec-leasing.ru
       - ROUNDCUBEMAIL_DEFAULT_PORT=993
