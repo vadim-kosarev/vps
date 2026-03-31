@@ -50,6 +50,6 @@ docker-compose.override.yml
 bin/windows_exporter.exe
 
 # Исключить кэш и сторедж SnappyMail
-agghhh.click/snappymail-data/_data_/_default_/cache/
-agghhh.click/snappymail-data/_data_/_default_/storage/
+agghhh.click/snappymail/**/_data_/**/cache/
+agghhh.click/snappymail/**/_data_/**/storage/
 agghhh.click/roundcube-temp/

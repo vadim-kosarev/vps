@@ -196,8 +196,8 @@ services:
     container_name: snappymail
     hostname: snappymail
     restart: unless-stopped
-    # ports:
-    #   - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
+    ports:
+       - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
     # Настройка IMAP/SMTP производится через файл snappymail-data/_data_/_default_/domains/default.json
     volumes:
       - ./snappymail/data:/var/lib/snappymail
