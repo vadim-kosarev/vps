@@ -119,13 +119,13 @@ services:
       - ROUNDCUBEMAIL_SKIN=elastic
       - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload
     volumes:
-      - ./roundcube-db:/var/roundcube/db
-      - ./roundcube-config:/var/roundcube/config
-      - ./roundcube-temp:/tmp/roundcube-temp
+      - ./roundcube/db:/var/roundcube/db
+      - ./roundcube/config:/var/roundcube/config
+      - ./roundcube/roundcube-temp:/tmp/roundcube-temp
 
   # ---------------------------------------------------------------------------
-  # nginx — HTTPS reverse proxy для roundcube
-  # Проксирует 443 → roundcube:80, сертификаты из ${CERT_DIR}
+  # nginx — HTTPS reverse proxy для roundcube и snappymail
+  # Проксирует 3210 → roundcube:80 и 3220 → snappymail:8888, сертификаты из ${CERT_DIR}
   # ---------------------------------------------------------------------------
   nginx:
     image: nginx:1.27-alpine
@@ -133,11 +133,10 @@ services:
     restart: unless-stopped
     ports:
       - "3210:3210"
+      - "3220:3220"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
-    depends_on:
-      - roundcube
 
   # ---------------------------------------------------------------------------
   # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
@@ -159,3 +158,48 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     ports:
       - "3001:3000"
+
+  # ---------------------------------------------------------------------------
+  # SOGo — веб-почтовый/groupware сервер
+  # UI:  https://agghhh.click:20000
+  # Документация: https://github.com/Alinto/docker-sogo
+  # Образ: https://hub.docker.com/r/pmietlicki/sogo
+  # ---------------------------------------------------------------------------
+#  sogo:
+#    image: pmietlicki/sogo
+#    container_name: sogo
+#    hostname: sogo
+#    restart: unless-stopped
+#    environment:
+#      - SOGO_TIMEZONE=Europe/Moscow
+#      # Добавьте другие переменные окружения по необходимости (см. документацию)
+#      # Например:
+#      # - SOGO_SOGOD_DEBUG=1
+#    ports:
+#      - "20000:20000"   # Веб-интерфейс SOGo
+#    volumes:
+#      # Вся конфигурация, логи и данные SOGo будут храниться в ./sogo-data
+#      - ./sogo-data:/srv
+#      # После первого запуска скопируйте .orig-файлы конфигов из ./sogo-data/etc/ и настройте их (см. инструкцию в .tmp/sogo_dockerhub.txt)
+##    depends_on:
+##      - nginx
+#    # Для работы требуется отдельная база данных (например, PostgreSQL). Настройте параметры подключения в sogo.conf внутри ./sogo-data/etc/
+#
+
+  # ---------------------------------------------------------------------------
+  # SnappyMail — легкий веб-почтовый клиент
+  # UI:  http://agghhh.click:8080
+  # Документация: https://hub.docker.com/r/djmaze/snappymail
+  # ---------------------------------------------------------------------------
+  snappymail:
+    image: djmaze/snappymail:latest
+    container_name: snappymail
+    hostname: snappymail
+    restart: unless-stopped
+    # ports:
+    #   - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
+    # Настройка IMAP/SMTP производится через файл snappymail-data/_data_/_default_/domains/default.json
+    volumes:
+      - ./snappymail-data:/var/lib/snappymail
+      - ./snappymail-config:/var/lib/snappymail/config
+      - ./snappymail-temp:/tmp/snappymail-temp
