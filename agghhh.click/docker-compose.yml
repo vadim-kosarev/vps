@@ -200,6 +200,6 @@ services:
     #   - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
     # Настройка IMAP/SMTP производится через файл snappymail-data/_data_/_default_/domains/default.json
     volumes:
-      - ./snappymail-data:/var/lib/snappymail
-      - ./snappymail-config:/var/lib/snappymail/config
-      - ./snappymail-temp:/tmp/snappymail-temp
+      - ./snappymail/data:/var/lib/snappymail
+      - ./snappymail/config:/var/lib/snappymail/config
+      - ./snappymail/temp:/tmp/snappymail-temp
