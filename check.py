@@ -101,6 +101,13 @@ SERVICES = [
     
     # ⚡ Утилиты
     ("vkosarev.name", "iperf3", "Docker", "5. Утилиты", "tcp://vkosarev.name:5201"),
+
+    # vkosarev.link
+    # 🛠️ Инфраструктура
+    ("vkosarev.link", "3x-ui", "Docker", "2. Инфраструктура", "https://vkosarev.link:33562/vkosarev.link.amazon/panel/settings"),
+    ("vkosarev.link", "Portainer", "Docker", "2. Инфраструктура", "https://vkosarev.link:9443/"),
+    ("vkosarev.link", "Prometheus", "Docker", "2. Инфраструктура", "http://vkosarev.link:9090/"),
+    ("vkosarev.link", "MTProxy", "Docker", "2. Инфраструктура", "tcp://vkosarev.link:2443"),
 ]
 
 

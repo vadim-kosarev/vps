@@ -59,6 +59,25 @@ services:
       - "${XUI_EXPORTER_PORT:-3001}:3000"
 
   # ---------------------------------------------------------------------------
+  # mtproxy — Telegram MTProto Proxy
+  # Порт: 2443 (снаружи) → 443 (внутри контейнера)
+  # Secret: ebc3ec92c8efd209fdf48cb1b18dfab1
+  # Ссылку для подключения смотреть в логах: docker compose logs mtproxy
+  # Актуальные образы: https://hub.docker.com/r/telegrammessenger/proxy/tags
+  # ---------------------------------------------------------------------------
+  mtproxy:
+    image: telegrammessenger/proxy:latest
+    container_name: mtproxy
+    restart: unless-stopped
+    ports:
+      - "2443:443"
+    volumes:
+      - ${MTPROXY_DATA:-./mtproxy/data}:/data
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+    environment:
+      - SECRET=ebc3ec92c8efd209fdf48cb1b18dfab1
+
+  # ---------------------------------------------------------------------------
   # frps — Fast Reverse Proxy server
   # Dashboard: http://vkosarev.link:7599
   # Клиенты подключаются на порт 7401 (TCP + KCP/UDP)
