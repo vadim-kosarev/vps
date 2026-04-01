@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-check.py - Проверка доступности всех сервисов vkosarev.name
+check.py - Проверка доступности сервисов VPS хостингов
 
 Использование:
-  python3 check.py                    # Проверить локальные сервисы (localhost)
-  python3 check.py vkosarev.name      # Проверить удаленные сервисы по FQDN
+  python3 check.py                    # Проверить все сайты
+  python3 check.py vkosarev.name      # Проверить только vkosarev.name
   python3 check.py --help             # Справка
 
 Примеры:
-  python3 check.py                    # Проверить localhost
-  python3 check.py 127.0.0.1          # Проверить локально
-  python3 check.py vkosarev.name      # Проверить по FQDN
+  python3 check.py                    # Проверить все сервисы всех сайтов
+  python3 check.py vkosarev.name      # Проверить только сервисы vkosarev.name
 """
 
 import sys
@@ -68,7 +67,8 @@ def parse_url(url):
 # ════════════════════════════════════════════════════════════════════════════════
 # КОНФИГУРАЦИЯ СЕРВИСОВ
 # ════════════════════════════════════════════════════════════════════════════════
-# Формат: (Название, Локация, Категория, FullURL)
+# Формат: (Сайт, Название, Локация, Категория, FullURL)
+# - Сайт: домен/сайт для группировки (vkosarev.name, agghhh.click, и т.д.)
 # - Название: отображаемое имя сервиса
 # - Локация: Docker / Host / FRP-туннель
 # - Категория: Мониторинг / Инфраструктура / Медиа / Видеонаблюдение / Утилиты
@@ -76,30 +76,31 @@ def parse_url(url):
 # ════════════════════════════════════════════════════════════════════════════════
 
 SERVICES = [
+    # vkosarev.name
     # 📊 Мониторинг
-    ("Grafana", "Docker", "1. Мониторинг", "http://vkosarev.name:3000/"),
-    ("Prometheus", "Docker", "1. Мониторинг", "http://vkosarev.name:9090/query"),
-    ("node_exporter", "Host", "1. Мониторинг", "http://vkosarev.name:9100/metrics"),
-    ("3x-ui Exporter", "Docker", "1. Мониторинг", "http://vkosarev.name:3001/metrics"),
-    ("frps Dashboard", "Docker", "1. Мониторинг", "http://vkosarev.name:7599/"),
+    ("vkosarev.name", "Grafana", "Docker", "1. Мониторинг", "http://vkosarev.name:3000/"),
+    ("vkosarev.name", "Prometheus", "Docker", "1. Мониторинг", "http://vkosarev.name:9090/query"),
+    ("vkosarev.name", "node_exporter", "Host", "1. Мониторинг", "http://vkosarev.name:9100/metrics"),
+    ("vkosarev.name", "3x-ui Exporter", "Docker", "1. Мониторинг", "http://vkosarev.name:3001/metrics"),
+    ("vkosarev.name", "frps Dashboard", "Docker", "1. Мониторинг", "http://vkosarev.name:7599/"),
     
     # 🛠️ Инфраструктура
-    ("Portainer", "Docker", "2. Инфраструктура", "https://vkosarev.name:9443/"),
-    ("3x-ui", "Docker", "2. Инфраструктура", "https://vkosarev.name:2055/vkosarev.name.eu/"),
-    ("Mermaid Live", "Docker", "2. Инфраструктура", "http://vkosarev.name:3200/"),
-    ("MTProxy", "Docker", "2. Инфраструктура", "tcp://vkosarev.name:2443"),
-    ("Myip", "Docker", "2. Инфраструктура", "http://vkosarev.name:88/"),
+    ("vkosarev.name", "Portainer", "Docker", "2. Инфраструктура", "https://vkosarev.name:9443/"),
+    ("vkosarev.name", "3x-ui", "Docker", "2. Инфраструктура", "https://vkosarev.name:2055/vkosarev.name.eu/"),
+    ("vkosarev.name", "Mermaid Live", "Docker", "2. Инфраструктура", "http://vkosarev.name:3200/"),
+    ("vkosarev.name", "MTProxy", "Docker", "2. Инфраструктура", "tcp://vkosarev.name:2443"),
+    ("vkosarev.name", "Myip", "Docker", "2. Инфраструктура", "http://vkosarev.name:88/"),
     
     # 📸 Медиа
-    ("Immich", "FRP-туннель", "3. Медиа", "https://vkosarev.name:7601/"),
-    ("Subsonic", "FRP-туннель", "3. Медиа", "http://vkosarev.name:4041/"),
+    ("vkosarev.name", "Immich", "FRP-туннель", "3. Медиа", "https://vkosarev.name:7601/"),
+    ("vkosarev.name", "Subsonic", "FRP-туннель", "3. Медиа", "http://vkosarev.name:4041/"),
     
     # 📷 Видеонаблюдение
-    ("Frigate", "FRP-туннель", "4. Видеонаблюдение", "https://vkosarev.name:5001/"),
-    ("HikCam", "FRP-туннель", "4. Видеонаблюдение", "https://vkosarev.name:981/"),
+    ("vkosarev.name", "Frigate", "FRP-туннель", "4. Видеонаблюдение", "https://vkosarev.name:5001/"),
+    ("vkosarev.name", "HikCam", "FRP-туннель", "4. Видеонаблюдение", "https://vkosarev.name:981/"),
     
     # ⚡ Утилиты
-    ("iperf3", "Docker", "5. Утилиты", "tcp://vkosarev.name:5201"),
+    ("vkosarev.name", "iperf3", "Docker", "5. Утилиты", "tcp://vkosarev.name:5201"),
 ]
 
 
@@ -226,7 +227,7 @@ def check_http_fallback(host, port, url_path="/", timeout=2.0):
         return False, diag_both, False
 
 
-def check_service(host_from_url, name, location, url, number=None, total=None):
+def check_service(name, location, url, number=None, total=None):
     """Проверить один сервис и вывести результат"""
     # Парсим URL с помощью встроенной функции
     protocol, host, port, path = parse_url(url)
@@ -267,13 +268,13 @@ def check_service(host_from_url, name, location, url, number=None, total=None):
     return available
 
 
-def print_header(host, total_services=15):
+def print_header(site, total_services):
     """Печать заголовка"""
     line_width = 69
-    title = "Проверка доступности сервисов vkosarev.name"
+    title = f"Проверка доступности сервисов {site}"
     title_padding = (line_width - len(title)) // 2
     
-    host_info = f"Хост: {host} ({total_services} сервисов)"
+    host_info = f"({total_services} сервисов)"
     host_padding = (line_width - len(host_info)) // 2
     
     print(f"\n{BOLD}{CYAN}╔{'═'*line_width}╗{RESET}")
@@ -304,32 +305,48 @@ def print_summary(total, ok):
 
 def main():
     # Парсим аргументы
-    host = "localhost"
+    filter_site = None
     if len(sys.argv) > 1:
         if sys.argv[1] in ('--help', '-h', '-?'):
             print(__doc__)
             sys.exit(0)
-        host = sys.argv[1]
+        filter_site = sys.argv[1]
     
-    print_header(host, len(SERVICES))
+    # Группируем сервисы по сайтам
+    sites_data = {}
+    for site, name, location, category, url in SERVICES:
+        if filter_site and site != filter_site:
+            continue  # Пропускаем если есть фильтр по сайту
+        
+        if site not in sites_data:
+            sites_data[site] = {}
+        
+        if category not in sites_data[site]:
+            sites_data[site][category] = []
+        
+        sites_data[site][category].append((name, location, url))
     
-    ok_count = 0
+    # Сначала подсчитаем общее количество сервисов для всех отфильтрованных сайтов
+    total_all_services = sum(
+        len(sites_data[site][cat])
+        for site in sites_data
+        for cat in sites_data[site]
+    )
+    
+    # Проверяем каждый сайт
+    total_ok = 0
     service_number = 1
     
-    # Категоризируем сервисы
-    categories = {}
-    for name, location, category, url in SERVICES:
-        if category not in categories:
-            categories[category] = []
-        categories[category].append((name, location, url))
-    
-    # Сортируем по имени категории (автоматически по номерам: 1, 2, 3, 4, 5)
-    first_section = True
-    for category_name in sorted(categories.keys()):
-        if not first_section:
-            print()
+    for site in sorted(sites_data.keys()):
+        site_services = []
+        for category in sorted(sites_data[site].keys()):
+            site_services.extend(sites_data[site][category])
         
-        # Конвертируем имя обратно в emoji формат для вывода
+        print_header(site, len(site_services))
+        
+        site_ok = 0
+        
+        # Мониторинг по категориям
         emoji_map = {
             "1. Мониторинг": "📊 Мониторинг",
             "2. Инфраструктура": "🛠️ Инфраструктура",
@@ -337,17 +354,23 @@ def main():
             "4. Видеонаблюдение": "📷 Видеонаблюдение",
             "5. Утилиты": "⚡ Утилиты",
         }
-        section_emoji = emoji_map.get(category_name, category_name)
         
-        print_section(section_emoji)
-        first_section = False
+        first_section = True
+        for category in sorted(sites_data[site].keys()):
+            if not first_section:
+                print()
+            
+            section_emoji = emoji_map.get(category, category)
+            print_section(section_emoji)
+            first_section = False
+            
+            for name, location, url in sites_data[site][category]:
+                if check_service(f"{name} ({location})", location, url, service_number, total_all_services):
+                    site_ok += 1
+                    total_ok += 1
+                service_number += 1
         
-        for name, location, url in categories[category_name]:
-            if check_service(host, f"{name} ({location})", location, url, service_number, len(SERVICES)):
-                ok_count += 1
-            service_number += 1
-    
-    print_summary(len(SERVICES), ok_count)
+        print_summary(len(site_services), site_ok)
 
 
 if __name__ == "__main__":
