@@ -195,14 +195,18 @@ services:
   # Документация: https://hub.docker.com/r/djmaze/snappymail
   # ---------------------------------------------------------------------------
   snappymail:
-    image: djmaze/snappymail:latest
+    image: itefixnet/snappymail:latest
     container_name: snappymail
     hostname: snappymail
     restart: unless-stopped
 #    ports:
 #       - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
-    # Настройка IMAP/SMTP производится через файл snappymail-data/_data_/_default_/domains/default.json
     volumes:
       - ./snappymail:/var/lib/snappymail
       - ./snappymail/config:/var/lib/snappymail/config
       - ./snappymail/temp:/tmp/snappymail-temp
+      - ./snappymail-data:/var/www/html/data
+    environment:
+      - SNAPPYMAIL_ADMIN_USER=${SNAPPYMAIL_ADMIN_USER:-admin}
+      - SNAPPYMAIL_ADMIN_PASS=${SNAPPYMAIL_ADMIN_PASS:-changeme}
+      - TZ=Europe/Moscow
