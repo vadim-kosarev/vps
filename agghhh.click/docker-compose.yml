@@ -200,6 +200,8 @@ services:
     hostname: snappymail
     restart: unless-stopped
 #    ports:
+#        - "8080:80"   # Веб-интерфейс SnappyMail (теперь только через nginx)
+#    ports:
 #       - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
     volumes:
       - ./snappymail:/var/lib/snappymail
