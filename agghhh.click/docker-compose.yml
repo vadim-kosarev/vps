@@ -195,7 +195,7 @@ services:
   # Документация: https://hub.docker.com/r/djmaze/snappymail
   # ---------------------------------------------------------------------------
   snappymail:
-    image: itefixnet/snappymail:latest
+    image: itefixnet/snappymail:2.38.2-2
     container_name: snappymail
     hostname: snappymail
     restart: unless-stopped
