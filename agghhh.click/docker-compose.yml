@@ -16,9 +16,11 @@ services:
   # 3x-ui — панель управления Xray
   # Панель:  http://agghhh.click:2077/vaduha.name777/panel/settings
   # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
+  # Проблема и патч для экспортёра: см. .ai/2026.03.29_3x-ui-exporter_patch.md
   # ---------------------------------------------------------------------------
   3x-ui:
     image: ghcr.io/mhsanaei/3x-ui:latest
+    container_name: 3x-ui
     restart: unless-stopped
     tty: true
     volumes:
@@ -48,6 +50,7 @@ services:
       args:
         TELEMT_VERSION: "3.3.28"
     image: telemt:3.3.28
+    container_name: telemt
     restart: unless-stopped
     volumes:
       - ${TELEMT_DATA:-./telemt/data}:/etc/telemt
@@ -88,6 +91,7 @@ services:
   # ---------------------------------------------------------------------------
   portainer:
     image: portainer/portainer-ce:2.27.9
+    container_name: portainer
     restart: always
     ports:
       - "${PORTAINER_PORT:-9443}:9443"
@@ -102,8 +106,8 @@ services:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
     restart: unless-stopped
-    ports:
-      - "3210:80"
+#    ports:
+#      - "3211:80"
     environment:
       - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.ec-leasing.ru
       - ROUNDCUBEMAIL_DEFAULT_PORT=993
@@ -115,6 +119,96 @@ services:
       - ROUNDCUBEMAIL_SKIN=elastic
       - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload
     volumes:
-      - ./roundcube-db:/var/roundcube/db
-      - ./roundcube-config:/var/roundcube/config
-      - ./roundcube-temp:/tmp/roundcube-temp
+      - ./roundcube/db:/var/roundcube/db
+      - ./roundcube/config:/var/roundcube/config
+      - ./roundcube/roundcube-temp:/tmp/roundcube-temp
+
+  # ---------------------------------------------------------------------------
+  # nginx — HTTPS reverse proxy для roundcube и snappymail
+  # Проксирует 3210 → roundcube:80 и 3220 → snappymail:8888, сертификаты из ${CERT_DIR}
+  # ---------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx-agghhh-click
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "1443:1443"
+      - "3210:3210"
+      - "3220:3220"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - ${CERT_DIR:-/root/cert}:/root/cert:ro
+
+  # ---------------------------------------------------------------------------
+  # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
+  # Метрики: http://agghhh.click:3001/metrics
+  # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
+  # Проблема и патч: см. .ai/2026.03.29_3x-ui-exporter_patch.md
+  # После запуска применить патч к /app/build/xui.js (см. инструкцию в .ai)
+  # ---------------------------------------------------------------------------
+  3x-ui-exporter:
+    image: m4l3vich/3x-ui-prometheus-exporter:latest
+    container_name: 3x-ui-exporter
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2077/vaduha.name777/}"
+      XUI_USERNAME: "${XUI_EXPORTER_USERNAME:-vkosarev}"
+      XUI_PASSWORD: "${XUI_EXPORTER_PASSWORD:-changeme}"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    ports:
+      - "3001:3000"
+
+  # ---------------------------------------------------------------------------
+  # SOGo — веб-почтовый/groupware сервер
+  # UI:  https://agghhh.click:20000
+  # Документация: https://github.com/Alinto/docker-sogo
+  # Образ: https://hub.docker.com/r/pmietlicki/sogo
+  # ---------------------------------------------------------------------------
+#  sogo:
+#    image: pmietlicki/sogo
+#    container_name: sogo
+#    hostname: sogo
+#    restart: unless-stopped
+#    environment:
+#      - SOGO_TIMEZONE=Europe/Moscow
+#      # Добавьте другие переменные окружения по необходимости (см. документацию)
+#      # Например:
+#      # - SOGO_SOGOD_DEBUG=1
+#    ports:
+#      - "20000:20000"   # Веб-интерфейс SOGo
+#    volumes:
+#      # Вся конфигурация, логи и данные SOGo будут храниться в ./sogo-data
+#      - ./sogo-data:/srv
+#      # После первого запуска скопируйте .orig-файлы конфигов из ./sogo-data/etc/ и настройте их (см. инструкцию в .tmp/sogo_dockerhub.txt)
+##    depends_on:
+##      - nginx
+#    # Для работы требуется отдельная база данных (например, PostgreSQL). Настройте параметры подключения в sogo.conf внутри ./sogo-data/etc/
+#
+
+  # ---------------------------------------------------------------------------
+  # SnappyMail — легкий веб-почтовый клиент
+  # UI:  http://agghhh.click:8080
+  # Документация: https://hub.docker.com/r/djmaze/snappymail
+  # ---------------------------------------------------------------------------
+  snappymail:
+    image: itefixnet/snappymail:2.38.2-2
+    container_name: snappymail
+    hostname: snappymail
+    restart: unless-stopped
+#    ports:
+#        - "8080:80"   # Веб-интерфейс SnappyMail (теперь только через nginx)
+#    ports:
+#       - "8888:8888"   # Веб-интерфейс SnappyMail (теперь только через nginx)
+    volumes:
+      - ./snappymail:/var/lib/snappymail
+      - ./snappymail/config:/var/lib/snappymail/config
+      - ./snappymail/temp:/tmp/snappymail-temp
+      - ./snappymail-data:/var/www/html/data
+    environment:
+      - SNAPPYMAIL_ADMIN_USER=${SNAPPYMAIL_ADMIN_USER:-admin}
+      - SNAPPYMAIL_ADMIN_PASS=${SNAPPYMAIL_ADMIN_PASS:-changeme}
+      - TZ=Europe/Moscow
