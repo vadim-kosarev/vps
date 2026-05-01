@@ -91,11 +91,21 @@ flowchart TD
 
 ## Сервисы по хостингам
 
+### 3x-ui Панели управления
+
+**Все URL-адреса панелей и доступ** → [`.ai/2026.04.01_3x-ui_panels_access.md`](.ai/2026.04.01_3x-ui_panels_access.md)
+
+| Хостинг | URL Панели | Порт |
+|---------|-----------|------|
+| **vkosarev.name** | `https://vkosarev.name:2055/vkosarev.name.eu/` | 2055 |
+| **vkosarev.link** | `https://vkosarev.link:33562/vkosarev.link.amazon/` | 33562 |
+| **agghhh.click** | `https://agghhh.click:2077/vaduha.name777/` | 2077 |
+
 ### vkosarev.name
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) |
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.name:2055/vkosarev.name.eu/) |
 | `3x-ui` (http-proxy) | `ghcr.io/mhsanaei/3x-ui` | 10126 | HTTP-прокси для YouTube/браузера |
 | `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy (выходной узел) |
 | `prometheus` | `prom/prometheus` | 9090 (localhost) | Сбор метрик |
@@ -105,11 +115,21 @@ flowchart TD
 | `mermaid` | `johnsinclair73/mermaid-live-editor` | 3200 | Редактор диаграмм |
 | `node_exporter` | *(systemd, не Docker)* | 9100 | Метрики хоста для Prometheus |
 
+### vkosarev.link
+
+| Сервис | Образ | Порты | Назначение |
+|---|---|---|---|
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 8888, 22000, 33562 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.link:33562/vkosarev.link.amazon/) |
+| `frps` | `snowdreamtech/frps` | 7401, 7599 | FRP сервер и dashboard |
+| `openvpn` | `kylemanna/openvpn` | 29817 | OpenVPN сервер |
+| `nginx` | `nginx:1.27-alpine` | 80, 1443, 7601 | Обратный прокси |
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Управление Docker |
+
 ### agghhh.click
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2077, 40404 | Xray VPN панель |
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2077, 40404 | Xray VPN панель — [Панель](https://agghhh.click:2077/vaduha.name777/) |
 | `telemt` | *(собирается из Dockerfile)* | 8443, 9091 | MTProxy фронтенд (multi-hop) |
 | `portainer` | `portainer/portainer-ce` | 9443 | Управление Docker |
 

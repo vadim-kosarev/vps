@@ -45,8 +45,8 @@ fi
 # Куда складывать архивы
 TARGET_DIR="/backup"
 
-# Сколько дней хранить старые бэкапы (автоочистка)
-KEEP_DAYS=30
+# Сколько последних дней хранить бэкапы (независимо от числа месяца)
+KEEP_DAYS=3
 # ===============================================
 
 # Имя хоста для имени файла
@@ -79,9 +79,41 @@ else
 fi
 
 # Автоочистка старых бэкапов
-log INFO "Очистка старых бэкапов старше ${KEEP_DAYS} дней..."
-find "$TARGET_DIR" -name "backup-*.tar.gz" -mtime +${KEEP_DAYS} -delete -print0 | while read -r -d $'\0' oldfile; do
-    log WARN "Удалён старый бэкап: $(basename "$oldfile")"
+# Правила хранения:
+#   - хранить бэкапы за последние KEEP_DAYS дней
+#   - хранить бэкапы от 1-го числа каждого месяца (YYYY-MM-01)
+log INFO "Очистка старых бэкапов (хранить: последние ${KEEP_DAYS} дней + 1-е числа месяцев)..."
+
+# Граничная дата: KEEP_DAYS дней назад в формате YYYY-MM-DD
+CUTOFF_DATE=$(date -d "-${KEEP_DAYS} days" +%Y-%m-%d)
+
+# Получаем все бэкапы текущего хоста
+mapfile -t ALL_BACKUPS < <(
+    find "$TARGET_DIR" -maxdepth 1 -name "backup-${HOSTNAME}-*.tar.gz" \
+    | sort -r
+)
+
+for f in "${ALL_BACKUPS[@]}"; do
+    fname=$(basename "$f")
+    # Извлекаем дату из имени файла: backup-HOSTNAME-YYYY-MM-DD.tar.gz
+    file_date=$(echo "$fname" | grep -oP '\d{4}-\d{2}-\d{2}')
+    file_day=$(echo "$file_date" | cut -d'-' -f3)
+
+    # Оставляем: бэкап за последние KEEP_DAYS дней
+    if [[ "$file_date" > "$CUTOFF_DATE" || "$file_date" == "$CUTOFF_DATE" ]]; then
+        log INFO "Сохраняем (последние ${KEEP_DAYS} дней): ${fname}"
+        continue
+    fi
+
+    # Оставляем: 1-е число каждого месяца
+    if [[ "$file_day" == "01" ]]; then
+        log INFO "Сохраняем (1-е число месяца): ${fname}"
+        continue
+    fi
+
+    # Удаляем остальное
+    rm -f "$f"
+    log WARN "Удалён старый бэкап: ${fname}"
 done
 
 log INFO "=== БЭКАП ЗАВЕРШЁН УСПЕШНО ==="
