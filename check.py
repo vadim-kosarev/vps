@@ -268,9 +268,9 @@ def check_service(name, location, url, number=None, total=None):
     # Добавляем нумерацию если передана
     if number is not None and total is not None:
         num_str = f"[{number:2d}/{total}]"
-        print(f"  {num_str} {name:.<22} {port_str:>6}  {type_str:.<8} {status}")
+        print(f"  {num_str} {name:.<22} {port_str:>6}  {type_str:.<8} {status}  | {url}")
     else:
-        print(f"  {name:.<25} {port_str:>6}  {type_str:.<8} {status}")
+        print(f"  {name:.<25} {port_str:>6}  {type_str:.<8} {status}  | {url}")
     
     return available
 
