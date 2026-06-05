@@ -45,12 +45,31 @@ fi
 # Куда складывать архивы
 TARGET_DIR="/backup"
 
-# Сколько последних дней хранить бэкапы (независимо от числа месяца)
-KEEP_DAYS=3
-# ===============================================
-
 # Имя хоста для имени файла
 HOSTNAME=$(hostname)
+
+# Путь к репозиторию VPS конфигураций
+VPS_REPO_PATH="/root/vps"
+
+# Читаем настройки из .env файла соответствующего хоста
+HOST_ENV_FILE="${VPS_REPO_PATH}/${HOSTNAME}/.env"
+
+# Значение по умолчанию
+KEEP_DAYS=1
+
+if [[ -f "$HOST_ENV_FILE" ]]; then
+    log INFO "Загружаем настройки из файла: ${HOST_ENV_FILE}"
+    # Загружаем только переменную BACKUP_KEEP_DAYS, игнорируя остальные
+    if grep -q "^BACKUP_KEEP_DAYS=" "$HOST_ENV_FILE"; then
+        KEEP_DAYS=$(grep "^BACKUP_KEEP_DAYS=" "$HOST_ENV_FILE" | cut -d'=' -f2)
+        log INFO "Настройка BACKUP_KEEP_DAYS=${KEEP_DAYS} из .env файла"
+    else
+        log WARN "BACKUP_KEEP_DAYS не найден в .env файле, используем значение по умолчанию: ${KEEP_DAYS}"
+    fi
+else
+    log WARN "Файл настроек не найден: ${HOST_ENV_FILE}, используем значение по умолчанию: ${KEEP_DAYS}"
+fi
+# ===============================================
 DATE=$(date +%Y-%m-%d)
 BACKUP_FILE="${TARGET_DIR}/backup-${HOSTNAME}-${DATE}.tar.gz"
 

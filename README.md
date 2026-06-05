@@ -120,10 +120,13 @@ flowchart TD
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
 | `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 8888, 22000, 33562 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.link:33562/vkosarev.link.amazon/) |
-| `frps` | `snowdreamtech/frps` | 7401, 7599 | FRP сервер и dashboard |
-| `openvpn` | `kylemanna/openvpn` | 29817 | OpenVPN сервер |
+| `3x-ui-exporter` | `m4l3vich/3x-ui-prometheus-exporter` | 3001 | Экспортёр метрик Xray для Prometheus |
+| `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy |
 | `nginx` | `nginx:1.27-alpine` | 80, 1443, 7601 | Обратный прокси |
+| `prometheus` | `prom/prometheus` | 9090 | Сбор метрик |
 | `portainer` | `portainer/portainer-ce` | 8000, 9443 | Управление Docker |
+
+> `frps` (7401, 7599) и `openvpn` (29817) присутствуют в `docker-compose.yml`, но закомментированы и сейчас не запущены.
 
 ### agghhh.click
 
