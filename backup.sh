@@ -54,6 +54,15 @@ VPS_REPO_PATH="/root/vps"
 # Читаем настройки из .env файла соответствующего хоста
 HOST_ENV_FILE="${VPS_REPO_PATH}/${HOSTNAME}/.env"
 
+# Если точного совпадения нет — ищем по маске HOSTNAME.* (напр. vkosarev → vkosarev.link)
+if [[ ! -f "$HOST_ENV_FILE" ]]; then
+    HOST_ENV_FILE_ALT=$(ls "${VPS_REPO_PATH}/${HOSTNAME}."*"/.env" 2>/dev/null | head -1)
+    if [[ -n "$HOST_ENV_FILE_ALT" ]]; then
+        HOST_ENV_FILE="$HOST_ENV_FILE_ALT"
+        log INFO "Найден .env по маске: ${HOST_ENV_FILE}"
+    fi
+fi
+
 # Значение по умолчанию
 KEEP_DAYS=1
 
@@ -80,24 +89,7 @@ log INFO "=== БЭКАП ЗАПУЩЕН: ${DATE} ==="
 log INFO "Директории: ${BACKUP_DIRS[*]}"
 log INFO "Архив будет сохранён как: ${BACKUP_FILE}"
 
-# Проверка свободного места (минимум 10 ГБ)
-FREE=$(df -BG "$TARGET_DIR" | awk 'NR==2 {print $4}' | tr -d 'G')
-if [ "${FREE:-0}" -lt 10 ]; then
-    log WARN "Мало свободного места! Осталось только ${FREE}G"
-fi
-
-# Сам бэкап
-log INFO "Начинаем архивирование..."
-
-if tar -czf "$BACKUP_FILE" "${BACKUP_DIRS[@]}" 2>&1; then
-    SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
-    log SUCCESS "БЭКАП УСПЕШНО ЗАВЕРШЁН! Размер: ${SIZE}"
-else
-    log ERROR "ОШИБКА при создании архива!"
-    exit 1
-fi
-
-# Автоочистка старых бэкапов
+# Автоочистка старых бэкапов ДО создания нового (освобождаем место заранее)
 # Правила хранения:
 #   - хранить бэкапы за последние KEEP_DAYS дней
 #   - хранить бэкапы от 1-го числа каждого месяца (YYYY-MM-01)
@@ -134,5 +126,22 @@ for f in "${ALL_BACKUPS[@]}"; do
     rm -f "$f"
     log WARN "Удалён старый бэкап: ${fname}"
 done
+
+# Проверка свободного места (минимум 10 ГБ)
+FREE=$(df -BG "$TARGET_DIR" | awk 'NR==2 {print $4}' | tr -d 'G')
+if [ "${FREE:-0}" -lt 10 ]; then
+    log WARN "Мало свободного места! Осталось только ${FREE}G"
+fi
+
+# Сам бэкап
+log INFO "Начинаем архивирование..."
+
+if tar -czf "$BACKUP_FILE" "${BACKUP_DIRS[@]}" 2>&1; then
+    SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+    log SUCCESS "БЭКАП УСПЕШНО ЗАВЕРШЁН! Размер: ${SIZE}"
+else
+    log ERROR "ОШИБКА при создании архива!"
+    exit 1
+fi
 
 log INFO "=== БЭКАП ЗАВЕРШЁН УСПЕШНО ==="
