@@ -219,6 +219,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PORTAINER_DATA:-./portainer/data}:/data
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
+    command: --ssl --sslcert /root/cert/vkosarev.name_fullchain.crt --sslkey /root/cert/vkosarev.name_privatekey.key
 
   # ---------------------------------------------------------------------------
   # myip — сервис для отображения публичного IP-адреса
