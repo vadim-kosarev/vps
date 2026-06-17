@@ -62,7 +62,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ../local/tools/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
+      - ../shared/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
     environment:
       # Адрес панели 3x-ui внутри Docker-сети — экспортёр читает XUI_ORIGIN (не XUI_HOST!)
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2055/vkosarev.name.eu/}"

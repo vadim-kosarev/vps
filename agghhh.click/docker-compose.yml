@@ -155,7 +155,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ../local/tools/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
+      - ../shared/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
     environment:
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2077/vaduha.name777/}"
       XUI_USERNAME: "${XUI_EXPORTER_USERNAME:-vkosarev}"
