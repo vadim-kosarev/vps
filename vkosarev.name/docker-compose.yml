@@ -52,14 +52,17 @@ services:
   # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
   # Метрики: http://vkosarev.name:3001/metrics
   # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
-  # Проблема и патч: см. .ai/2026.03.29_3x-ui-exporter_patch.md
+  # Entrypoint-обёртка патчит xui.js для совместимости с 3x-ui < v3.x (нет /csrf-token)
   # ---------------------------------------------------------------------------
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
     container_name: 3x-xui-exporter
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "/patch-entrypoint.sh"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - ../local/tools/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
     environment:
       # Адрес панели 3x-ui внутри Docker-сети — экспортёр читает XUI_ORIGIN (не XUI_HOST!)
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2055/vkosarev.name.eu/}"
