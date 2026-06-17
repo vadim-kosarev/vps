@@ -143,6 +143,7 @@ flowchart TD
 - Новый хостинг — новая директория в корне репозитория (название = домен или псевдоним сервера).
 - Внутри директории хостинга хранятся только файлы конфигурации (compose, nginx-конфиги, скрипты).
 - Папка `local/` — вспомогательные утилиты, скрипты, инструменты для локального использования (не деплоятся на серверы).
+- Папка `shared/` — общие скрипты, используемые на всех серверах (entrypoint-обёртки, патчи). Монтируются в контейнеры через docker-compose.
 - Папка `scripts/` — отдельные скрипты для анализа, дампов, вспомогательных задач.
 - Папка `.ai/` — заметки, отчёты и логи AI-агента (каждый файл с датой в названии).
 - Папка `vkosarev.link/` — дополнительный хостинг/домен (структура аналогична другим хостингам).
@@ -158,6 +159,8 @@ flowchart TD
 ├── .ai/                       # Заметки и отчёты AI (формат: yyyy.mm.dd_*)
 ├── local/                     # Локальные утилиты и инструменты
 │   └── tools/                 # Примеры: bReader/, download-premier-one/, ...
+├── shared/                    # Общие скрипты для всех серверов
+│   └── 3x-ui-exporter/       # Entrypoint-патч для совместимости exporter + 3x-ui
 ├── scripts/                   # Вспомогательные скрипты (read_xui.py и др.)
 ├── agghhh.click/              # Конфигурация хостинга agghhh.click
 │   ├── docker-compose.yml
@@ -233,6 +236,17 @@ docker compose pull && docker compose up -d
 
 ---
 
+## 3x-ui-exporter: патч совместимости
+
+Образ `m4l3vich/3x-ui-prometheus-exporter:latest` (с 2026-06-15) требует endpoint `/csrf-token`, которого нет в 3x-ui < v3.x. Для совместимости используется entrypoint-обёртка `shared/3x-ui-exporter/patch-entrypoint.sh`, которая при каждом старте контейнера патчит `xui.js` — оборачивает вызов `fetchCsrfToken()` в try/catch.
+
+**Поведение при обновлении:**
+- **3x-ui обновлён до v3.x** — `/csrf-token` доступен, `fetchCsrfToken()` отрабатывает штатно, catch не срабатывает. Патч безвреден.
+- **Exporter изменил код** — sed не найдёт паттерн, выведет WARNING в логи. Если 3x-ui уже на v3.x — всё работает нативно. Если на v2.x — нужно обновить патч.
+- **Патч можно убрать** после обновления 3x-ui до v3.x на всех серверах: удалить `entrypoint`, `command` и volume с `patch-entrypoint.sh` из docker-compose.
+
+---
+
 ## Переменные окружения
 
 Каждая директория хостинга содержит `.env.example` — шаблон с описанием переменных.  
@@ -249,9 +263,20 @@ docker compose pull && docker compose up -d
 
 ## SSH-подключение (Windows)
 
+Для подключения используется **plink** (PuTTY) с PPK-ключом:
+
+| Сервер | Пользователь | Ключ |
+|--------|-------------|------|
+| `vkosarev.name` | `root` | `Z:\MY\vk-amazon-2023-private.ppk` |
+| `vkosarev.link` | `ubuntu` | `Z:\MY\vk-amazon-2023-private.ppk` |
+| `agghhh.click` | `vaduhann` | `Z:\MY\vk-amazon-2023-private.ppk` |
+
 ```powershell
-# vkosarev.name
-plink -load "vkosarev.name" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "команда"
+# vkosarev.name (root)
+plink -batch -i "Z:\MY\vk-amazon-2023-private.ppk" root@vkosarev.name "команда"
+
+# vkosarev.link (ubuntu, sudo для docker)
+plink -batch -i "Z:\MY\vk-amazon-2023-private.ppk" ubuntu@vkosarev.link "sudo команда"
 
 # agghhh.click
 plink -i "Z:\MY\vk-amazon-2023-private.ppk" -batch -l vaduhann `

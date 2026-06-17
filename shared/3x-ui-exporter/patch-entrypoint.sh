@@ -6,13 +6,17 @@
 
 XUI_JS="/app/build/xui.js"
 
-if [ -f "$XUI_JS" ] && grep -q 'const csrfToken = yield fetchCsrfToken()' "$XUI_JS"; then
+if [ ! -f "$XUI_JS" ]; then
+  echo "[patch-entrypoint] WARNING: $XUI_JS not found, skipping patch"
+elif grep -q 'const csrfToken = yield fetchCsrfToken()' "$XUI_JS"; then
   sed -i \
     's/const csrfToken = yield fetchCsrfToken()/let csrfToken = ""; try { csrfToken = yield fetchCsrfToken(); } catch(_e) { console.error("CSRF not available, proceeding without it"); }/' \
     "$XUI_JS"
   echo "[patch-entrypoint] patched fetchCsrfToken() fallback in xui.js"
+elif grep -q 'try { csrfToken = yield fetchCsrfToken()' "$XUI_JS"; then
+  echo "[patch-entrypoint] already patched, skipping"
 else
-  echo "[patch-entrypoint] xui.js already patched or not found, skipping"
+  echo "[patch-entrypoint] WARNING: fetchCsrfToken() pattern not found — exporter code may have changed, patch not applied"
 fi
 
 exec docker-entrypoint.sh "$@"
