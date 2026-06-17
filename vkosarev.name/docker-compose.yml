@@ -59,6 +59,7 @@ services:
     container_name: 3x-xui-exporter
     restart: unless-stopped
     entrypoint: ["/bin/sh", "/patch-entrypoint.sh"]
+    command: ["pnpm", "start"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
