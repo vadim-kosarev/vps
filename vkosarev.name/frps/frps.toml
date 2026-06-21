@@ -11,8 +11,23 @@ bindPort = 7401
 # KCP (UDP) — тот же порт что и TCP
 kcpBindPort = 7401
 
-# Прокси слушают только на localhost хоста (т.к. network_mode: host)
+# Прокси слушают только на localhost хоста (т.к. network_mode: host).
+# Чтобы открыть конкретный туннельный порт наружу — использовать iptables DNAT (см. ниже).
+# proxyBindAddr = "0.0.0.0" открыло бы ВСЕ туннели публично — не делать.
 proxyBindAddr = "127.0.0.1"
+
+# Проброс туннельных портов наружу через iptables (выполняется на хосте один раз):
+#
+#   sysctl -w net.ipv4.conf.all.route_localnet=1          # разрешить DNAT на 127.0.0.1
+#   echo "net.ipv4.conf.all.route_localnet=1" >> /etc/sysctl.conf   # сохранить навсегда
+#
+#   # Шаблон для каждого порта:
+#   iptables -t nat -A PREROUTING -p tcp --dport <PORT> -j DNAT --to-destination 127.0.0.1:<PORT>
+#   iptables -A FORWARD -p tcp -d 127.0.0.1 --dport <PORT> -j ACCEPT
+#   netfilter-persistent save                              # сохранить правила (пакет iptables-persistent)
+#
+# Текущие проброшенные порты:
+#   41404 — luigi-sync (Resilio Sync), добавлен 2026-06-12
 
 transport.tls.force = false
 transport.maxPoolCount = 5

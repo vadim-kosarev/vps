@@ -45,12 +45,40 @@ fi
 # Куда складывать архивы
 TARGET_DIR="/backup"
 
-# Сколько дней хранить старые бэкапы (автоочистка)
-KEEP_DAYS=30
-# ===============================================
-
 # Имя хоста для имени файла
 HOSTNAME=$(hostname)
+
+# Путь к репозиторию VPS конфигураций
+VPS_REPO_PATH="/root/vps"
+
+# Читаем настройки из .env файла соответствующего хоста
+HOST_ENV_FILE="${VPS_REPO_PATH}/${HOSTNAME}/.env"
+
+# Если точного совпадения нет — ищем по маске HOSTNAME.* (напр. vkosarev → vkosarev.link)
+if [[ ! -f "$HOST_ENV_FILE" ]]; then
+    HOST_ENV_FILE_ALT=$(ls "${VPS_REPO_PATH}/${HOSTNAME}."*"/.env" 2>/dev/null | head -1)
+    if [[ -n "$HOST_ENV_FILE_ALT" ]]; then
+        HOST_ENV_FILE="$HOST_ENV_FILE_ALT"
+        log INFO "Найден .env по маске: ${HOST_ENV_FILE}"
+    fi
+fi
+
+# Значение по умолчанию
+KEEP_DAYS=1
+
+if [[ -f "$HOST_ENV_FILE" ]]; then
+    log INFO "Загружаем настройки из файла: ${HOST_ENV_FILE}"
+    # Загружаем только переменную BACKUP_KEEP_DAYS, игнорируя остальные
+    if grep -q "^BACKUP_KEEP_DAYS=" "$HOST_ENV_FILE"; then
+        KEEP_DAYS=$(grep "^BACKUP_KEEP_DAYS=" "$HOST_ENV_FILE" | cut -d'=' -f2)
+        log INFO "Настройка BACKUP_KEEP_DAYS=${KEEP_DAYS} из .env файла"
+    else
+        log WARN "BACKUP_KEEP_DAYS не найден в .env файле, используем значение по умолчанию: ${KEEP_DAYS}"
+    fi
+else
+    log WARN "Файл настроек не найден: ${HOST_ENV_FILE}, используем значение по умолчанию: ${KEEP_DAYS}"
+fi
+# ===============================================
 DATE=$(date +%Y-%m-%d)
 BACKUP_FILE="${TARGET_DIR}/backup-${HOSTNAME}-${DATE}.tar.gz"
 
@@ -60,6 +88,44 @@ mkdir -p "$TARGET_DIR"
 log INFO "=== БЭКАП ЗАПУЩЕН: ${DATE} ==="
 log INFO "Директории: ${BACKUP_DIRS[*]}"
 log INFO "Архив будет сохранён как: ${BACKUP_FILE}"
+
+# Автоочистка старых бэкапов ДО создания нового (освобождаем место заранее)
+# Правила хранения:
+#   - хранить бэкапы за последние KEEP_DAYS дней
+#   - хранить бэкапы от 1-го числа каждого месяца (YYYY-MM-01)
+log INFO "Очистка старых бэкапов (хранить: последние ${KEEP_DAYS} дней + 1-е числа месяцев)..."
+
+# Граничная дата: KEEP_DAYS дней назад в формате YYYY-MM-DD
+CUTOFF_DATE=$(date -d "-${KEEP_DAYS} days" +%Y-%m-%d)
+
+# Получаем все бэкапы текущего хоста
+mapfile -t ALL_BACKUPS < <(
+    find "$TARGET_DIR" -maxdepth 1 -name "backup-${HOSTNAME}-*.tar.gz" \
+    | sort -r
+)
+
+for f in "${ALL_BACKUPS[@]}"; do
+    fname=$(basename "$f")
+    # Извлекаем дату из имени файла: backup-HOSTNAME-YYYY-MM-DD.tar.gz
+    file_date=$(echo "$fname" | grep -oP '\d{4}-\d{2}-\d{2}')
+    file_day=$(echo "$file_date" | cut -d'-' -f3)
+
+    # Оставляем: бэкап за последние KEEP_DAYS дней
+    if [[ "$file_date" > "$CUTOFF_DATE" || "$file_date" == "$CUTOFF_DATE" ]]; then
+        log INFO "Сохраняем (последние ${KEEP_DAYS} дней): ${fname}"
+        continue
+    fi
+
+    # Оставляем: 1-е число каждого месяца
+    if [[ "$file_day" == "01" ]]; then
+        log INFO "Сохраняем (1-е число месяца): ${fname}"
+        continue
+    fi
+
+    # Удаляем остальное
+    rm -f "$f"
+    log WARN "Удалён старый бэкап: ${fname}"
+done
 
 # Проверка свободного места (минимум 10 ГБ)
 FREE=$(df -BG "$TARGET_DIR" | awk 'NR==2 {print $4}' | tr -d 'G')
@@ -77,11 +143,5 @@ else
     log ERROR "ОШИБКА при создании архива!"
     exit 1
 fi
-
-# Автоочистка старых бэкапов
-log INFO "Очистка старых бэкапов старше ${KEEP_DAYS} дней..."
-find "$TARGET_DIR" -name "backup-*.tar.gz" -mtime +${KEEP_DAYS} -delete -print0 | while read -r -d $'\0' oldfile; do
-    log WARN "Удалён старый бэкап: $(basename "$oldfile")"
-done
 
 log INFO "=== БЭКАП ЗАВЕРШЁН УСПЕШНО ==="

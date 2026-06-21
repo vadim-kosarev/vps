@@ -265,12 +265,13 @@
   <div class="section-title">📊 Мониторинг</div>
   <div class="grid">
 
-    <a class="card" href="http://vkosarev.name:3000/" target="_blank" style="--card-color:#f97316">
+    <a class="card" href="https://vkosarev.name:3000/" target="_blank" style="--card-color:#f97316">
       <div class="card-icon">📈</div>
       <div class="card-body">
         <div class="card-name">Grafana</div>
         <div class="card-desc">Дашборды и визуализация метрик сервера и сервисов</div>
         <div class="card-meta">
+          <span class="tag https">HTTPS</span>
           <span class="tag port">:3000</span>
           <span class="tag auth">🔐 auth</span>
         </div>
@@ -290,14 +291,27 @@
       <div class="card-arrow">→</div>
     </a>
 
-    <a class="card" href="http://vkosarev.name:3010/" target="_blank" style="--card-color:#f59e42">
-      <div class="card-icon">📈</div>
+    <a class="card" href="http://vkosarev.name:9100/metrics" target="_blank" style="--card-color:#22d3ee">
+      <div class="card-icon">🖥️</div>
       <div class="card-body">
-        <div class="card-name">Grafana (frps)</div>
-        <div class="card-desc">Альтернативная Grafana, проброшена наружу через frps (порт :3010, backend: localhost:3003)</div>
+        <div class="card-name">node_exporter</div>
+        <div class="card-desc">Метрики хоста: CPU, RAM, диски, сеть, процессы</div>
         <div class="card-meta">
-          <span class="tag port">:3010</span>
-          <span class="tag ext">FRP tunnel</span>
+          <span class="tag port">:9100</span>
+          <span class="tag ext">host</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="http://vkosarev.name:3001/metrics" target="_blank" style="--card-color:#f59e42">
+      <div class="card-icon">📊</div>
+      <div class="card-body">
+        <div class="card-name">3x-ui Exporter</div>
+        <div class="card-desc">Экспортёр метрик Xray/3x-ui для Prometheus</div>
+        <div class="card-meta">
+          <span class="tag port">:3001</span>
+          <span class="tag ext">3x-ui</span>
         </div>
       </div>
       <div class="card-arrow">→</div>
@@ -380,6 +394,18 @@
         <div class="card-meta">
           <span class="tag port">:2443</span>
           <span class="tag ext">TCP proxy</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="http://vkosarev.name:88/" target="_blank" style="--card-color:#fbbf24">
+      <div class="card-icon">🌍</div>
+      <div class="card-body">
+        <div class="card-name">Myip</div>
+        <div class="card-desc">Показать ваш внешний IP-адрес (myip)</div>
+        <div class="card-meta">
+          <span class="tag port">:88</span>
         </div>
       </div>
       <div class="card-arrow">→</div>

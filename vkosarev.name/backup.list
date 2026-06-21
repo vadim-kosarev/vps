@@ -1,8 +1,2 @@
-/root/vps/vkosarev.name/3x-ui/db
-/root/vps/vkosarev.name/grafana/data
-/root/vps/vkosarev.name/mtproxy/data
-/root/vps/vkosarev.name/nginx/conf.d
-/root/vps/vkosarev.name/nginx/www
-/root/vps/vkosarev.name/portainer/data
-/root/vps/vkosarev.name/prometheus/data
-/root/vps/vkosarev.name/frps/frps.toml
+/root/vps/vkosarev.name
+/data

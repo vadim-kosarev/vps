@@ -1,0 +1,30 @@
+## в прометеус на vkosarev.name:9090 приходят вот такие данные
+node_uname_info{job="node"}
+node_uname_info{domainname="(none)", instance="vkosarev.name:9100", job="node", machine="x86_64", nodename="vkosarev.name", release="6.8.0-106-generic", sysname="Linux", version="#106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar 6 07:58:08 UTC 2026"}	1
+node_uname_info{domainname="(none)", instance="agghhh.click:9100", job="node", machine="x86_64", nodename="agghhh.click", release="6.8.0-101-generic", sysname="Linux", version="#101-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 9 10:15:05 UTC 2026"}	1
+node_uname_info{domainname="(none)", instance="host.docker.internal:9100", job="node", machine="x86_64", nodename="vkosarev.name", release="6.8.0-106-generic", sysname="Linux", version="#106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar 6 07:58:08 UTC 2026"}	1
+node_uname_info{domainname="(none)", instance="vkosarev.link:9100", job="node", machine="x86_64", nodename="ip-172-31-90-104", release="6.14.0-1018-aws", sysname="Linux", version="#18~24.04.1-Ubuntu SMP Mon Nov 24 19:46:27 UTC 2025"}	1
+node_uname_info{domainname="(none)", instance="host.docker.internal:9100", job="node", machine="x86_64", nodename="ip-172-31-90-104", release="6.14.0-1018-aws", sysname="Linux", version="#18~24.04.1-Ubuntu SMP Mon Nov 24 19:46:27 UTC 2025"}	1
+
+
+## в дашборде графаны вот такие переменные
+job
+
+nodename
+label_values(node_uname_info{job="$job"}, nodename)
+
+node
+label_values(node_uname_info{job="$job", nodename="$nodename"}, instance)
+
+instance
+label_values(down_bytes_total,instance)
+
+
+## в виджетах пример запроса --
+rate(node_network_receive_bytes_total{instance="$node",job="$job",device!~"lo|docker0|veth.*|br-.*"}[$__rate_interval])*8
+
+## проблема -- и на vkosarev.name и в vkosarev.link (см конфигурации prometheus) метрики собираются с
+host.docker.internal:9100
+и я не могу переключить instance на нужный
+
+что нужно сделать в конфигурациях Prometheus, чтобы метрики в этой дашборде отличались?

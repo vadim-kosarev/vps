@@ -91,11 +91,21 @@ flowchart TD
 
 ## Сервисы по хостингам
 
+### 3x-ui Панели управления
+
+**Все URL-адреса панелей и доступ** → [`.ai/2026.04.01_3x-ui_panels_access.md`](.ai/2026.04.01_3x-ui_panels_access.md)
+
+| Хостинг | URL Панели | Порт |
+|---------|-----------|------|
+| **vkosarev.name** | `https://vkosarev.name:2055/vkosarev.name.eu/` | 2055 |
+| **vkosarev.link** | `https://vkosarev.link:33562/vkosarev.link.amazon/` | 33562 |
+| **agghhh.click** | `https://agghhh.click:2077/vaduha.name777/` | 2077 |
+
 ### vkosarev.name
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) |
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.name:2055/vkosarev.name.eu/) |
 | `3x-ui` (http-proxy) | `ghcr.io/mhsanaei/3x-ui` | 10126 | HTTP-прокси для YouTube/браузера |
 | `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy (выходной узел) |
 | `prometheus` | `prom/prometheus` | 9090 (localhost) | Сбор метрик |
@@ -105,11 +115,24 @@ flowchart TD
 | `mermaid` | `johnsinclair73/mermaid-live-editor` | 3200 | Редактор диаграмм |
 | `node_exporter` | *(systemd, не Docker)* | 9100 | Метрики хоста для Prometheus |
 
+### vkosarev.link
+
+| Сервис | Образ | Порты | Назначение |
+|---|---|---|---|
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 8888, 22000, 33562 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.link:33562/vkosarev.link.amazon/) |
+| `3x-ui-exporter` | `m4l3vich/3x-ui-prometheus-exporter` | 3001 | Экспортёр метрик Xray для Prometheus |
+| `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy |
+| `nginx` | `nginx:1.27-alpine` | 80, 1443, 7601 | Обратный прокси |
+| `prometheus` | `prom/prometheus` | 9090 | Сбор метрик |
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Управление Docker |
+
+> `frps` (7401, 7599) и `openvpn` (29817) присутствуют в `docker-compose.yml`, но закомментированы и сейчас не запущены.
+
 ### agghhh.click
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2077, 40404 | Xray VPN панель |
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2077, 40404 | Xray VPN панель — [Панель](https://agghhh.click:2077/vaduha.name777/) |
 | `telemt` | *(собирается из Dockerfile)* | 8443, 9091 | MTProxy фронтенд (multi-hop) |
 | `portainer` | `portainer/portainer-ce` | 9443 | Управление Docker |
 
@@ -120,6 +143,7 @@ flowchart TD
 - Новый хостинг — новая директория в корне репозитория (название = домен или псевдоним сервера).
 - Внутри директории хостинга хранятся только файлы конфигурации (compose, nginx-конфиги, скрипты).
 - Папка `local/` — вспомогательные утилиты, скрипты, инструменты для локального использования (не деплоятся на серверы).
+- Папка `shared/` — общие скрипты, используемые на всех серверах (entrypoint-обёртки, патчи). Монтируются в контейнеры через docker-compose.
 - Папка `scripts/` — отдельные скрипты для анализа, дампов, вспомогательных задач.
 - Папка `.ai/` — заметки, отчёты и логи AI-агента (каждый файл с датой в названии).
 - Папка `vkosarev.link/` — дополнительный хостинг/домен (структура аналогична другим хостингам).
@@ -135,6 +159,8 @@ flowchart TD
 ├── .ai/                       # Заметки и отчёты AI (формат: yyyy.mm.dd_*)
 ├── local/                     # Локальные утилиты и инструменты
 │   └── tools/                 # Примеры: bReader/, download-premier-one/, ...
+├── shared/                    # Общие скрипты для всех серверов
+│   └── 3x-ui-exporter/       # Entrypoint-патч для совместимости exporter + 3x-ui
 ├── scripts/                   # Вспомогательные скрипты (read_xui.py и др.)
 ├── agghhh.click/              # Конфигурация хостинга agghhh.click
 │   ├── docker-compose.yml
@@ -210,6 +236,17 @@ docker compose pull && docker compose up -d
 
 ---
 
+## 3x-ui-exporter: патч совместимости
+
+Образ `m4l3vich/3x-ui-prometheus-exporter:latest` (с 2026-06-15) требует endpoint `/csrf-token`, которого нет в 3x-ui < v3.x. Для совместимости используется entrypoint-обёртка `shared/3x-ui-exporter/patch-entrypoint.sh`, которая при каждом старте контейнера патчит `xui.js` — оборачивает вызов `fetchCsrfToken()` в try/catch.
+
+**Поведение при обновлении:**
+- **3x-ui обновлён до v3.x** — `/csrf-token` доступен, `fetchCsrfToken()` отрабатывает штатно, catch не срабатывает. Патч безвреден.
+- **Exporter изменил код** — sed не найдёт паттерн, выведет WARNING в логи. Если 3x-ui уже на v3.x — всё работает нативно. Если на v2.x — нужно обновить патч.
+- **Патч можно убрать** после обновления 3x-ui до v3.x на всех серверах: удалить `entrypoint`, `command` и volume с `patch-entrypoint.sh` из docker-compose.
+
+---
+
 ## Переменные окружения
 
 Каждая директория хостинга содержит `.env.example` — шаблон с описанием переменных.  
@@ -226,9 +263,20 @@ docker compose pull && docker compose up -d
 
 ## SSH-подключение (Windows)
 
+Для подключения используется **plink** (PuTTY) с PPK-ключом:
+
+| Сервер | Пользователь | Ключ |
+|--------|-------------|------|
+| `vkosarev.name` | `root` | `Z:\MY\vk-amazon-2023-private.ppk` |
+| `vkosarev.link` | `ubuntu` | `Z:\MY\vk-amazon-2023-private.ppk` |
+| `agghhh.click` | `vaduhann` | `Z:\MY\vk-amazon-2023-private.ppk` |
+
 ```powershell
-# vkosarev.name
-plink -load "vkosarev.name" -i "Z:\MY\vk-amazon-2023-private.ppk" -batch "команда"
+# vkosarev.name (root)
+plink -batch -i "Z:\MY\vk-amazon-2023-private.ppk" root@vkosarev.name "команда"
+
+# vkosarev.link (ubuntu, sudo для docker)
+plink -batch -i "Z:\MY\vk-amazon-2023-private.ppk" ubuntu@vkosarev.link "sudo команда"
 
 # agghhh.click
 plink -i "Z:\MY\vk-amazon-2023-private.ppk" -batch -l vaduhann `

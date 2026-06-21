@@ -21,6 +21,7 @@ services:
     # Актуальные теги: https://github.com/MHSanaei/3x-ui/releases
     image: ghcr.io/mhsanaei/3x-ui:v2.8.11
     container_name: 3x-ui
+#    hostname: 3x-ui
     restart: unless-stopped
     tty: true
 
@@ -29,6 +30,7 @@ services:
       - ./3x-ui/db:/etc/x-ui
       # TLS-сертификаты — общая папка с хоста
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
+      #- /src/cert:/root/cert:ro
 
     ports:
       # Веб-панель управления (порт можно сменить в настройках панели)
@@ -50,13 +52,18 @@ services:
   # 3x-ui-exporter — экспортёр метрик Xray/3x-ui для Prometheus
   # Метрики: http://vkosarev.name:3001/metrics
   # Проект:  https://github.com/m4l3vich/3x-ui-prometheus-exporter
+  # Entrypoint-обёртка патчит xui.js для совместимости с 3x-ui < v3.x (нет /csrf-token)
   # ---------------------------------------------------------------------------
   3x-ui-exporter:
     image: m4l3vich/3x-ui-prometheus-exporter:latest
-    container_name: xui-exporter
+    container_name: 3x-xui-exporter
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "/patch-entrypoint.sh"]
+    command: ["pnpm", "start"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - ../shared/3x-ui-exporter/patch-entrypoint.sh:/patch-entrypoint.sh:ro
     environment:
       # Адрес панели 3x-ui внутри Docker-сети — экспортёр читает XUI_ORIGIN (не XUI_HOST!)
       XUI_ORIGIN:   "${XUI_EXPORTER_ORIGIN:-https://host.docker.internal:2055/vkosarev.name.eu/}"
@@ -88,7 +95,7 @@ services:
   # Актуальные теги: https://github.com/prometheus/prometheus/releases
   # ---------------------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v3.2.1
+    image: prom/prometheus:latest-distroless
     container_name: prometheus
     restart: unless-stopped
     extra_hosts:
@@ -104,6 +111,8 @@ services:
       - "--web.enable-lifecycle"
     ports:
       - "9090:9090"
+    environment:
+      - NODE_NAME=${NODE_NAME}
 
   # ---------------------------------------------------------------------------
   # Grafana — дашборды и визуализация
@@ -118,6 +127,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ${GRAFANA_DATA:-./grafana/data}:/var/lib/grafana
+      - ./grafana/conf/grafana.ini:/etc/grafana/grafana.ini:ro
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
     ports:
       - "3000:3000"
@@ -126,6 +136,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus
+    user: "0:0"
 
   # ---------------------------------------------------------------------------
   # mtproxy — Telegram MTProto Proxy
@@ -212,6 +223,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PORTAINER_DATA:-./portainer/data}:/data
       - ${CERT_DIR:-/root/cert}:/root/cert:ro
+    command: --ssl --sslcert /root/cert/vkosarev.name_fullchain.crt --sslkey /root/cert/vkosarev.name_privatekey.key
 
   # ---------------------------------------------------------------------------
   # myip — сервис для отображения публичного IP-адреса

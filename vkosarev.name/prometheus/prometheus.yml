@@ -1,20 +1,58 @@
 global:
   scrape_interval: 15s      # как часто снимать метрики
   evaluation_interval: 15s  # как часто вычислять alert-правила
+  external_labels:
+    prometheus: vkosarev-name
 
 scrape_configs:
 
-  - job_name: "node"
+  - job_name: "node-self"
     static_configs:
-
-      - targets: ["host.docker.internal:9100"]
+      - targets:
+          - "host.docker.internal:9100"
         labels:
-          host: "lithuania-xxx"
+          instance: "vkosarev.name:9100"
 
-  # 3x-ui метрики — экспортёр в той же Docker-сети, слушает на :3000
   - job_name: "xui"
     static_configs:
-      - targets: ["host.docker.internal:3001"]
+      - targets:
+          - "host.docker.internal:3001"
         labels:
-          host: "lithuania-xxx"
+          instance: "vkosarev.name:9100"
+          xui_instance: "vkosarev.name:3001"
 
+#  - job_name: 'federate-vkosarev.name'
+#    scrape_interval: 30s
+#    metrics_path: '/federate'
+#    honor_labels: true
+#    params:
+#      'match[]':
+#        - '{job="node"}'
+#        - '{job="node-self"}'
+#        - '{job="xui"}'
+#    static_configs:
+#      - targets:
+#          - 'vkosarev.name:9090'
+
+  - job_name: 'federate-vkosarev.link'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    honor_timestamps: false
+    params:
+      'match[]':
+        - '{job=~"node|node-self|xui"}'
+    static_configs:
+      - targets:
+          - 'vkosarev.link:9090'
+
+  - job_name: 'federate-agghhh.click'
+    scrape_interval: 30s
+    metrics_path: '/federate'
+    honor_labels: true
+    params:
+      'match[]':
+        - '{job=~"node|node-self|xui"}'
+    static_configs:
+      - targets:
+          - 'agghhh.click:9090'
