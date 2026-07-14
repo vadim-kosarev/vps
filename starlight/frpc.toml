@@ -6,7 +6,11 @@ auth.token = "470720451211462921230901855180"
 [[proxies]]
 name = "starlight-vnc"
 type = "tcp"
-localIP = "host.docker.internal"
+# host.docker.internal НЕ подходит для VNC: Docker Desktop на Windows реализует
+# host.docker.internal через локальный прокси, соединение приходит на tvnserver
+# с адреса 127.0.0.1 → TightVNC блокирует его как "loopback connection".
+# LAN IP хоста (192.168.1.99) — обычное сетевое соединение, loopback-проверка не срабатывает.
+localIP = "192.168.1.99"
 localPort = 5900
 remotePort = 5900
 

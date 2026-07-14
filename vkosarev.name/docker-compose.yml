@@ -241,4 +241,23 @@ services:
       - ALLOW_ORIGIN=*
       - ALLOWED_DOMAINS=vkosarev.name
 
+  # ---------------------------------------------------------------------------
+  # novnc — веб-клиент VNC (noVNC + websockify), без установки VNC-viewer
+  # Мост между TightVNC на starlight (приходит через frps-туннель starlight-vnc,
+  # доступен локально на host:5900) и браузером по WebSocket. HTTPS/WSS
+  # терминирует nginx (см. nginx/conf.d/vkosarev.name.conf, порт 5902).
+  # host.docker.internal → хост (host-gateway), т.к. frps слушает на 127.0.0.1
+  # самого хоста, а не внутри этого контейнера.
+  # Актуальные теги: https://hub.docker.com/r/gotget/novnc/tags
+  # ---------------------------------------------------------------------------
+  novnc:
+    image: gotget/novnc
+    container_name: novnc
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: --vnc host.docker.internal:5900
+    ports:
+      - "127.0.0.1:6080:6080"
+
 volumes: {}
