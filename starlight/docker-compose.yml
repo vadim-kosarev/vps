@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# starlight — хост 192.168.1.99 (Windows, Docker Desktop)
+# ---------------------------------------------------------------------------
+# frpc — FRP-клиент, пробрасывает локальные сервисы этого хоста (TightVNC:5900,
+# Ollama:11434) через frps на vkosarev.name:7401 → доступны на vkosarev.name как
+# localhost:5900 / localhost:11434
+# (см. .ai/2026.03.25-vkosarev.name-Services-Audit.md, раздел "starlight-vnc").
+#
+# Туннели starlight-* исторически нёс frpc на хосте brightsky (по LAN до
+# 192.168.1.99, см. local/tools/immich/docker/frpc.ini) — с 2026-07-14 там
+# остановлен, регистрацию держит только этот клиент, запущенный прямо на
+# starlight.
+#
+# localIP = host.docker.internal — TightVNC слушает на хосте Windows
+# (0.0.0.0:5900), не в контейнере; Docker Desktop резолвит host.docker.internal
+# на хост из контейнеров "из коробки".
+#
+# Конфиг в формате TOML (ini — deprecated в frp).
+# Актуальные теги: https://hub.docker.com/r/snowdreamtech/frpc/tags
+# ---------------------------------------------------------------------------
+services:
+  frpc:
+    image: snowdreamtech/frpc
+    container_name: starlight_frpc
+    restart: always
+    volumes:
+      - ./frpc.toml:/etc/frp/frpc.toml:ro
+    entrypoint: /usr/bin/frpc
+    command: ["-c", "/etc/frp/frpc.toml"]

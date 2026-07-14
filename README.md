@@ -136,6 +136,26 @@ flowchart TD
 | `telemt` | *(собирается из Dockerfile)* | 8443, 9091 | MTProxy фронтенд (multi-hop) |
 | `portainer` | `portainer/portainer-ce` | 9443 | Управление Docker |
 
+### starlight
+
+Домашний хост (Windows, Docker Desktop, `192.168.1.99`) — не VPS, а FRP-клиент,
+пробрасывающий локальные сервисы на `vkosarev.name` через frps.
+
+| Сервис | Образ | Порты | Назначение |
+|---|---|---|---|
+| `frpc` | `snowdreamtech/frpc` | — | FRP-клиент: пробрасывает TightVNC (5900) и Ollama (11434) на frps `vkosarev.name:7401` |
+
+**Проброшенные туннели:**
+
+| Туннель | Локальный сервис | Доступ на `vkosarev.name` |
+|---|---|---|
+| `starlight-vnc` | TightVNC :5900 | публично `vkosarev.name:5900` — проброшен наружу через iptables DNAT (парольная аутентификация в TightVNC включена) |
+| `starlight-ollama` | Ollama :11434 | `https://vkosarev.name:11444/` — проксируется через nginx |
+
+> До 2026-07-14 туннели `starlight-*` нёс frpc на хосте `brightsky` (по LAN до `192.168.1.99`,
+> см. `local/tools/immich/docker/frpc.ini`). Теперь `starlight` — самостоятельный frpc-клиент,
+> не зависящий от brightsky.
+
 ---
 
 ## Структура репозитория
@@ -187,6 +207,9 @@ flowchart TD
 │   ├── nginx/
 │   ├── portainer/
 │   └── ...
+├── starlight/                 # FRP-клиент домашнего хоста starlight (не VPS)
+│   ├── docker-compose.yml
+│   └── frpc.toml
 └── ...                        # Прочие файлы и директории по мере необходимости
 ```
 

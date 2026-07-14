@@ -1,0 +1,18 @@
+serverAddr = "62.72.33.196"
+serverPort = 7401
+
+auth.token = "470720451211462921230901855180"
+
+[[proxies]]
+name = "starlight-vnc"
+type = "tcp"
+localIP = "host.docker.internal"
+localPort = 5900
+remotePort = 5900
+
+[[proxies]]
+name = "starlight-ollama"
+type = "tcp"
+localIP = "host.docker.internal"
+localPort = 11434
+remotePort = 11434
