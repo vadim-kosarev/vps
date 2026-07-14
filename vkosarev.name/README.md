@@ -67,9 +67,11 @@ sudo bash setup.sh
 sysctl -w net.ipv4.conf.all.route_localnet=1
 echo "net.ipv4.conf.all.route_localnet=1" >> /etc/sysctl.conf
 
-# luigi-sync (Resilio Sync), добавлено 2026-06-12
+# luigi-sync (Resilio Sync), TCP добавлено 2026-06-12, UDP добавлено 2026-07-14
 iptables -t nat -A PREROUTING -p tcp --dport 41404 -j DNAT --to-destination 127.0.0.1:41404
 iptables -A FORWARD -p tcp -d 127.0.0.1 --dport 41404 -j ACCEPT
+iptables -t nat -A PREROUTING -p udp --dport 41404 -j DNAT --to-destination 127.0.0.1:41404
+iptables -A FORWARD -p udp -d 127.0.0.1 --dport 41404 -j ACCEPT
 
 # starlight-vnc (TightVNC, парольная аутентификация в TightVNC включена), добавлено 2026-07-14
 iptables -t nat -A PREROUTING -p tcp --dport 5900 -j DNAT --to-destination 127.0.0.1:5900
@@ -78,10 +80,6 @@ iptables -A FORWARD -p tcp -d 127.0.0.1 --dport 5900 -j ACCEPT
 apt-get install -y iptables-persistent   # если ещё не стоит — даст netfilter-persistent
 netfilter-persistent save
 ```
-
-> ⚠️ `luigi-sync-udp` (UDP 41404) зарегистрирован на стороне frpc, но DNAT-правило на этом
-> сервере есть только для TCP — если понадобится именно UDP-проброс, DNAT-правило для него
-> нужно добавить отдельно (`-p udp`).
 
 #### c. TLS-сертификаты
 
@@ -170,7 +168,7 @@ Portainer users, 3x-ui inbound-конфиги, секрет MTProxy).
 | 8000, 9443 | Portainer | |
 | 88, 11966 | myip | |
 | 80, 1443, 3181, 5001, 981, 4041, 3021, 11444, 8766, 8768, 3010, 5902 | nginx (`network_mode: host`) | список = все `listen` в `nginx/conf.d/vkosarev.name.conf` |
-| 41404 (TCP; UDP не пробрасывается, см. выше) | iptables DNAT → 127.0.0.1:41404 | luigi-sync |
+| 41404 (TCP+UDP) | iptables DNAT → 127.0.0.1:41404 | luigi-sync |
 | 5900 | iptables DNAT → 127.0.0.1:5900 | starlight-vnc (сырой TCP, см. также noVNC на 5902) |
 
 **НЕ открывать наружу:** `9100` (node_exporter — только для Prometheus внутри хоста).
