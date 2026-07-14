@@ -103,6 +103,9 @@ flowchart TD
 
 ### vkosarev.name
 
+> 🛟 **Полное восстановление хоста с нуля** (после сноса VPS) — пошаговая инструкция:
+> [`vkosarev.name/README.md`](vkosarev.name/README.md).
+
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
 | `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.name:2055/vkosarev.name.eu/) |
