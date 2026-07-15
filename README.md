@@ -147,7 +147,8 @@ flowchart TD
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
 | `frpc` | `snowdreamtech/frpc` | — | FRP-клиент: пробрасывает TightVNC (5900) и Ollama (11434) на frps `vkosarev.name:7401` |
-| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Центральная панель управления Docker — отсюда же управляется brightsky через `portainer/agent` (`https://192.168.1.99:9443`) |
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется brightsky через его `portainer/agent` (`https://192.168.1.99:9443`) |
+| `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на brightsky (`https://192.168.1.43:9443`) |
 
 **Проброшенные туннели:**
 
@@ -164,11 +165,13 @@ flowchart TD
 
 Домашний хост (Windows, Docker Desktop, `192.168.1.43`) — не VPS. Держит Immich и
 сопутствующие сервисы (см. `local/tools/immich/`, вне этого репозитория/директории). В
-`brightsky/` лежит только Portainer Agent для управления docker'ом этого хоста удалённо
-с starlight.
+`brightsky/` — Portainer (панель + agent), связка со starlight двусторонняя: с любого из
+двух хостов управляются контейнеры обоих. См. `brightsky/README.md` про миграцию со
+старого вручную поднятого portainer-ce перед первым `docker compose up -d`.
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется starlight через его `portainer/agent` (`https://192.168.1.43:9443`) |
 | `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на starlight (`https://192.168.1.99:9443`) |
 
 ---
@@ -222,10 +225,10 @@ flowchart TD
 │   ├── nginx/
 │   ├── portainer/
 │   └── ...
-├── starlight/                 # FRP-клиент + Portainer домашнего хоста starlight (не VPS)
+├── starlight/                 # FRP-клиент + Portainer (панель+agent) starlight (не VPS)
 │   ├── docker-compose.yml
 │   └── frpc.toml
-├── brightsky/                 # Portainer Agent домашнего хоста brightsky (не VPS)
+├── brightsky/                 # Portainer (панель+agent) домашнего хоста brightsky (не VPS)
 │   ├── docker-compose.yml
 │   └── README.md
 └── ...                        # Прочие файлы и директории по мере необходимости
