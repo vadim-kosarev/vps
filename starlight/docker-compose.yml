@@ -27,3 +27,25 @@ services:
       - ./frpc.toml:/etc/frp/frpc.toml:ro
     entrypoint: /usr/bin/frpc
     command: ["-c", "/etc/frp/frpc.toml"]
+
+  # ---------------------------------------------------------------------------
+  # Portainer — центральная панель управления Docker. starlight — хаб,
+  # brightsky подключается сюда как удалённое окружение через portainer/agent
+  # (Environments → Add environment → Docker Standalone → Agent → 192.168.1.43:9001).
+  # UI: https://192.168.1.99:9443 (self-signed сертификат самого Portainer —
+  # публичного домена/TLS-сертификата у starlight нет, доступ только по LAN)
+  # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
+  # ---------------------------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: starlight_portainer
+    restart: always
+    ports:
+      - "9443:9443"
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:

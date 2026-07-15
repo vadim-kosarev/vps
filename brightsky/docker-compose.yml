@@ -1,0 +1,24 @@
+# ---------------------------------------------------------------------------
+# brightsky — домашний хост (Windows, Docker Desktop, 192.168.1.43)
+# ---------------------------------------------------------------------------
+# portainer_agent — агент Portainer, публикует свой docker.sock на порт 9001.
+# Управляется удалённо из центральной панели Portainer на starlight
+# (https://192.168.1.99:9443 → Environments → Add environment →
+# Docker Standalone → Agent → 192.168.1.43:9001).
+#
+# Полноценный portainer-ce на brightsky уже стоит отдельно (не в этом файле,
+# поднят раньше вручную) — им можно продолжать пользоваться локально
+# (https://brightsky:9443), agent тут — только для управления с starlight.
+#
+# Актуальные теги: https://hub.docker.com/r/portainer/agent/tags
+# ---------------------------------------------------------------------------
+services:
+  portainer_agent:
+    image: portainer/agent:latest
+    container_name: brightsky_portainer_agent
+    restart: always
+    ports:
+      - "9001:9001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
