@@ -6,7 +6,7 @@
 
 | Хостинг | Провайдер | Назначение |
 |---|---|---|
-| `vkosarev.name` | AWS | Основной сервер: Xray VPN, MTProxy, мониторинг |
+| `vkosarev.name` | Hostinger (Литва) | Основной сервер: Xray VPN, MTProxy, мониторинг |
 | `agghhh.click` | Yandex Cloud | Фронтенд-узел: Xray VPN, MTProxy (multi-hop) |
 
 ---
@@ -30,7 +30,7 @@ flowchart TD
         XUI_443["3x-ui:443\nVLESS+Reality\nSNI: browser.yandex.com"]
     end
 
-    subgraph vkosarev ["vkosarev.name — EU exit (AWS Poland)"]
+    subgraph vkosarev ["vkosarev.name — EU exit (Hostinger, Литва)"]
         RU_PL["3x-ui:8080\nVLESS+Reality\nSNI: yahoo.com"]
         EU_AMAZON["3x-ui:34819\nVLESS+Reality\nSNI: apple.com"]
         MIXED["3x-ui:8443\nmixed SOCKS5\n(MTProxy upstream)"]
@@ -67,7 +67,7 @@ flowchart TD
         XUI_443["3x-ui:443\nVLESS+Reality\nSNI: browser.yandex.com"]
     end
 
-    subgraph vkosarev ["vkosarev.name — EU exit (AWS Poland)"]
+    subgraph vkosarev ["vkosarev.name — EU exit (Hostinger, Литва)"]
         RU_PL["3x-ui:8080\nVLESS+Reality\nSNI: yahoo.com"]
         EU_AMAZON["3x-ui:34819\nVLESS+Reality\nSNI: apple.com"]
         HTTP_PROXY["3x-ui:10126\nHTTP proxy\nauth: user1"]
@@ -110,6 +110,7 @@ flowchart TD
 |---|---|---|---|
 | `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 2055, 8080, 8443, 34819 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.name:2055/vkosarev.name.eu/) |
 | `3x-ui` (http-proxy) | `ghcr.io/mhsanaei/3x-ui` | 10126 | HTTP-прокси для YouTube/браузера |
+| `3x-ui` (http-proxy → vkosarev.link) | `ghcr.io/mhsanaei/3x-ui` | 22000 | HTTP-прокси (`user1`/`Password123!!`); трафик уходит через VLESS+Reality-туннель (outbound `out-vkosarev-link`) на `vkosarev.link:3443`, выход в интернет — с IP vkosarev.link |
 | `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy (выходной узел) |
 | `prometheus` | `prom/prometheus` | 9090 (localhost) | Сбор метрик |
 | `grafana` | `grafana/grafana` | 3000 | Дашборды мониторинга |
@@ -122,7 +123,7 @@ flowchart TD
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 443, 8888, 22000, 33562 | Xray VPN панель (VLESS+Reality) — [Панель](https://vkosarev.link:33562/vkosarev.link.amazon/) |
+| `3x-ui` | `ghcr.io/mhsanaei/3x-ui` | 33562, 22001, 3443 | Xray VPN панель — [Панель](https://vkosarev.link:33562/vkosarev.link.amazon/); inbound `22001` — HTTP-прокси (`user1`/`Password123!!`); inbound `3443` — VLESS+Reality (SNI: `browser.yandex.ru`), в т.ч. принимает туннель с `vkosarev.name:22000` |
 | `3x-ui-exporter` | `m4l3vich/3x-ui-prometheus-exporter` | 3001 | Экспортёр метрик Xray для Prometheus |
 | `mtproxy` | `telegrammessenger/proxy` | 2443 | Telegram MTProxy |
 | `nginx` | `nginx:1.27-alpine` | 80, 1443, 7601 | Обратный прокси |
