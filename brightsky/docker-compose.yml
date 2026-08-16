@@ -82,5 +82,50 @@ services:
     devices:
       - /dev/kmsg
 
+  # ---------------------------------------------------------------------------
+  # Technitium DNS Server — локальный DNS для домашней сети 192.168.1.0/24.
+  # Цель: резолвить голые хостнеймы (brightsky, starlight, luigi — без домена,
+  # как они уже используются в prometheus.yml/README) через нормальный DNS,
+  # а не через Windows NetBIOS/mDNS (не видно с Linux-хостов/контейнеров/из-за
+  # прокси, см. историю с HTTP_PROXY и luigi:9090 — 2026-08-16).
+  #
+  # После первого поднятия — настройка руками через web-консоль
+  # (https://192.168.1.43:5380, при первом заходе создать admin-пароль):
+  #   1. Settings → Forwarders → добавить 1.1.1.1, 8.8.8.8 (или свои).
+  #   2. Settings → Recursion → "Allow Only For Private Networks" (не открытый
+  #      резолвер наружу).
+  #   3. Zones → Add Zone → Primary Zone — создать 3 зоны: "brightsky",
+  #      "starlight", "luigi" (имя зоны = сам хостнейм, без точки в конце).
+  #      В каждой зоне добавить A-запись на "@" со значением IP хоста:
+  #        brightsky → 192.168.1.43
+  #        starlight → 192.168.1.99
+  #        luigi     → 192.168.1.143
+  #   4. На роутере (192.168.1.1, Keenetic) прописать 192.168.1.43 как DNS-
+  #      сервер, выдаваемый DHCP-клиентам домашней сети — тогда все устройства
+  #      в 192.168.1.0/24 резолвят brightsky/starlight/luigi «из коробки».
+  #      Второй роутер (192.168.1.91, сеть 192.168.2.0/24) — аналогично, если
+  #      нужно резолвить эти имена и оттуда (см. reference_home_network_routing).
+  #
+  # Порт 53 наружу (на роутере) не пробрасывать — только LAN.
+  # Актуальные теги: https://hub.docker.com/r/technitium/dns-server/tags
+  # ---------------------------------------------------------------------------
+  dns:
+    image: technitium/dns-server:latest
+    container_name: brightsky_dns
+    hostname: brightsky-dns
+    restart: always
+    ports:
+      - "5380:5380/tcp" # web-консоль (HTTP)
+      - "53:53/udp"
+      - "53:53/tcp"
+    environment:
+      - DNS_SERVER_DOMAIN=brightsky-dns
+      - DNS_SERVER_LOG_FOLDER_PATH=/var/log/technitium/dns
+    volumes:
+      - dns_config:/etc/dns
+      - dns_logs:/var/log/technitium/dns
+
 volumes:
   portainer_data:
+  dns_config:
+  dns_logs:

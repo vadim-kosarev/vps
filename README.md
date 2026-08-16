@@ -176,6 +176,7 @@ flowchart TD
 | `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется starlight через его `portainer/agent` (`https://192.168.1.43:9443`) |
 | `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на starlight (`https://192.168.1.99:9443`) |
 | `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
+| `dns` | `technitium/dns-server` | 53, 5380 | Локальный DNS для домашней сети — резолвит `brightsky`/`starlight`/`luigi` (см. `docker-compose.yml`) |
 
 ---
 

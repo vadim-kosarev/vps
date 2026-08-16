@@ -1,9 +1,9 @@
 # brightsky
 
 Домашний хост (Windows, Docker Desktop, `192.168.1.43`) — не VPS. Держит Immich и
-сопутствующие сервисы (см. `local/tools/immich/`), сюда добавлен Portainer (полная панель +
-agent) для двусторонней связки со **starlight**: с любого из двух хостов можно управлять
-docker'ом обоих.
+сопутствующие сервисы (см. `immich/` в репозитории [tools](https://github.com/vadim-kosarev/tools)),
+сюда добавлен Portainer (полная панель + agent) для двусторонней связки со **starlight**:
+с любого из двух хостов можно управлять docker'ом обоих.
 
 ## Перед первым деплоем
 
@@ -26,9 +26,12 @@ git pull
 docker compose up -d
 ```
 
-Поднимет два сервиса:
+Поднимет:
 - `portainer` — полная панель, UI `https://192.168.1.43:9443`.
 - `portainer_agent` — агент на порту 9001, чтобы этот хост был виден из панели на starlight.
+- `cadvisor` — метрики контейнеров для Prometheus на luigi (порт 8080).
+- `dns` — Technitium DNS Server, локальный DNS для домашней сети (порт 53, web-консоль
+  5380). Настройка зон/форвардеров — см. комментарий у сервиса `dns` в `docker-compose.yml`.
 
 ## Двусторонняя регистрация
 
@@ -42,5 +45,6 @@ Environments → Add environment → Docker Standalone → Agent → `192.168.1.
 
 ## Существующие сервисы brightsky
 
-Immich и остальное — вне этого репозитория/директории на данный момент (см.
-`local/tools/immich/README.md`), этот `docker-compose.yml` их не трогает и не заменяет.
+Immich и остальное — вне этого репозитория/директории на данный момент (см. `immich/README.md`
+в репозитории [tools](https://github.com/vadim-kosarev/tools)), этот `docker-compose.yml` их
+не трогает и не заменяет.
