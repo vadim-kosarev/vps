@@ -114,6 +114,15 @@ services:
   #      Обнаружено и исправлено 2026-08-16 (телефон на Wi-Fi: то luigi, то
   #      starlight, то brightsky — NXDOMAIN не пойми от чего; см. dumpsys wifi
   #      → DnsAddresses содержал fe80::.../wlan0 = сам роутер, у него зон нет).
+  #   6. Плюс зона "home" (Primary Zone "home", записи brightsky/starlight/luigi
+  #      → те же IP) — то же самое, но с суффиксом (brightsky.home и т.п.).
+  #      Заодно чинит другой баг: встроенный DNS-прокси Docker Desktop
+  #      (nameserver 192.168.65.7 в /etc/resolv.conf контейнеров) не резолвит
+  #      голое имя СВОЕГО ЖЕ хоста (например, "starlight" внутри контейнера,
+  #      запущенного на starlight, — "No answer"), а с суффиксом ".home"
+  #      резолвит нормально. Голые зоны (п.3) не трогать — используются
+  #      снаружи Docker (prometheus.yml и т.д.), просто предпочитать
+  #      *.home внутри compose/контейнеров, где это тот же хост.
   #
   # Порт 53 наружу (на роутере) не пробрасывать — только LAN.
   # Актуальные теги: https://hub.docker.com/r/technitium/dns-server/tags
