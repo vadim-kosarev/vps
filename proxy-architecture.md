@@ -8,7 +8,8 @@
 | Сервер | Провайдер | Роль |
 |---|---|---|
 | **agghhh.click** | Yandex Cloud | Entry node — RU-фронт, принимает клиентов |
-| **vkosarev.name** | AWS (EU/Poland) | Exit node — EU-выход в интернет |
+| **vkosarev.name** | Hostinger (Литва) | Exit node — EU-выход в интернет |
+| **vkosarev.link** | AWS | Exit node #2 — принимает VLESS-туннель с vkosarev.name |
 
 ---
 
@@ -115,6 +116,33 @@ YT Client─10126►│  3x-ui:10126 (HTTP proxy)            │─────�
                                ▼                                  ▼
                       Internet / Telegram                  ▶️ YouTube
 ```
+
+---
+
+## 5. HTTP-proxy через VLESS-туннель (vkosarev.name → vkosarev.link)
+
+```
+Client (HTTP-proxy)
+    │  HTTP CONNECT, port 22000
+    │  auth: user1 / Password123!!
+    ▼
+vkosarev.name:22000  ← 3x-ui inbound "http-22000-via-vkosarev.link" (tag: inbound-22000)
+    │  Routing: inboundTag "inbound-22000" → outbound "out-vkosarev-link"
+    │  VLESS+Reality outbound
+    │    → vkosarev.link:3443
+    │    → UUID: ba4cd410-6fa2-4460-a36e-bb277f3599ab (email: vkosarev.name-tunnel)
+    │    → flow: xtls-rprx-vision, SNI: browser.yandex.ru, shortId: a25a
+    ▼
+vkosarev.link:3443  ← 3x-ui inbound "yandex" (id=13)
+                       VLESS+Reality, camouflage: browser.yandex.ru:443
+    │
+    ▼
+Internet (выход с IP vkosarev.link)
+```
+
+Смысл: клиент подключается к обычному HTTP-прокси на `vkosarev.name:22000`, но фактический
+выход в интернет идёт с `vkosarev.link` — трафик между серверами завёрнут в VLESS+Reality,
+неотличим от HTTPS к `browser.yandex.ru`.
 
 ---
 
