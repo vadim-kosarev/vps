@@ -39,3 +39,14 @@ scrape_configs:
     static_configs:
       - targets:
           - "brightsky:8082"
+  - job_name: "cadvisor"
+    # Дропаем сущности без image (системные cgroup/slice-агрегаты, которые
+    # cAdvisor тоже отдаёт) — не контейнеры, только шум.
+    static_configs:
+      - targets:
+          - "starlight:8080"
+          - "brightsky:8080"
+    metric_relabel_configs:
+      - source_labels: [image]
+        regex: '.+'
+        action: keep

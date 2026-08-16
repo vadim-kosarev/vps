@@ -150,6 +150,7 @@ flowchart TD
 | `frpc` | `snowdreamtech/frpc` | — | FRP-клиент: пробрасывает TightVNC (5900) и Ollama (11434) на frps `vkosarev.name:7401` |
 | `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется brightsky через его `portainer/agent` (`https://192.168.1.99:9443`) |
 | `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на brightsky (`https://192.168.1.43:9443`) |
+| `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
 
 **Проброшенные туннели:**
 
@@ -159,13 +160,13 @@ flowchart TD
 | `starlight-ollama` | Ollama :11434 | `https://vkosarev.name:11444/` — проксируется через nginx |
 
 > До 2026-07-14 туннели `starlight-*` нёс frpc на хосте `brightsky` (по LAN до `192.168.1.99`,
-> см. `local/tools/immich/docker/frpc.ini`). Теперь `starlight` — самостоятельный frpc-клиент,
+> см. `immich/docker/frpc.ini` в репозитории [tools](https://github.com/vadim-kosarev/tools)). Теперь `starlight` — самостоятельный frpc-клиент,
 > не зависящий от brightsky.
 
 ### brightsky
 
 Домашний хост (Windows, Docker Desktop, `192.168.1.43`) — не VPS. Держит Immich и
-сопутствующие сервисы (см. `local/tools/immich/`, вне этого репозитория/директории). В
+сопутствующие сервисы (см. `immich/` в репозитории [tools](https://github.com/vadim-kosarev/tools), вне этого репозитория). В
 `brightsky/` — Portainer (панель + agent), связка со starlight двусторонняя: с любого из
 двух хостов управляются контейнеры обоих. См. `brightsky/README.md` про миграцию со
 старого вручную поднятого portainer-ce перед первым `docker compose up -d`.
@@ -174,6 +175,7 @@ flowchart TD
 |---|---|---|---|
 | `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется starlight через его `portainer/agent` (`https://192.168.1.43:9443`) |
 | `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на starlight (`https://192.168.1.99:9443`) |
+| `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
 
 ---
 
@@ -181,7 +183,6 @@ flowchart TD
 
 - Новый хостинг — новая директория в корне репозитория (название = домен или псевдоним сервера).
 - Внутри директории хостинга хранятся только файлы конфигурации (compose, nginx-конфиги, скрипты).
-- Папка `local/` — вспомогательные утилиты, скрипты, инструменты для локального использования (не деплоятся на серверы).
 - Папка `shared/` — общие скрипты, используемые на всех серверах (entrypoint-обёртки, патчи). Монтируются в контейнеры через docker-compose.
 - Папка `scripts/` — отдельные скрипты для анализа, дампов, вспомогательных задач.
 - Папка `.ai/` — заметки, отчёты и логи AI-агента (каждый файл с датой в названии).
@@ -196,8 +197,6 @@ flowchart TD
 ├── README.md                  # Основная документация
 ├── vps.iml                    # Файл проекта для JetBrains
 ├── .ai/                       # Заметки и отчёты AI (формат: yyyy.mm.dd_*)
-├── local/                     # Локальные утилиты и инструменты
-│   └── tools/                 # Примеры: bReader/, download-premier-one/, ...
 ├── shared/                    # Общие скрипты для всех серверов
 │   └── 3x-ui-exporter/       # Entrypoint-патч для совместимости exporter + 3x-ui
 ├── scripts/                   # Вспомогательные скрипты (read_xui.py и др.)

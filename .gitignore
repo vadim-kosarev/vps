@@ -54,3 +54,6 @@ agghhh.click/snappymail/**/_data_/**/cache/
 agghhh.click/snappymail/**/_data_/**/storage/
 agghhh.click/snappymail-data/
 agghhh.click/roundcube-temp/
+
+.venv
+.playwright-mcp

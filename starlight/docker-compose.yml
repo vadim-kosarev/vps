@@ -64,5 +64,40 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
 
+  # ---------------------------------------------------------------------------
+  # cAdvisor — метрики контейнеров (CPU/RAM/сеть/диск по каждому контейнеру),
+  # скрейпится Prometheus'ом на luigi (job "cadvisor", см.
+  # luigi/prometheus/prometheus.yml). Дашборд — в Grafana на luigi.
+  # На Docker Desktop (WSL2) видит cgroups/докер внутри Linux-VM, поэтому метрики
+  # диска — по виртуальному диску VM, не по физическим Windows-дискам.
+  #
+  # ВАЖНО: на v0.49.1 (как в C:\dev\ec-leasing\common\docker, но там классический
+  # Linux-хост) здесь падало с "Failed to create existing container: ... failed
+  # to identify the read-write layer ID" — Docker Desktop использует containerd
+  # snapshotter вместо overlay2-графдрайвера (`docker inspect --format
+  # '{{.GraphDriver}}'` → null), контейнер при этом "healthy", но без разбивки
+  # по контейнерам (только агрегаты /docker, /kubepods). Поддержка
+  # containerd-snapshotter добавлена в cAdvisor начиная с v0.54 (issue #3643,
+  # PR #3709) — фикс: версия образа v0.60.5+, никаких доп. флагов не нужно.
+  # Проверено на starlight (2026-08-16): 0 ошибок в логе, имена контейнеров
+  # (frigate, starlight_portainer, ...) резолвятся корректно.
+  # Актуальные теги: https://github.com/google/cadvisor/releases
+  # ---------------------------------------------------------------------------
+  cadvisor:
+    image: ghcr.io/google/cadvisor:v0.60.5
+    container_name: starlight_cadvisor
+    restart: always
+    privileged: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+
 volumes:
   portainer_data:
