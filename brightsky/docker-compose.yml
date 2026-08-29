@@ -7,6 +7,27 @@
 # ---------------------------------------------------------------------------
 services:
   # ---------------------------------------------------------------------------
+  # frpc — FRP-клиент, пробрасывает локальные сервисы этого хоста (Immich,
+  # Frigate, Face Search/Finder, Video Search, плюс luigi/cam1 через LAN) через
+  # frps на vkosarev.name:7401 → доступны на vkosarev.name (внешние порты —
+  # см. vkosarev.name/nginx/conf.d/vkosarev.name.conf в этом репозитории).
+  # Конфиг — ./frpc.toml. Сервисы (tools-репозиторий: immich/, frigate/) не
+  # содержат ничего про frpc/экспозицию наружу — это забота хоста, не утилиты.
+  # Раньше жил как immich_frpc в tools/immich/docker (docker-compose.prod.yml) —
+  # перенесён сюда, см. историю миграции в frpc.toml.
+  # Конфиг в формате TOML (ini — deprecated в frp).
+  # Актуальные теги: https://hub.docker.com/r/snowdreamtech/frpc/tags
+  # ---------------------------------------------------------------------------
+  frpc:
+    image: snowdreamtech/frpc
+    container_name: brightsky_frpc
+    restart: always
+    volumes:
+      - ./frpc.toml:/etc/frp/frpc.toml:ro
+    entrypoint: /usr/bin/frpc
+    command: ["-c", "/etc/frp/frpc.toml"]
+
+  # ---------------------------------------------------------------------------
   # Portainer — панель управления Docker brightsky.
   # UI: https://192.168.1.43:9443 (self-signed сертификат, доступ только по LAN)
   # Чтобы видеть starlight отсюда: Environments → Add environment →

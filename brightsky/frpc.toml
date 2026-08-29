@@ -1,0 +1,114 @@
+serverAddr = "62.72.33.196"
+serverPort = 7401
+
+auth.token = "470720451211462921230901855180"
+
+# Сервисы этого хоста (2283/8765/8767/8768/5000/9554 и т.п.) — все опубликованы
+# на хосте (docker-compose `ports:` в соответствующих репозиториях), поэтому
+# адресуются как brightsky.home, а не по docker-network/container-name: frpc
+# живёт в отдельном docker-compose проекте, не в сети Immich/Frigate, и не
+# должен от них зависеть. "brightsky" (без .home) не резолвится в контейнере
+# на самом brightsky (self-lookup через Docker Desktop DNS-прокси не работает,
+# см. brightsky/docker-compose.yml, сервис dns) — только "brightsky.home".
+
+[[proxies]]
+name = "immich-server"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 2283
+remotePort = 2283
+
+[[proxies]]
+name = "face-search"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 8765
+remotePort = 8765
+
+[[proxies]]
+name = "face-finder"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 8767
+remotePort = 8767
+
+[[proxies]]
+name = "frigate-ui"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 5000
+remotePort = 5000
+
+[[proxies]]
+name = "frigate-rtsp"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 9554
+remotePort = 9554
+
+[[proxies]]
+name = "video-search"
+type = "tcp"
+localIP = "brightsky.home"
+localPort = 8768
+remotePort = 8770
+
+# luigi (NAS, 192.168.1.143) — отдельный хост в LAN, не brightsky.
+
+[[proxies]]
+name = "luigi-grafana"
+type = "tcp"
+localIP = "luigi"
+localPort = 3000
+remotePort = 3003
+
+[[proxies]]
+name = "luigi-torrent"
+type = "tcp"
+localIP = "luigi"
+localPort = 24222
+remotePort = 24222
+
+[[proxies]]
+name = "luigi-subsonic"
+type = "tcp"
+localIP = "luigi"
+localPort = 4040
+remotePort = 4040
+
+[[proxies]]
+name = "luigi-sync-tcp"
+type = "tcp"
+localIP = "luigi"
+localPort = 41404
+remotePort = 41404
+
+[[proxies]]
+name = "luigi-sync-udp"
+type = "udp"
+localIP = "luigi"
+localPort = 41404
+remotePort = 41404
+
+# Hikvision-камера cam1 — физическое устройство в LAN, свой IP.
+
+[[proxies]]
+name = "cam1-high"
+type = "tcp"
+localIP = "192.168.2.80"
+localPort = 554
+remotePort = 554
+
+[[proxies]]
+name = "cam1-ui-http"
+type = "tcp"
+localIP = "192.168.2.80"
+localPort = 80
+remotePort = 980
+
+[[proxies]]
+name = "cam1-ui-https"
+type = "tcp"
+localIP = "192.168.2.80"
+localPort = 443
+remotePort = 982
