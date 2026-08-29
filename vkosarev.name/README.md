@@ -167,7 +167,7 @@ Portainer users, 3x-ui inbound-конфиги, секрет MTProxy).
 | 3200 | Mermaid Live | |
 | 8000, 9443 | Portainer | |
 | 88, 11966 | myip | |
-| 80, 1443, 3181, 5001, 981, 4041, 3021, 11444, 8766, 8768, 3010, 5902 | nginx (`network_mode: host`) | список = все `listen` в `nginx/conf.d/vkosarev.name.conf` |
+| 80, 1443, 3181, 5001, 981, 4041, 3021, 11444, 8766, 8768, 8769, 3010, 5902 | nginx (`network_mode: host`) | список = все `listen` в `nginx/conf.d/vkosarev.name.conf` |
 | 41404 (TCP+UDP) | iptables DNAT → 127.0.0.1:41404 | luigi-sync |
 | 5900 | iptables DNAT → 127.0.0.1:5900 | starlight-vnc (сырой TCP, см. также noVNC на 5902) |
 
@@ -182,6 +182,8 @@ Portainer users, 3x-ui inbound-конфиги, секрет MTProxy).
   Ничего разворачивать здесь не нужно, просто учитывать, что после переустановки
   `vkosarev.name` frpc на starlight сам переподключится (тот же `server_addr`/`token` в
   `starlight/frpc.toml`).
-- Прочие frps-клиенты (luigi, frigate, cam1 и т.д., см. `local/tools/immich/docker/frpc.ini`)
-  подключаются тем же образом — их поднимать не нужно, они сами переподключатся к frps как
-  только тот появится на прежнем адресе с тем же `token`.
+- **brightsky** (`../brightsky/`) — домашний хост со своим frpc-клиентом (`brightsky/frpc.toml`),
+  регистрирует туннели immich-server, face-search, face-finder, frigate-ui/rtsp, video-search,
+  luigi-* (luigi — отдельный NAS в LAN у brightsky), cam1-* (Hikvision-камера). Ничего
+  разворачивать здесь не нужно — сам переподключится к frps как только тот появится на прежнем
+  адресе с тем же `token`.
