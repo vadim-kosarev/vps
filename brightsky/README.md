@@ -1,6 +1,6 @@
 # brightsky
 
-Домашний хост (Windows, Docker Desktop, `192.168.1.43`) — не VPS. Держит Immich и
+Домашний хост (Windows, Docker Desktop, `192.168.55.43`) — не VPS. Держит Immich и
 сопутствующие сервисы (см. `immich/` в репозитории [tools](https://github.com/vadim-kosarev/tools)),
 сюда добавлен Portainer (полная панель + agent) для двусторонней связки со **starlight**:
 с любого из двух хостов можно управлять docker'ом обоих.
@@ -28,7 +28,7 @@ docker compose up -d
 
 Поднимет:
 - `frpc` — FRP-клиент, пробрасывает сервисы brightsky на `vkosarev.name` (см. раздел ниже).
-- `portainer` — полная панель, UI `https://192.168.1.43:9443`.
+- `portainer` — полная панель, UI `https://192.168.55.43:9443`.
 - `portainer_agent` — агент на порту 9001, чтобы этот хост был виден из панели на starlight.
 - `cadvisor` — метрики контейнеров для Prometheus на luigi (порт 8080).
 - `dns` — Technitium DNS Server, локальный DNS для домашней сети (порт 53, web-консоль
@@ -36,11 +36,11 @@ docker compose up -d
 
 ## Двусторонняя регистрация
 
-**brightsky → видеть starlight** (в панели `https://192.168.1.43:9443`):
-Environments → Add environment → Docker Standalone → Agent → `192.168.1.99:9001` → Connect.
+**brightsky → видеть starlight** (в панели `https://192.168.55.43:9443`):
+Environments → Add environment → Docker Standalone → Agent → `192.168.55.99:9001` → Connect.
 
-**starlight → видеть brightsky** (в панели `https://192.168.1.99:9443`):
-Environments → Add environment → Docker Standalone → Agent → `192.168.1.43:9001` → Connect.
+**starlight → видеть brightsky** (в панели `https://192.168.55.99:9443`):
+Environments → Add environment → Docker Standalone → Agent → `192.168.55.43:9001` → Connect.
 
 После этого с любой из двух панелей управляются контейнеры обоих хостов.
 

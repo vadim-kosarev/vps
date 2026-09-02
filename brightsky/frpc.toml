@@ -1,4 +1,4 @@
-serverAddr = "62.72.33.196"
+serverAddr = "vkosarev.name"
 serverPort = 7401
 
 auth.token = "470720451211462921230901855180"
@@ -53,7 +53,7 @@ localIP = "brightsky.home"
 localPort = 8768
 remotePort = 8770
 
-# luigi (NAS, 192.168.1.143) — отдельный хост в LAN, не brightsky.
+# luigi (NAS, 192.168.55.142) — отдельный хост в LAN, не brightsky.
 
 [[proxies]]
 name = "luigi-grafana"
@@ -90,25 +90,29 @@ localIP = "luigi"
 localPort = 41404
 remotePort = 41404
 
-# Hikvision-камера cam1 — физическое устройство в LAN, свой IP.
+# Hikvision-камера cam1 — физическое устройство в LAN (сеть Router2, раньше
+# 192.168.2.0/24, с 2026-08-30 — 192.168.56.0/24), свой статический IP.
+# IP ниже пересчитан по той же схеме (третий октет 2→56, хвост адреса как
+# был) — если камере при перенумерации сети вручную выставили другой IP,
+# поправить здесь и сверить с реальным адресом камеры.
 
 [[proxies]]
 name = "cam1-high"
 type = "tcp"
-localIP = "192.168.2.80"
+localIP = "192.168.56.80"
 localPort = 554
 remotePort = 554
 
 [[proxies]]
 name = "cam1-ui-http"
 type = "tcp"
-localIP = "192.168.2.80"
+localIP = "192.168.56.80"
 localPort = 80
 remotePort = 980
 
 [[proxies]]
 name = "cam1-ui-https"
 type = "tcp"
-localIP = "192.168.2.80"
+localIP = "192.168.56.80"
 localPort = 443
 remotePort = 982

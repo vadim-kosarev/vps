@@ -142,14 +142,14 @@ flowchart TD
 
 ### starlight
 
-Домашний хост (Windows, Docker Desktop, `192.168.1.99`) — не VPS, а FRP-клиент,
+Домашний хост (Windows, Docker Desktop, `192.168.55.99`) — не VPS, а FRP-клиент,
 пробрасывающий локальные сервисы на `vkosarev.name` через frps.
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
 | `frpc` | `snowdreamtech/frpc` | — | FRP-клиент: пробрасывает TightVNC (5900) и Ollama (11434) на frps `vkosarev.name:7401` |
-| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется brightsky через его `portainer/agent` (`https://192.168.1.99:9443`) |
-| `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на brightsky (`https://192.168.1.43:9443`) |
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется brightsky через его `portainer/agent` (`https://192.168.55.99:9443`) |
+| `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на brightsky (`https://192.168.55.43:9443`) |
 | `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
 
 **Проброшенные туннели:**
@@ -165,7 +165,7 @@ flowchart TD
 
 ### brightsky
 
-Домашний хост (Windows, Docker Desktop, `192.168.1.43`) — не VPS. Держит Immich и
+Домашний хост (Windows, Docker Desktop, `192.168.55.43`) — не VPS. Держит Immich и
 сопутствующие сервисы (см. `immich/` в репозитории [tools](https://github.com/vadim-kosarev/tools), вне этого репозитория). В
 `brightsky/` — Portainer (панель + agent), связка со starlight двусторонняя: с любого из
 двух хостов управляются контейнеры обоих. См. `brightsky/README.md` про миграцию со
@@ -173,8 +173,8 @@ flowchart TD
 
 | Сервис | Образ | Порты | Назначение |
 |---|---|---|---|
-| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется starlight через его `portainer/agent` (`https://192.168.1.43:9443`) |
-| `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на starlight (`https://192.168.1.99:9443`) |
+| `portainer` | `portainer/portainer-ce` | 8000, 9443 | Панель управления Docker — отсюда же управляется starlight через его `portainer/agent` (`https://192.168.55.43:9443`) |
+| `portainer_agent` | `portainer/agent` | 9001 | Агент — регистрируется как удалённое окружение в Portainer на starlight (`https://192.168.55.99:9443`) |
 | `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
 | `dns` | `technitium/dns-server` | 53, 5380 | Локальный DNS для домашней сети — резолвит `brightsky`/`starlight`/`luigi` (см. `docker-compose.yml`) |
 

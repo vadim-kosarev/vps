@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# starlight — хост 192.168.1.99 (Windows, Docker Desktop)
+# starlight — хост 192.168.55.99 (Windows, Docker Desktop)
 # ---------------------------------------------------------------------------
 # frpc — FRP-клиент, пробрасывает локальные сервисы этого хоста (TightVNC:5900,
 # Ollama:11434) через frps на vkosarev.name:7401 → доступны на vkosarev.name как
@@ -31,9 +31,9 @@ services:
   # ---------------------------------------------------------------------------
   # Portainer — панель управления Docker starlight. Двусторонняя схема с
   # brightsky: этот portainer видит brightsky через его portainer_agent
-  # (Environments → Add environment → Docker Standalone → Agent → 192.168.1.43:9001),
+  # (Environments → Add environment → Docker Standalone → Agent → 192.168.55.43:9001),
   # а portainer_agent ниже в этом файле даёт brightsky.portainer видеть starlight.
-  # UI: https://192.168.1.99:9443 (self-signed сертификат самого Portainer —
+  # UI: https://192.168.55.99:9443 (self-signed сертификат самого Portainer —
   # публичного домена/TLS-сертификата у starlight нет, доступ только по LAN)
   # Актуальные теги: https://hub.docker.com/r/portainer/portainer-ce/tags
   # ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ services:
   # ---------------------------------------------------------------------------
   # Portainer Agent — публикует docker.sock starlight на порт 9001, чтобы
   # его видел Portainer на brightsky (Environments → Add environment →
-  # Docker Standalone → Agent → 192.168.1.99:9001).
+  # Docker Standalone → Agent → 192.168.55.99:9001).
   # Актуальные теги: https://hub.docker.com/r/portainer/agent/tags
   # ---------------------------------------------------------------------------
   portainer_agent:
