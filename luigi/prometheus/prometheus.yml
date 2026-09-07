@@ -50,3 +50,11 @@ scrape_configs:
       - source_labels: [image]
         regex: '.+'
         action: keep
+  - job_name: "kshlt-process-exporter"
+    # CPU/RAM по каждому процессу backend'а kshlt на starlight (process-exporter,
+    # kshlt-backend container, порт 9256) — просьба пользователя 07.09.2026,
+    # те же два виджета, что уже есть на devtools (дашборд htoVWdxGt), локально
+    # с этой же машины, напрямую по LAN, как cadvisor выше (не через remote_write).
+    static_configs:
+      - targets:
+          - "starlight:9256"
