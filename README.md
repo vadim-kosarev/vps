@@ -117,7 +117,7 @@ flowchart TD
 | `portainer` | `portainer/portainer-ce` | 9443 | Управление Docker |
 | `iperf3` | `networkstatic/iperf3` | 5201 | Замер пропускной способности |
 | `mermaid` | `johnsinclair73/mermaid-live-editor` | 3200 | Редактор диаграмм |
-| `chrome` | `kasmweb/chrome` | 5903 (через nginx, внутри — 6901) | Браузер в контейнере (KasmVNC) — [UI](https://vkosarev.name:5903/), пароль `CHROME_VNC_PASSWORD` |
+| `chrome` | `kasmweb/chrome` | 5903 (через nginx, внутри — 6901) | Браузер в контейнере (KasmVNC) — [UI](https://vkosarev.name:5903/), HTTP Basic Auth: логин `kasm_user`, пароль `CHROME_VNC_PASSWORD` |
 | `node_exporter` | *(systemd, не Docker)* | 9100 | Метрики хоста для Prometheus |
 
 ### vkosarev.link

@@ -122,7 +122,7 @@ cp .env.example .env
 | `XUI_EXPORTER_PASSWORD` | Пароль 3x-ui для экспортёра | `changeme` |
 | `XUI_EXPORTER_PORT` | Порт, на котором отдаются метрики экспортёра | `3001` |
 | `BACKUP_KEEP_DAYS` | Сколько дней хранить локальные бэкапы (`backup.sh`) | — |
-| `CHROME_VNC_PASSWORD` | Пароль входа в браузер (KasmVNC), `https://vkosarev.name:5903/` | `changeme` |
+| `CHROME_VNC_PASSWORD` | Пароль входа в браузер (KasmVNC), `https://vkosarev.name:5903/`, логин `kasm_user` (HTTP Basic Auth) | `changeme` |
 
 ---
 

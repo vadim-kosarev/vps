@@ -268,8 +268,10 @@ services:
   # Порт 6901 (встроенный HTTPS KasmVNC, self-signed) публикуется только на
   # loopback — наружу отдаётся через nginx (порт 5903, настоящий сертификат),
   # см. nginx/conf.d/vkosarev.name.conf. Тот же паттерн, что у novnc/starlight.
-  # UI: https://vkosarev.name:5903/ — логин по паролю VNC_PW (без имени
-  # пользователя), не через .htpasswd.
+  # UI: https://vkosarev.name:5903/ — логин HTTP Basic Auth (это делает сам
+  # KasmVNC, не .htpasswd/nginx): пользователь всегда `kasm_user`, пароль —
+  # значение VNC_PW (переменная CHROME_VNC_PASSWORD в .env). Проверено:
+  # `curl -u kasm_user:<пароль> https://vkosarev.name:5903/`.
   # shm_size 1g — Chrome активно использует /dev/shm, дефолтных 64m мало
   # (краши вкладок). Официальный минимум — 512m, взял с запасом.
   # Актуальные теги: https://hub.docker.com/r/kasmweb/chrome/tags
