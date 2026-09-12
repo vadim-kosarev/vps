@@ -122,6 +122,7 @@ cp .env.example .env
 | `XUI_EXPORTER_PASSWORD` | Пароль 3x-ui для экспортёра | `changeme` |
 | `XUI_EXPORTER_PORT` | Порт, на котором отдаются метрики экспортёра | `3001` |
 | `BACKUP_KEEP_DAYS` | Сколько дней хранить локальные бэкапы (`backup.sh`) | — |
+| `CHROME_VNC_PASSWORD` | Пароль входа в браузер (KasmVNC), `https://vkosarev.name:5903/` | `changeme` |
 
 ---
 
@@ -167,7 +168,7 @@ Portainer users, 3x-ui inbound-конфиги, секрет MTProxy).
 | 3200 | Mermaid Live | |
 | 8000, 9443 | Portainer | |
 | 88, 11966 | myip | |
-| 80, 1443, 3181, 5001, 981, 4041, 3021, 11444, 8766, 8768, 8769, 3010, 5902 | nginx (`network_mode: host`) | список = все `listen` в `nginx/conf.d/vkosarev.name.conf` |
+| 80, 1443, 3181, 5001, 981, 4041, 3021, 11444, 8766, 8768, 8769, 3010, 5902, 5903 | nginx (`network_mode: host`) | список = все `listen` в `nginx/conf.d/vkosarev.name.conf` |
 | 41404 (TCP+UDP) | iptables DNAT → 127.0.0.1:41404 | luigi-sync |
 | 5900 | iptables DNAT → 127.0.0.1:5900 | starlight-vnc (сырой TCP, см. также noVNC на 5902) |
 

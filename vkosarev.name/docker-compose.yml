@@ -260,4 +260,28 @@ services:
     ports:
       - "127.0.0.1:6080:6080"
 
+  # ---------------------------------------------------------------------------
+  # chrome — браузер в контейнере (KasmVNC), доступ через HTML5-клиент в
+  # обычном браузере, RDP-клиент не нужен. Свой Chrome (не Chromium), сессия
+  # изолирована от локального компьютера — удобно как "чистый" браузер с IP
+  # vkosarev.name.
+  # Порт 6901 (встроенный HTTPS KasmVNC, self-signed) публикуется только на
+  # loopback — наружу отдаётся через nginx (порт 5903, настоящий сертификат),
+  # см. nginx/conf.d/vkosarev.name.conf. Тот же паттерн, что у novnc/starlight.
+  # UI: https://vkosarev.name:5903/ — логин по паролю VNC_PW (без имени
+  # пользователя), не через .htpasswd.
+  # shm_size 1g — Chrome активно использует /dev/shm, дефолтных 64m мало
+  # (краши вкладок). Официальный минимум — 512m, взял с запасом.
+  # Актуальные теги: https://hub.docker.com/r/kasmweb/chrome/tags
+  # ---------------------------------------------------------------------------
+  chrome:
+    image: kasmweb/chrome:1.18.0
+    container_name: chrome
+    restart: unless-stopped
+    shm_size: 1g
+    environment:
+      - VNC_PW=${CHROME_VNC_PASSWORD:-changeme}
+    ports:
+      - "127.0.0.1:6901:6901"
+
 volumes: {}
