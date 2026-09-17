@@ -175,6 +175,8 @@ services:
   # Актуальные теги: https://hub.docker.com/r/johnsinclair73/mermaid-live-editor/tags
   # ---------------------------------------------------------------------------
   mermaid:
+    profiles:
+      - mermaid
     image: johnsinclair73/mermaid-live-editor:9.1.7
     container_name: mermaid
     restart: unless-stopped
