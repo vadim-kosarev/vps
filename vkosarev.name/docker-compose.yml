@@ -277,6 +277,8 @@ services:
   # Актуальные теги: https://hub.docker.com/r/kasmweb/chrome/tags
   # ---------------------------------------------------------------------------
   chrome:
+    profiles:
+      - chrome
     image: kasmweb/chrome:1.18.0
     container_name: chrome
     restart: unless-stopped
