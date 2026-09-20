@@ -179,6 +179,15 @@ flowchart TD
 | `cadvisor` | `ghcr.io/google/cadvisor` | 8080 | Метрики контейнеров (CPU/RAM/сеть/диск) — скрейпится Prometheus на `luigi` |
 | `dns` | `technitium/dns-server` | 53, 5380 | Локальный DNS для домашней сети — резолвит `brightsky`/`starlight`/`luigi` (см. `docker-compose.yml`) |
 
+### raspberry
+
+Физическая плата Raspberry Pi 4 (`192.168.55.118` по Wi-Fi) — не VPS. Раздаёт открытую
+Wi-Fi-сеть `WiFi-FREE-Taxi` с captive-порталом, локальным видео и (после нажатия кнопки на портале)
+интернетом через второй Wi-Fi. Весь проект точки доступа (docker compose, конфиги, бэкенд, страницы
+портала) и Portainer лежат здесь, в `raspberry/`; описание железа, сети, деплоя и замечаний по
+безопасности: [`raspberry/README.md`](raspberry/README.md). (Раньше проект жил в репозитории
+[tools](https://github.com/vadim-kosarev/tools), `nginx/` — теперь источник правды этот репозиторий.)
+
 ---
 
 ## Структура репозитория
@@ -233,6 +242,10 @@ flowchart TD
 ├── brightsky/                 # Portainer (панель+agent) домашнего хоста brightsky (не VPS)
 │   ├── docker-compose.yml
 │   └── README.md
+├── raspberry/                 # Raspberry Pi: Wi-Fi-хотспот с порталом и NAT (не VPS)
+│   ├── README.md
+│   ├── nginx/                 # проект точки доступа (compose, конфиги, back.py, страницы портала)
+│   └── portainer/
 └── ...                        # Прочие файлы и директории по мере необходимости
 ```
 

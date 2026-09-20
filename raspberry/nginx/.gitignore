@@ -1,0 +1,6 @@
+# данные хотспота: телефоны пассажиров — в git не кладём
+py/back.sqlite3
+py/data/
+py/__pycache__/
+# хэш пароля nginx (в проекте не используется), тоже не храним
+etc/nginx/users.passwd

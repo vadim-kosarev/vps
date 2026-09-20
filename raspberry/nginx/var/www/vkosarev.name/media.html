@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Browser</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        #content {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            padding: 2px 2px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .breadcrumb {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 0;
+            background: 0 8px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid #eee;
+        }
+
+        .item-thumbnail {
+            object-fit: cover;
+            height: 80px;
+            width: auto;
+            margin-right: 15px;
+        }
+
+        .item-name {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .first-line {
+            font-weight: bold;
+        }
+
+
+        .item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .media-link,
+        .media-link:visited,
+        .media-link:hover,
+        .media-link:active,
+        .media-link:focus {
+            text-decoration: none;
+            color: inherit;
+            outline: none;
+        }
+
+
+        .item-link,
+        .item-link:visited,
+        .item-link:hover,
+        .item-link:active,
+        .item-link:focus {
+            text-decoration: none;
+            color: inherit;
+            outline: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #media-player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #media-player-wrapper {
+            position: relative;
+            width: 95%;
+            max-width: 1000px;
+        }
+        #media-player {
+            width: 100%;
+            max-height: 80vh;
+            outline: none;
+        }
+        #player-controls {
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #player-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: white;
+            max-width: 80%;
+            text-align: center;
+            word-break: break-word;
+        }
+        #player-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+            z-index: 1001;
+        }
+        #playlist-container {
+            width: 80%;
+            max-width: 1000px;
+            max-height: 350px;
+            overflow-y: auto;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .playlist-item {
+            padding: 5px;
+            color: white;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .playlist-item.active {
+            background-color: rgba(0, 123, 255, 0.5);
+        }
+        .player-btn {
+            background-color: rgba(34, 34, 34, 0.7);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+        }
+        .player-btn:hover {
+            background-color: rgba(60, 60, 60, 0.9);
+        }
+        .player-btn.active {
+            background-color: rgba(65, 105, 225, 0.8);
+        }
+        .player-btn img {
+            width: 24px;
+            height: 24px;
+            filter: invert(1);
+        }
+        #player-next-prev {
+            display: flex;
+            gap: 5px;
+        }
+        #media-player:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+            max-height: none;
+        }
+        #media-player:fullscreen {
+            width: 100%;
+            height: 100%;
+            max-height: none;
+        }
+        #player-fullscreen {
+            margin-left: 10px;
+        }
+        .expanded-player #media-player-wrapper {
+            width: 95%;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .expanded-player #media-player {
+            width: 100%;
+            height: 100%;
+            max-height: none;
+            object-fit: contain;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="content">
+        <!-- <h1>Media Browser</h1> -->
+        <div id="breadcrumb" class="breadcrumb">
+            <span>Loading...</span>
+        </div>
+        <div id="listing">
+            <div class="loading">Loading content...</div>
+        </div>
+    </div>
+
+    <div id="media-player-container">
+        <button id="player-close">×</button>
+        <div id="player-title"></div>
+        <div id="media-player-wrapper">
+            <video id="media-player" controls></video>
+        </div>
+        <div id="player-controls">
+            <div id="player-next-prev">
+                <button id="player-prev" class="player-btn" title="Previous">
+                    <img src="./images/icons/4.png" alt="Previous">
+                </button>
+                <button id="player-play" class="player-btn" title="Play">
+                    <img src="./images/icons/1.png" alt="Play">
+                </button>
+                <button id="player-pause" class="player-btn" title="Pause">
+                    <img src="./images/icons/2.png" alt="Pause">
+                </button>
+                <button id="player-stop" class="player-btn" title="Stop">
+                    <img src="./images/icons/7.png" alt="Stop">
+                </button>
+                <button id="player-next" class="player-btn" title="Next">
+                    <img src="./images/icons/3.png" alt="Next">
+                </button>
+                <button id="player-shuffle" class="player-btn active" title="Random Order">
+                    <img src="./images/icons/21.png" alt="Shuffle">
+                </button>
+                <button id="player-fullscreen" class="player-btn" title="Fullscreen">
+                    <img src="./images/icons/13.png" alt="Fullscreen">
+                </button>
+            </div>
+            <div id="player-info"></div>
+        </div>
+        <div id="playlist-container"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseUrl = '';
+            let currentPath = '/video/';
+            const mediaPlayerContainer = document.getElementById('media-player-container');
+            const mediaPlayer = document.getElementById('media-player');
+            const playerTitle = document.getElementById('player-title');
+            const playerClose = document.getElementById('player-close');
+            const playerNext = document.getElementById('player-next');
+            const playerPrev = document.getElementById('player-prev');
+            const playerPlay = document.getElementById('player-play');
+            const playerPause = document.getElementById('player-pause');
+            const playerStop = document.getElementById('player-stop');
+            const playlistContainer = document.getElementById('playlist-container');
+            const playerFullscreen = document.getElementById('player-fullscreen');
+            const playerShuffle = document.getElementById('player-shuffle');
+
+            let isExpanded = false;
+            let isShuffleMode = true;
+            let currentPlaylist = [];
+            let currentPlaylistIndex = -1;
+            let playedIndices = [];
+
+            // Check for path in URL hash
+            if (window.location.hash) {
+                currentPath = window.location.hash.substring(1);
+            }
+
+            loadDirectory(currentPath);
+
+            function loadDirectory(path) {
+                document.getElementById('listing').innerHTML = '<div class="loading">Loading content...</div>';
+
+                // Update URL hash with current path
+                window.location.hash = path;
+
+                fetch(baseUrl + path)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const title = doc.querySelector('h1').textContent;
+                        updateBreadcrumb(path);
+                        const links = Array.from(doc.querySelectorAll('pre a'));
+                        const items = processLinks(links);
+                        renderItems(items, path);
+                    })
+                    .catch(error => {
+                        document.getElementById('listing').innerHTML = `
+                            <div class="error">
+                                Error loading directory: ${error.message}
+                            </div>
+                        `;
+                    });
+            }
+
+            function updateBreadcrumb(path) {
+                const parts = path.split('/').filter(part => part !== '');
+                let breadcrumbHtml = '<a href="/www/82.html"><b>Comfort+</b></a>';
+                let currentPath = '/';
+
+                parts.forEach((part, index) => {
+                    currentPath += part + '/';
+                    breadcrumbHtml += ' / ';
+
+                    if (index === parts.length - 1) {
+                        breadcrumbHtml += `<span>${decodeURIComponent(part)}</span>`;
+                    } else {
+                        breadcrumbHtml += `<a href="#" data-path="${currentPath}">${decodeURIComponent(part)}</a>`;
+                    }
+                });
+
+                document.getElementById('breadcrumb').innerHTML = breadcrumbHtml;
+
+                document.querySelectorAll('#breadcrumb a[data-path]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const path = this.getAttribute('data-path');
+                        currentPath = path;
+                        loadDirectory(path);
+                    });
+                });
+            }
+
+            function processLinks(links) {
+                const items = [];
+
+                links.forEach(link => {
+                    if (link.textContent === '../' && items.length === 0) {
+                        return;
+                    }
+
+                    const href = link.getAttribute('href');
+
+                    // Extract name from href instead of textContent to prevent truncation
+                    let name;
+                    if (href.endsWith('/')) {
+                        // For directories, remove the trailing slash
+                        name = href.slice(0, -1);
+                    } else {
+                        name = href;
+                    }
+
+                    // Get the filename part (after the last slash)
+                    if (name.includes('/')) {
+                        name = name.substring(name.lastIndexOf('/') + 1);
+                    }
+
+                    name = decodeURIComponent(name);
+                    if (name.startsWith('_')) {
+                        return;
+                    }
+
+                    const isDirectory = href.endsWith('/');
+                    const parentText = link.parentNode.textContent;
+                    const textAfterLink = parentText.substring(parentText.indexOf(link.textContent) + link.textContent.length);
+                    const dateMatch = textAfterLink.match(/(\d{2}-[A-Za-z]{3}-\d{4} \d{2}:\d{2})/);
+                    const date = dateMatch ? dateMatch[1] : '';
+
+                    let size = '';
+                    if (!isDirectory) {
+                        const sizeMatch = textAfterLink.match(/(\d+)$/);
+                        size = sizeMatch ? formatFileSize(parseInt(sizeMatch[1])) : '';
+                    }
+
+                    items.push({
+                        name,
+                        href,
+                        isDirectory,
+                        date,
+                        size
+                    });
+                });
+
+                items.sort(compareItems);
+                return items;
+            }
+
+            // отсортировать items:
+            // сначала папки
+            // потом - если имя начинается с цифры - по числу
+            // иначе - по алфавиту
+            function compareItems(a, b) {
+                if (a.isDirectory && !b.isDirectory) return -1;
+                if (!a.isDirectory && b.isDirectory) return 1;
+                const aStartsWithDigit = /^\d/.test(a.name);
+                const bStartsWithDigit = /^\d/.test(b.name);
+                if (aStartsWithDigit && bStartsWithDigit) {
+                    const aNum = parseInt(a.name.match(/^\d+/)[0]);
+                    const bNum = parseInt(b.name.match(/^\d+/)[0]);
+                    return aNum - bNum;
+                }
+                if (aStartsWithDigit) return -1;
+                if (bStartsWithDigit) return 1;
+                return a.name.localeCompare(b.name);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function getNameWithoutExtension(filename) {
+                if (filename.endsWith('/')) {
+                    filename = filename.slice(0, -1);
+                }
+
+                const baseName = filename.split('/').pop();
+                const dotIndex = baseName.lastIndexOf('.');
+                if (dotIndex !== -1) {
+                    return baseName.substring(0, dotIndex);
+                }
+                return baseName;
+            }
+
+            function getThumbnailPath(itemName, itemHref, itemType) {
+                const nameWithoutExt = getNameWithoutExtension(itemName);
+
+                // Define default icons based on item type
+                let defaultIcon;
+                if (itemType === 'directory') {
+                    defaultIcon = './images/icons/folder.png';
+                } else if (itemType === 'audio') {
+                    defaultIcon = './images/icons/audio.png';
+                } else {
+                    defaultIcon = './images/icons/media.png';
+                }
+
+                // Get path from URL hash without the leading #
+                let path = window.location.hash.substring(1);
+
+                // For video, image files, and directories, try to get thumbnail from _thumbs
+                if (path.startsWith('/video/')) {
+                    // Insert _thumbs after /video/ in the path
+                    const thumbPath = '/video/_thumbs/' + path.substring('/video/'.length) + nameWithoutExt + '.jpg';
+                    return {
+                        path: thumbPath,
+                        fallback: defaultIcon
+                    };
+                } else {
+                    // Fallback for non-video paths
+                    return {
+                        path: defaultIcon,
+                        fallback: defaultIcon
+                    };
+                }
+            }
+
+            function checkThumbnailExists(thumbPath, fallbackPath, callback) {
+                if (thumbPath.startsWith('./images/icons/')) {
+                    callback(thumbPath);
+                    return;
+                }
+
+                fetch(thumbPath, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            callback(thumbPath);
+                        } else {
+                            callback(fallbackPath);
+                        }
+                    })
+                    .catch(() => {
+                        callback(fallbackPath);
+                    });
+            }
+
+            function renderItems(items, currentPath) {
+                let html = '';
+
+                const pathParts = currentPath.split('/').filter(part => part !== '');
+                const currentDirName = pathParts.length > 0 ? decodeURIComponent(pathParts[pathParts.length - 1]) : 'Root';
+
+                // Only show parent directory link if not in the root video directory
+                if (currentPath !== '/video/' && currentPath !== '/') {
+
+                    html += `
+                        <a href="#" data-path="${getParentPath(currentPath)}" class="item-link">
+                        <div class="item">
+                                <img src="./images/icons/folder-up.png" class="item-thumbnail" alt="Parent directory">
+                                <div class="item-name">
+                                    <div class="first-line">НАЗАД...</div>
+                                </div>
+                        </div>
+                        </a>
+                    `;
+                }
+
+                items.filter(item => item.isDirectory).forEach(item => {
+                    const nameWithoutExt = getNameWithoutExtension(item.name);
+                    const thumbnailPath = getThumbnailPath(item.name, item.href, 'directory');
+
+                    html += `
+                        <a href="#" data-path="${currentPath + item.href}" class="item-link">
+                        <div class="item">
+                            <img src="${thumbnailPath.path}" class="item-thumbnail" alt="Folder"
+                                         onerror="this.onerror=null; this.src='${thumbnailPath.fallback}';">
+                            <div class="item-name">
+                                <div class="first-line">${nameWithoutExt}</div>
+                            </div>
+                        </div>
+                        </a>
+                    `;
+                });
+
+                const mediaFiles = items.filter(item => !item.isDirectory && isMediaFile(item.name));
+                const otherFiles = items.filter(item => !item.isDirectory && !isMediaFile(item.name));
+
+                mediaFiles.forEach(item => {
+                    const isVideo = /\.(mp4|webm|avi|mov|wmv|flv|mkv)$/i.test(item.name);
+                    const isAudio = /\.(mp3|wav|ogg|flac|aac)$/i.test(item.name);
+                    const isImage = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i.test(item.name);
+
+                    const fileType = isVideo ? 'video' : (isAudio ? 'audio' : (isImage ? 'image' : 'other'));
+                    const thumbnailPath = getThumbnailPath(item.name, item.href, fileType);
+                    const nameWithoutExt = getNameWithoutExtension(item.name);
+
+                    const fallbackIcon = isVideo || isImage ? './images/icons/media.png' :
+                                         isAudio ? './images/icons/audio.png' : './images/icons/media.png';
+
+                    html += `
+                        <a href="${baseUrl + currentPath + item.href}"
+                               class="media-link"
+                               data-src="${baseUrl + currentPath + item.href}"
+                               data-type="${fileType}"
+                               data-text="${nameWithoutExt}"
+                               >
+
+                        <div class="item" data-media="${isVideo || isAudio}">
+                            <img src="${thumbnailPath.path}" class="item-thumbnail" alt="Media"
+                                     onerror="this.onerror=null; this.src='${thumbnailPath.fallback}';"
+                                     />
+                            <div class="item-name">
+                                <div class="first-line">${currentDirName}</div>
+                                <div class="second-line">${nameWithoutExt}</div>
+                            </div>
+
+                        </div>
+
+                        </a>
+                    `;
+                });
+
+                otherFiles.forEach(item => {
+                    const nameWithoutExt = getNameWithoutExtension(item.name);
+                    const thumbnailPath = './images/icons/media.png';
+
+                    html += `
+                        <div class="item">
+                            <a href="${baseUrl + currentPath + item.href}" target="_blank">
+                                <img src="${thumbnailPath}" class="item-thumbnail" alt="File">
+                            </a>
+                            <div class="item-name">
+                                <a href="${baseUrl + currentPath + item.href}" target="_blank">${nameWithoutExt}</a>
+                                <div class="item-date">${item.date}</div>
+                                <div class="item-size">${item.size}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('listing').innerHTML = html;
+
+                document.querySelectorAll('#listing a[data-path]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const path = this.getAttribute('data-path');
+                        currentPath = path;
+                        loadDirectory(path);
+                    });
+                });
+
+                document.querySelectorAll('.media-link').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const src = this.getAttribute('data-src');
+                        const type = this.getAttribute('data-type');
+                        //const name = this.textContent || this.parentNode.querySelector('.item-name a').textContent;
+                        const name = this.getAttribute('data-text');
+
+                        createPlaylist();
+                        currentPlaylistIndex = currentPlaylist.findIndex(item => item.src === src);
+                        playMedia(src, type, name);
+                    });
+                });
+            }
+
+            function getParentPath(path) {
+                const parts = path.split('/').filter(part => part !== '');
+                parts.pop();
+                return '/' + parts.join('/') + '/';
+            }
+
+            function isMediaFile(filename) {
+                const mediaExtensions = /\.(mp4|webm|avi|mov|wmv|flv|mkv|mp3|wav|ogg|flac|aac|jpg|jpeg|png|gif|bmp|svg|webp)$/i;
+                return mediaExtensions.test(filename);
+            }
+
+            function createPlaylist() {
+                currentPlaylist = [];
+                playedIndices = [];
+
+                document.querySelectorAll('.media-link').forEach(link => {
+
+                    if (link.getAttribute('data-skip') === 'true') {
+                        return;
+                    }
+
+                    currentPlaylist.push({
+                        src: link.getAttribute('data-src'),
+                        type: link.getAttribute('data-type'),
+                        //name: link.textContent
+                        name: link.getAttribute('data-text')
+                    });
+                });
+
+                updatePlaylistUI();
+            }
+
+            function updatePlaylistUI() {
+                let playlistHtml = '';
+
+                currentPlaylist.forEach((item, index) => {
+                    const isActive = index === currentPlaylistIndex;
+                    playlistHtml += `<div class="playlist-item ${isActive ? 'active' : ''}" data-index="${index}">${item.name}</div>`;
+                });
+
+                playlistContainer.innerHTML = playlistHtml;
+
+                document.querySelectorAll('.playlist-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        currentPlaylistIndex = index;
+
+                        const mediaItem = currentPlaylist[index];
+                        playMedia(mediaItem.src, mediaItem.type, mediaItem.name);
+                    });
+                });
+
+                // Scroll the active item into view
+                const activeItem = playlistContainer.querySelector('.playlist-item.active');
+                if (activeItem) {
+                    activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            function playNextMedia() {
+                if (currentPlaylist.length === 0) return;
+
+                if (isShuffleMode) {
+                    if (playedIndices.length >= currentPlaylist.length - 1) {
+                        playedIndices = [currentPlaylistIndex];
+                    }
+
+                    const availableIndices = [];
+                    for (let i = 0; i < currentPlaylist.length; i++) {
+                        if (i !== currentPlaylistIndex && !playedIndices.includes(i)) {
+                            availableIndices.push(i);
+                        }
+                    }
+
+                    const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                    currentPlaylistIndex = availableIndices[randomIndex];
+                    playedIndices.push(currentPlaylistIndex);
+                } else {
+                    currentPlaylistIndex = (currentPlaylistIndex + 1) % currentPlaylist.length;
+                }
+
+                const nextItem = currentPlaylist[currentPlaylistIndex];
+                playMedia(nextItem.src, nextItem.type, nextItem.name);
+            }
+
+            function playPreviousMedia() {
+                if (currentPlaylist.length === 0) return;
+
+                if (isShuffleMode && playedIndices.length > 1) {
+                    playedIndices.pop();
+                    currentPlaylistIndex = playedIndices[playedIndices.length - 1];
+                    playedIndices.pop();
+                } else {
+                    currentPlaylistIndex = (currentPlaylistIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+                }
+
+                const prevItem = currentPlaylist[currentPlaylistIndex];
+                playMedia(prevItem.src, prevItem.type, prevItem.name);
+            }
+
+            function playMedia(src, type, name) {
+                playerTitle.textContent = name;
+
+                if (type === 'video' || type === 'audio') {
+                    mediaPlayer.src = src;
+                    mediaPlayer.style.display = 'block';
+                    mediaPlayer.play();
+                    mediaPlayerContainer.style.display = 'flex';
+                    updatePlaylistUI();
+
+                    if (isShuffleMode && !playedIndices.includes(currentPlaylistIndex)) {
+                        playedIndices.push(currentPlaylistIndex);
+                    }
+                }
+            }
+
+            mediaPlayer.addEventListener('ended', function() {
+                playNextMedia();
+            });
+
+            mediaPlayer.addEventListener('play', function() {
+                playerPlay.style.display = 'none';
+                playerPause.style.display = 'block';
+            });
+
+            mediaPlayer.addEventListener('pause', function() {
+                playerPlay.style.display = 'block';
+                playerPause.style.display = 'none';
+            });
+
+            // Initialize player control visibility
+            playerPlay.style.display = 'block';
+            playerPause.style.display = 'none';
+
+            // Ensure all player controls have proper event listeners
+            playerNext.addEventListener('click', function() {
+                playNextMedia();
+            });
+
+            playerPrev.addEventListener('click', function() {
+                playPreviousMedia();
+            });
+
+            playerPlay.addEventListener('click', function() {
+                mediaPlayer.play();
+            });
+
+            playerPause.addEventListener('click', function() {
+                mediaPlayer.pause();
+            });
+
+            playerStop.addEventListener('click', function() {
+                mediaPlayer.pause();
+                mediaPlayer.currentTime = 0;
+                playerPlay.style.display = 'block';
+                playerPause.style.display = 'none';
+            });
+
+            playerShuffle.addEventListener('click', function() {
+                isShuffleMode = !isShuffleMode;
+
+                if (isShuffleMode) {
+                    playerShuffle.classList.add('active');
+                } else {
+                    playerShuffle.classList.remove('active');
+                }
+
+                if (currentPlaylistIndex !== -1) {
+                    playedIndices = [currentPlaylistIndex];
+                }
+            });
+
+            playerFullscreen.addEventListener('click', function() {
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                } else {
+                    if (mediaPlayer.requestFullscreen) {
+                        mediaPlayer.requestFullscreen();
+                    } else if (mediaPlayer.webkitRequestFullscreen) {
+                        mediaPlayer.webkitRequestFullscreen();
+                    } else if (mediaPlayer.msRequestFullscreen) {
+                        mediaPlayer.msRequestFullscreen();
+                    } else {
+                        toggleExpandedMode(!isExpanded);
+                    }
+                }
+            });
+
+            function toggleExpandedMode(forceState = null) {
+                isExpanded = (forceState !== null) ? forceState : !isExpanded;
+
+                if (isExpanded) {
+                    mediaPlayerContainer.classList.add('expanded-player');
+                } else {
+                    mediaPlayerContainer.classList.remove('expanded-player');
+                }
+            }
+
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+            function handleFullscreenChange() {
+                if (!document.fullscreenElement && !document.webkitFullscreenElement &&
+                    !document.mozFullScreenElement && !document.msFullscreenElement) {
+                    toggleExpandedMode(true);
+                }
+            }
+
+            playerClose.addEventListener('click', function() {
+                mediaPlayer.pause();
+                mediaPlayerContainer.style.display = 'none';
+                toggleExpandedMode(false);
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mediaPlayerContainer.style.display === 'flex') {
+                    if (document.fullscreenElement) {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        }
+                        return;
+                    }
+
+                    mediaPlayer.pause();
+                    mediaPlayerContainer.style.display = 'none';
+                    toggleExpandedMode(false);
+                }
+            });
+
+            // Handle browser back button press to close the player
+            window.addEventListener('popstate', function(event) {
+                if (mediaPlayerContainer.style.display === 'flex') {
+                    mediaPlayer.pause();
+                    mediaPlayerContainer.style.display = 'none';
+                    toggleExpandedMode(false);
+
+                    // Prevent default back behavior and update hash to current path
+                    history.pushState(null, null, '#' + currentPath);
+                }
+            });
+        });
+
+        // Set random background image based on time of day
+        function setRandomBackgroundImage() {
+            const now = new Date();
+            const hours = now.getHours();
+
+            // Determine time of day
+            let timeOfDay;
+            if (hours >= 20 || hours < 3) {
+                timeOfDay = 'night';
+            } else if (hours >= 3 && hours < 16) {
+                timeOfDay = 'day';
+            } else { // 16-20
+                timeOfDay = 'evening';
+            }
+
+            // Generate random number between 1 and 3
+            const randomNumber = Math.floor(Math.random() * 3) + 1;
+
+            // Set background image
+            const backgroundImage = `images/${timeOfDay}-${randomNumber}.jpg`;
+            document.body.style.backgroundImage = `url('${backgroundImage}')`;
+        }
+
+        // Execute when page loads
+        window.addEventListener('DOMContentLoaded', setRandomBackgroundImage);
+    </script>
+</body>
+</html>
