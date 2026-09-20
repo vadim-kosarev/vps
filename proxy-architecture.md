@@ -104,7 +104,7 @@ VPN VK ─40404──►│  3x-ui:40404 (VLESS+Reality RU-RU) ─►Internet  �
                                                                   ▼
                 ┌──────────────────────────────────────┐
                 │          vkosarev.name               │
-                │      (EU exit / AWS Poland)          │
+                │   (EU exit / Hostinger, Литва)       │
                 │                                      │
 TG App ─2443──► │  mtproxy:2443                        │──────►──┐
                 │  3x-ui:8443 (mixed SOCKS5) ◄── telemt           │
