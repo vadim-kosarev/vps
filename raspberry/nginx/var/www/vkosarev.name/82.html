@@ -216,7 +216,6 @@
             display: flex;
             align-items: stretch; /* was flex-start */
             gap: 20px;
-            max-width: 600px;
         }
 
         .call-text {
@@ -269,6 +268,7 @@
 
         /* Цветовые варианты: компактная синяя кнопка справа вверху и широкая зелёная "Позвонить" внизу */
         .call-btn.blue-btn {
+            margin-left: auto; /* прижать к правому краю панели, а не к надписи Comfort+ */
             background: #3498db;
             border-color: #3498db;
             font-size: 14px;
