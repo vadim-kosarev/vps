@@ -310,33 +310,28 @@
             box-shadow: 0 5px 12px rgba(40, 167, 69, 0.6);
         }
 
-        /* Кнопка "Подключиться к интернету" */
-        .internet-btn {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 14px 15px;
-            background: #6f42c1;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 6px;
-            border: 2px solid #6f42c1;
+        /* Текстовая ссылка "Подключиться к интернету" под кнопкой "Позвонить" */
+        .internet-link {
+            color: #0d6efd;
+            font-size: 16px;
+            text-decoration: underline;
             cursor: pointer;
-            transition: .2s;
         }
 
-        .internet-btn:hover,
-        .internet-btn:focus {
-            background: #5a32a3;
-            border-color: #5a32a3;
+        .internet-link:hover,
+        .internet-link:focus {
+            color: #0a58ca;
         }
 
-        .internet-btn:disabled {
-            background: #6c757d;
-            border-color: #6c757d;
-            cursor: default;
+        .internet-link.busy {
+            opacity: .6;
+            pointer-events: none;
+        }
+
+        .internet-link.connected {
+            color: #2e7d32;
+            text-decoration: none;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -410,15 +405,14 @@
         </svg>
         <span style="margin-left: 8px">Позвонить</span>
     </a>
+    <div style="text-align: center; margin-top: 12px;">
+        <a href="#" id="internetLink" class="internet-link">Подключиться к интернету</a>
+        <div id="internetMessage" class="message"></div>
+    </div>
 
 </div>
 
 <div style="flex: 1;"></div>
-
-<div class="footer-panel" style="margin-bottom: 10px;">
-    <button type="button" id="internetBtn" class="internet-btn">Подключиться к интернету</button>
-    <div id="internetMessage" class="message"></div>
-</div>
 
 <div class="footer-panel">
     <p>Оставьте номер телефона для заказа</p>
@@ -483,12 +477,13 @@
     });
 
     // Открыть клиенту интернет (сервер добавляет его адрес в список разрешённых)
-    const internetBtn = document.getElementById('internetBtn');
+    const internetLink = document.getElementById('internetLink');
     const internetMessage = document.getElementById('internetMessage');
 
     function setInternetConnected() {
-        internetBtn.disabled = true;
-        internetBtn.textContent = 'Интернет подключён';
+        internetLink.classList.remove('busy');
+        internetLink.classList.add('connected');
+        internetLink.textContent = 'Интернет подключён';
     }
 
     function showInternetMessage(text, type) {
@@ -497,8 +492,9 @@
         internetMessage.style.display = 'block';
     }
 
-    internetBtn.addEventListener('click', async function () {
-        internetBtn.disabled = true;
+    internetLink.addEventListener('click', async function (e) {
+        e.preventDefault();
+        internetLink.classList.add('busy');
         internetMessage.style.display = 'none';
         try {
             const response = await fetch('/api/connect', {method: 'POST'});
@@ -510,7 +506,7 @@
             showInternetMessage('Интернет открыт на ' + Math.round(data.ttl / 3600) + ' ч. Можно закрыть это окно.', 'success');
         } catch (error) {
             console.error('Ошибка:', error);
-            internetBtn.disabled = false;
+            internetLink.classList.remove('busy');
             showInternetMessage('Не удалось подключить интернет. Попробуйте ещё раз.', 'error');
         }
     });
