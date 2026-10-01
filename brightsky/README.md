@@ -71,3 +71,18 @@ luigi (NAS, LAN) и cam1 (Hikvision-камера, LAN) — по своим ад�
 frigate-rtsp, video-search, luigi-grafana, luigi-torrent, luigi-subsonic, luigi-sync,
 cam1 (HikCam). Соответствие внешних портов на `vkosarev.name` —
 `vkosarev.name/nginx/conf.d/vkosarev.name.conf` в этом репозитории.
+
+### Health-check и автоперезапуск frpc
+
+Известная проблема: когда на хосте что-то делают с другими контейнерами, встроенный DNS Docker
+(`127.0.0.11`) периодически перестаёт резолвить `brightsky.home`; в логе frpc —
+`lookup brightsky.home on 127.0.0.11:53: no such host`. Процесс при этом жив, поэтому
+`restart: always` не срабатывает, а туннели не работают.
+
+- У `brightsky_frpc` есть `healthcheck`: `nslookup brightsky.home && nslookup luigi`
+  (каждые 30 с, 3 неудачи подряд → `unhealthy`).
+- Сервис `frpc_autoheal` (`willfarrell/autoheal`, docker.sock) перезапускает контейнеры с label
+  `autoheal=true` в состоянии `unhealthy` — docker сам unhealthy-контейнеры не рестартует.
+- Статус: `docker ps --filter name=brightsky_frpc`; рестарты autoheal — в `docker logs brightsky_frpc_autoheal`.
+- Ограничение: если DNS сломан у самого Docker Desktop (или `brightsky_dns` лежит), рестарт frpc
+  не поможет — он будет перезапускаться каждые ~90 с, пока резолв не восстановится.

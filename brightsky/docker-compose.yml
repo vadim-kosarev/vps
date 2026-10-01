@@ -26,6 +26,37 @@ services:
       - ./frpc.toml:/etc/frp/frpc.toml:ro
     entrypoint: /usr/bin/frpc
     command: ["-c", "/etc/frp/frpc.toml"]
+    # Симптом, который лечим: при возне с другими контейнерами встроенный DNS
+    # Docker (127.0.0.11) перестаёт резолвить brightsky.home → frpc пишет
+    # "lookup brightsky.home ... no such host" и туннели мертвы, хотя сам
+    # процесс жив (restart: always не срабатывает). Проверяем именно резолв.
+    # Сам по себе healthcheck контейнер не перезапускает — это делает
+    # сервис frpc_autoheal ниже (по label autoheal=true).
+    labels:
+      - autoheal=true
+    healthcheck:
+      test: ["CMD-SHELL", "nslookup brightsky.home >/dev/null 2>&1 && nslookup luigi >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # frpc_autoheal — перезапускает контейнеры с label autoheal=true, когда их
+  # healthcheck стал unhealthy (сейчас — только brightsky_frpc). Нужен потому,
+  # что docker/compose сами unhealthy-контейнеры не рестартуют.
+  # Актуальные теги: https://hub.docker.com/r/willfarrell/autoheal/tags
+  # ---------------------------------------------------------------------------
+  frpc_autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: brightsky_frpc_autoheal
+    restart: always
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=autoheal
+      - AUTOHEAL_INTERVAL=30
+      - AUTOHEAL_START_PERIOD=30
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   # ---------------------------------------------------------------------------
   # Portainer — панель управления Docker brightsky.
@@ -161,8 +192,12 @@ services:
     restart: always
     ports:
       - "5380:5380/tcp" # web-консоль (HTTP)
-      - "53:53/udp"
-      - "53:53/tcp"
+      # Привязка к LAN-IP, а не к 0.0.0.0: на 0.0.0.0:53 (IPv4) UDP сидит ICS
+      # (svchost/SharedAccess — нужен Hyper-V/WSL, не отключается), и Docker
+      # не может его занять — запросы на 192.168.55.43:53 уходили в ICS и
+      # таймаутились. Если IP хоста сменится — поправить здесь.
+      - "192.168.55.43:53:53/udp"
+      - "192.168.55.43:53:53/tcp"
     environment:
       - DNS_SERVER_DOMAIN=brightsky-dns
       - DNS_SERVER_LOG_FOLDER_PATH=/var/log/technitium/dns
