@@ -86,3 +86,40 @@ cam1 (HikCam). Соответствие внешних портов на `vkosar
 - Статус: `docker ps --filter name=brightsky_frpc`; рестарты autoheal — в `docker logs brightsky_frpc_autoheal`.
 - Ограничение: если DNS сломан у самого Docker Desktop (или `brightsky_dns` лежит), рестарт frpc
   не поможет — он будет перезапускаться каждые ~90 с, пока резолв не восстановится.
+
+### DNS на хосте: порт 53 и NRPT для `.home`
+
+Две настройки, без которых `brightsky.home` не резолвится (ни на хосте, ни в контейнерах frpc):
+
+1. **Порт 53 привязан к LAN-IP** (`192.168.55.43:53` в сервисе `dns`). На `0.0.0.0:53` (IPv4 UDP)
+   сидит Windows ICS (`svchost`, сервис `SharedAccess`) — он нужен Hyper-V/WSL, отключить его
+   не получается (сервис сам поднимается и сбрасывает тип запуска), и Docker не мог занять порт:
+   запросы на `192.168.55.43:53` уходили в ICS и таймаутились. При смене IP хоста — поправить
+   `docker-compose.yml`.
+2. **Правило NRPT**: Windows шлёт запросы для `.home` только на Technitium. Без него Windows
+   (и Docker Desktop, который берёт DNS у хоста) опрашивал и роутер `192.168.55.1`, а тот отвечал
+   NXDOMAIN (зон `.home` у него нет) — отсюда `lookup brightsky.home ... no such host` в frpc.
+   Остальные запросы идут на обычные DNS (DHCP: Technitium, затем роутер), поэтому при
+   остановленном `brightsky_dns` интернет работает, пропадают только имена `.home`.
+   Правило хранится в реестре Windows (не в git), переживает перезагрузку.
+
+PowerShell от администратора:
+
+```powershell
+# восстановить правило (например, после переустановки Windows)
+Add-DnsClientNrptRule -Namespace ".home" -NameServers 192.168.55.43 -Comment "brightsky technitium"
+Set-DnsClientServerAddress -InterfaceAlias "Wi-Fi" -ResetServerAddresses   # DNS на Wi-Fi — от DHCP
+Clear-DnsClientCache
+
+# проверка
+Get-DnsClientNrptRule | Where-Object Namespace -eq ".home"
+Resolve-DnsName brightsky.home -DnsOnly
+docker exec brightsky_frpc nslookup brightsky.home
+
+# откат
+Get-DnsClientNrptRule | Where-Object Namespace -eq ".home" | Remove-DnsClientNrptRule -Force
+```
+
+Не прописывать на Wi-Fi статический единственный DNS `192.168.55.43` (так было на время отладки):
+при остановленном `brightsky_dns` (в т.ч. после перезагрузки, пока не стартовал Docker Desktop)
+у хоста пропадает интернет по именам.
